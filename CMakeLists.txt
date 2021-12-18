@@ -6,6 +6,20 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(
         chessEngine2 src/main/main.cpp
+
+        src/definitions/std_typedef.h
+        src/definitions/board.cpp
+        src/definitions/board.h
+
+        src/ui/terminal_ui.cpp
+        src/ui/terminal_ui.h
+        src/ui/uci.cpp
+        src/ui/uci.h
+
+        src/utils/bitops.cpp
+        src/utils/bitops.h
+        src/utils/board_utils.cpp
+        src/utils/board_utils.h
         )
 
 #Including Google Tests
