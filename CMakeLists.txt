@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
-project(ce2_t)
+project(chessEngine2)
 
 #Version of C++
 set(CMAKE_CXX_STANDARD 17)
