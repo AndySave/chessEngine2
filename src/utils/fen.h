@@ -1,0 +1,5 @@
+
+#ifndef CHESSENGINE2_FEN_H
+#define CHESSENGINE2_FEN_H
+
+#endif //CHESSENGINE2_FEN_H
