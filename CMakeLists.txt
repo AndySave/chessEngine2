@@ -14,6 +14,8 @@ add_executable(
         src/definitions/nonSlidersAttacks.h
         src/definitions/slidersAttacks.cpp
         src/definitions/slidersAttacks.h
+        src/definitions/zobristKey.cpp
+        src/definitions/zobristKey.h
 
         src/ui/terminal_ui.cpp
         src/ui/terminal_ui.h
