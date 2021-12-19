@@ -1,7 +1,24 @@
 
 #include "slidersAttacks.h"
 
-ull incrementalBishopAttack(int sq){
+ull generateOccupancy(ull attackMask, int index){
+    ull occupancy = 0ULL;
+    int bitsInAttackMask = countBits(attackMask);
+
+    for (int count = 0; count < bitsInAttackMask; count++){
+        int square = getLSB(attackMask);
+        clearBit(attackMask, square);
+
+        if (index & (1 << count)){
+            occupancy |= (1ULL << square);
+        }
+    }
+
+    return occupancy;
+}
+
+
+ull generateBishopAttackMask(int sq){
     ull bb = 0ull;
     int rank = sq/8, file = sq % 8;
 
@@ -37,7 +54,7 @@ ull incrementalBishopAttack(int sq){
 }
 
 
-ull incrementalRookAttack(int sq){
+ull generateRookAttackMask(int sq){
     ull bb = 0ull;
     int rank = sq/8, file = sq % 8;
 
@@ -68,6 +85,105 @@ ull incrementalRookAttack(int sq){
     return bb;
 }
 
+ull incrementalBishopAttack(ull occ, int sq){
+    ull bb = 0ull;
+    int rank = sq/8, file = sq % 8;
+
+    int xDir = 1, yDir = 1;
+    while (file + xDir < 8 && rank + yDir < 8){
+        setBit(bb, sq + yDir*8 + xDir);
+        if (getBit(occ, sq + yDir*8 + xDir)){
+            break;
+        }
+
+        xDir++;
+        yDir++;
+    }
+
+    xDir = 1, yDir = -1;
+    while (file + xDir < 8 && rank + yDir >= 0){
+        setBit(bb, sq + yDir*8 + xDir);
+        if (getBit(occ, sq + yDir*8 + xDir)){
+            break;
+        }
+
+        xDir++;
+        yDir--;
+    }
+
+    xDir = -1, yDir = 1;
+    while (file + xDir >= 0 && rank + yDir < 8){
+        setBit(bb, sq + yDir*8 + xDir);
+        if (getBit(occ, sq + yDir*8 + xDir)){
+            break;
+        }
+
+        xDir--;
+        yDir++;
+    }
+
+    xDir = -1, yDir = -1;
+    while (file + xDir >= 0 && rank + yDir >= 0){
+        setBit(bb, sq + yDir*8 + xDir);
+        if (getBit(occ, sq + yDir*8 + xDir)){
+            break;
+        }
+
+        xDir--;
+        yDir--;
+    }
+
+    return bb;
+}
+
+
+ull incrementalRookAttack(ull occ, int sq){
+    ull bb = 0ull;
+    int rank = sq/8, file = sq % 8;
+
+    int dir = 1;
+    while (file + dir < 8){
+        setBit(bb, sq + dir);
+        if (getBit(occ, sq+dir)){
+            break;
+        }
+
+        dir++;
+    }
+
+    dir = -1;
+    while (file + dir >= 0){
+        setBit(bb, sq + dir);
+        if (getBit(occ, sq+dir)){
+            break;
+        }
+
+        dir--;
+    }
+
+    dir = 1;
+    while (rank + dir < 8){
+        setBit(bb, sq + dir*8);
+        if (getBit(occ, sq+dir*8)){
+            break;
+        }
+
+        dir++;
+    }
+
+    dir = -1;
+    while (rank + dir >= 0){
+        setBit(bb, sq + dir*8);
+        if (getBit(occ, sq+dir*8)){
+            break;
+        }
+
+        dir--;
+    }
+
+    return bb;
+}
+
 
 /// ----------- INITS ------------ ///
 /// Must be initialized at startup ///
@@ -76,14 +192,14 @@ ull incrementalRookAttack(int sq){
 // Array: bishopAttackMasks
 void initBishopAttackMasks(){
     for (int sq = 0; sq < 64; sq++){
-        bishopAttackMasks[sq] = incrementalBishopAttack(sq);
+        bishopAttackMasks[sq] = generateBishopAttackMask(sq);
     }
 }
 
 // Array: rookAttackMasks
 void initRookAttackMasks(){
     for (int sq = 0; sq < 64; sq++){
-        rookAttackMasks[sq] = incrementalRookAttack(sq);
+        rookAttackMasks[sq] = generateRookAttackMask(sq);
     }
 }
 
