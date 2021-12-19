@@ -7,7 +7,10 @@ ull pawnAttackMask(int sq){
     ull bb = 0ll;
     int rank = sq/8, file = sq % 8;
 
+    // Can attack Up Right if file is larger than a-file and rank
+    // is less than the 8th-rank
     if (file > 0 && rank < 8){ setBit(bb, sq + 7); }
+    // Up Left
     if (file < 7 && rank < 7){ setBit(bb, sq + 9); }
 
     return bb;
@@ -46,18 +49,25 @@ ull kingAttackMask(int sq){
 }
 
 
+/// ----------- INITS ------------ ///
+/// Must be initialized at startup ///
+/// Fills arrays with attack bb's  ///
+
+// Array: pawnAttacks
 void initPawnAttacks(){
     for (int sq = 0; sq < 64; sq++){
         pawnAttacks[sq] = pawnAttackMask(sq);
     }
 }
 
+// Array: knightAttacks
 void initKnightAttacks(){
     for (int sq = 0; sq < 64; sq++){
         knightAttacks[sq] = knightAttackMask(sq);
     }
 }
 
+// Array: kingAttacks
 void initKingAttacks(){
     for (int sq = 0; sq < 64; sq++){
         kingAttacks[sq] = kingAttackMask(sq);
