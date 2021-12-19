@@ -13,6 +13,8 @@ add_executable(
         src/definitions/enums.h
         src/definitions/nonSlidersAttacks.cpp
         src/definitions/nonSlidersAttacks.h
+        src/definitions/slidersAttacks.cpp
+        src/definitions/slidersAttacks.h
 
         src/ui/terminal_ui.cpp
         src/ui/terminal_ui.h
