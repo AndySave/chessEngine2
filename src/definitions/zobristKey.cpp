@@ -52,7 +52,7 @@ ull generateHash(Board *brd){
 
 
     if (brd->enpassantSq != noSq){
-        key ^= enpassantKeys[brd->enPas];
+        key ^= enpassantKeys[brd->enpassantSq];
     }
 
     key ^= castleKeys[brd->castle];
