@@ -2,6 +2,7 @@
 #include "../utils/bitops.h"
 #include "../definitions/enums.h"
 #include "../definitions/nonSlidersAttacks.h"
+#include "../definitions/slidersAttacks.h"
 
 
 int main() {
@@ -10,7 +11,12 @@ int main() {
     initPawnAttacks();
     initKnightAttacks();
     initKingAttacks();
+    initBishopAttackMasks();
+    initRookAttackMasks();
 
-    printBitboard(pawnAttacks[d2]);
+    for (int sq = 0; sq < 64; sq++){
+        printBitboard(rookAttackMasks[sq]);
+    }
 }
+
 
