@@ -53,7 +53,6 @@ ull generateBishopAttackMask(int sq){
     return bb;
 }
 
-
 ull generateRookAttackMask(int sq){
     ull bb = 0ull;
     int rank = sq/8, file = sq % 8;
@@ -136,7 +135,6 @@ ull incrementalBishopAttack(ull occ, int sq){
     return bb;
 }
 
-
 ull incrementalRookAttack(ull occ, int sq){
     ull bb = 0ull;
     int rank = sq/8, file = sq % 8;
@@ -183,6 +181,56 @@ ull incrementalRookAttack(ull occ, int sq){
 
     return bb;
 }
+
+
+ull bishopAttacks[64][512];
+ull rookAttacks[64][4096];
+void fillBishopAttacksArray(){
+    for (int sq = 0; sq < 64; sq++){
+        for (int i = 0; i < (1 << relevantBishopBits[sq]); i++){
+            ull attackMask = bishopAttackMasks[sq];
+            ull occ = generateOccupancy(attackMask, i);
+            ull attack = incrementalBishopAttack(occ, sq);
+
+            occ *= bishopMagics[sq];
+            occ >>= 64 - relevantBishopBits[sq];
+
+            bishopAttacks[sq][occ] = attack;
+        }
+    }
+}
+
+void fillRookAttacksArray(){
+    for (int sq = 0; sq < 64; sq++){
+        for (int i = 0; i < (1 << relevantRookBits[sq]); i++){
+            ull attackMask = rookAttackMasks[sq];
+            ull occ = generateOccupancy(attackMask, i);
+            ull attack = incrementalRookAttack(occ, sq);
+
+            occ *= rookMagics[sq];
+            occ >>= 64 - relevantRookBits[sq];
+
+            rookAttacks[sq][occ] = attack;
+        }
+    }
+}
+
+
+// Gets pseudo legal moves for a bishop on a given square
+ull bishopAttackRay(ull occ, int sq) {
+    occ &= bishopAttackMasks[sq];
+    occ *= bishopMagics[sq];
+    occ >>= 64 - relevantBishopBits[sq];
+    return bishopAttacks[sq][occ];
+}
+
+ull rookAttackRay(ull occ, int sq) {
+    occ &= rookAttackMasks[sq];
+    occ *= rookMagics[sq];
+    occ >>= 64 - relevantRookBits[sq];
+    return rookAttacks[sq][occ];
+}
+
 
 
 /// ----------- INITS ------------ ///
