@@ -1,7 +1,5 @@
 
 #include "nonSlidersAttacks.h"
-#include "../definitions/std_typedef.h"
-#include "../utils/bitops.h"
 
 ull pawnAttackMask(int sq){
     ull bb = 0ll;

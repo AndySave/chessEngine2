@@ -3,6 +3,7 @@
 #define CHESSENGINE2_NONSLIDERSATTACKS_H
 
 #include "../definitions/std_typedef.h"
+#include "../utils/bitops.h"
 
 void initPawnAttacks();
 void initKnightAttacks();
