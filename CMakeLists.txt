@@ -10,7 +10,6 @@ add_executable(
         src/definitions/std_typedef.h
         src/definitions/board.cpp
         src/definitions/board.h
-        src/definitions/enums.h
         src/definitions/nonSlidersAttacks.cpp
         src/definitions/nonSlidersAttacks.h
         src/definitions/slidersAttacks.cpp
