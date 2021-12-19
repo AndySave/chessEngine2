@@ -10,14 +10,44 @@ ull generateOccupancy(ull attackMask, int index);
 ull incrementalBishopAttack(ull occ, int sq);
 ull incrementalRookAttack(ull occ, int sq);
 
-ull generateBishopAttackMask(int sq);
-ull generateRookAttackMask(int sq);
+ull bishopAttackRay(ull occ, int sq);
+ull rookAttackRay(ull occ, int sq);
 
 void initBishopAttackMasks();
 void initRookAttackMasks();
 
+void fillBishopAttacksArray();
+void fillRookAttacksArray();
+
 inline ull bishopAttackMasks[64];
 inline ull rookAttackMasks[64];
+extern ull bishopAttacks[64][512];
+extern ull rookAttacks[64][4096];
+
+
+/// ------------ Relevant bits ------------ ///
+inline ull relevantBishopBits[64] = {
+        6, 5, 5, 5, 5, 5, 5, 6,
+        5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 7, 7, 7, 7, 5, 5,
+        5, 5, 7, 9, 9, 7, 5, 5,
+        5, 5, 7, 9, 9, 7, 5, 5,
+        5, 5, 7, 7, 7, 7, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5,
+        6, 5, 5, 5, 5, 5, 5, 6
+};
+
+inline ull relevantRookBits[64] = {
+        12, 11, 11, 11, 11, 11, 11, 12,
+        11, 10, 10, 10, 10, 10, 10, 11,
+        11, 10, 10, 10, 10, 10, 10, 11,
+        11, 10, 10, 10, 10, 10, 10, 11,
+        11, 10, 10, 10, 10, 10, 10, 11,
+        11, 10, 10, 10, 10, 10, 10, 11,
+        11, 10, 10, 10, 10, 10, 10, 11,
+        12, 11, 11, 11, 11, 11, 11, 12
+};
+
 
 
 /// ----------------------------- MAGIC NUMBERS ---------------------------- ///
