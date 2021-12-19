@@ -1,3 +1,4 @@
+
 #ifndef CHESSENGINE2_BITOPS_H
 #define CHESSENGINE2_BITOPS_H
 
@@ -7,6 +8,7 @@ inline ull setMask[64];
 inline ull clearMask[64];
 
 void initBitMasks();
+void printBitboard(ull bb);
 
 inline void clearBit(ull &bitBoard, int sq){
     bitBoard &= clearMask[sq];
