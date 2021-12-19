@@ -1,0 +1,7 @@
+
+#ifndef CHESSENGINE2_BOARD_H
+#define CHESSENGINE2_BOARD_H
+
+
+
+#endif
