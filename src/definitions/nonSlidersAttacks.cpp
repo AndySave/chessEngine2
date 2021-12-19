@@ -7,7 +7,7 @@ ull pawnAttackMask(int sq){
 
     // Can attack Up Right if file is larger than a-file and rank
     // is less than the 8th-rank
-    if (file > 0 && rank < 8){ setBit(bb, sq + 7); }
+    if (file > 0 && rank < 7){ setBit(bb, sq + 7); }
     // Up Left
     if (file < 7 && rank < 7){ setBit(bb, sq + 9); }
 
