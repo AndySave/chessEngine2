@@ -77,7 +77,12 @@ int main() {
 
     bishopMagicsTest();
     rookMagicsTest();
+
+    fillBishopAttacksArray();
+    fillRookAttacksArray();
+
 }
+
 
 
 
