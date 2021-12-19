@@ -6,7 +6,7 @@ typedef unsigned long long ull;
 typedef long long ll;
 
 enum color {white, black, both};
-enum pieces {e, P, N, B, R, Q, K, p, n, b, r, q, k};
+enum pieces {P, N, B, R, Q, K, p, n, b, r, q, k};
 enum castle {WKC = 1, WQC = 2, BKC = 4, BQC = 8};
 
 enum squares {
