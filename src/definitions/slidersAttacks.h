@@ -12,6 +12,7 @@ ull incrementalRookAttack(ull occ, int sq);
 
 ull bishopAttackRay(ull occ, int sq);
 ull rookAttackRay(ull occ, int sq);
+ull queenAttackRay(ull occ, int sq);
 
 void initBishopAttackMasks();
 void initRookAttackMasks();

@@ -231,6 +231,11 @@ ull rookAttackRay(ull occ, int sq) {
     return rookAttacks[sq][occ];
 }
 
+ull queenAttackRay(ull occ, int sq){
+    ull queenAttack = bishopAttackRay(occ, sq) | rookAttackRay(occ, sq);
+    return queenAttack;
+}
+
 
 
 /// ----------- INITS ------------ ///
