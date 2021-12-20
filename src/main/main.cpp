@@ -1,8 +1,11 @@
 #include <iostream>
 #include "../utils/bitops.h"
-#include "../definitions/enums.h"
 #include "../definitions/nonSlidersAttacks.h"
 #include "../definitions/slidersAttacks.h"
+#include "../definitions/zobristKey.h"
+#include "../utils/fen.h"
+#include "../definitions/board.h"
+#include "../utils/board_utils.h"
 
 bool magicOk(ull bb, ull magic, int sq, bool debugMsg){
     sq++;
@@ -74,6 +77,7 @@ int main() {
     initKingAttacks();
     initBishopAttackMasks();
     initRookAttackMasks();
+    initHashkeys();
 
     bishopMagicsTest();
     rookMagicsTest();
@@ -81,7 +85,13 @@ int main() {
     fillBishopAttacksArray();
     fillRookAttacksArray();
 
+
+    Board board;
+    string fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    FEN(&board, fenString);
+    printBoard(&board);
 }
+
 
 
 
