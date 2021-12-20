@@ -65,10 +65,36 @@ void printAttackedSquares(Board *brd, bool whiteAttacking){
 }
 
 
+/*
+void generateMoves(Board *brd){
+    ull occ = brd->occupancies[both];
+    if (brd->side == white){
 
+        ull bb = brd->bitboards[P];
 
+        while (bb){
+            int index = getLSB(bb);
+            clearBit(bb, index);
 
+            int rank = index/8;
+            if (!getBit(occ, index+8)){
 
+                if (rank == 6){
+                    // Generate pawn promotion
+                }else{
+                    // Generate pawn quiet move
+                }
+
+                if (rank == 2 && !getBit(index+16)){
+                    // Generate pawn quiet move and add enPassant square
+                }
+            }
+        }
+
+    }
+}
+
+*/
 
 
 
