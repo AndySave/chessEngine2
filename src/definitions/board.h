@@ -22,6 +22,9 @@ struct Board{
     // Move is fullmoves since game started
     int move;
 
+    int whiteKingPos;
+    int blackKingPos;
+
     ull hashKey = 0ull;
 };
 
