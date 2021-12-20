@@ -43,6 +43,7 @@ void printMove(Move &move) {
     cout << "Score: " << move.score << "\n";
 }
 
+
 unsigned short createMove(int fromSq, int toSq, int promotedPiece, int moveFlag) {
     return fromSq | (toSq << 6) | (promotedPiece << 12) | (moveFlag << 14);
 }
