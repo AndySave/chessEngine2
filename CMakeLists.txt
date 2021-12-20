@@ -28,6 +28,8 @@ add_executable(
         src/utils/board_utils.h
         src/utils/fen.cpp
         src/utils/fen.h
+        src/utils/helpers.cpp
+        src/utils/helpers.h
         )
 
 #Including Google Tests
