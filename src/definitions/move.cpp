@@ -47,3 +47,27 @@ void printMove(Move &move) {
 unsigned short createMove(int fromSq, int toSq, int promotedPiece, int moveFlag) {
     return fromSq | (toSq << 6) | (promotedPiece << 12) | (moveFlag << 14);
 }
+
+
+void clearPiece(Board *brd, int sq){
+    int col = getBit(brd->occupancies[white], sq) ? white : black;
+
+    int piece = -1;
+    if (col == white){
+        for (int pce = P; pce <= K; pce++){
+            if (getBit(brd->bitboards[pce], sq)){
+                piece = pce;
+                break;
+            }
+        }
+    }else{
+        for (int pce = p; pce <= k; pce++){
+            if (getBit(brd->bitboards[pce], sq)){
+                piece = pce;
+                break;
+            }
+        }
+    }
+
+
+}
