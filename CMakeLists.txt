@@ -26,8 +26,6 @@ add_executable(
 
         src/utils/bitops.cpp
         src/utils/bitops.h
-        src/utils/board_utils.cpp
-        src/utils/board_utils.h
         src/utils/fen.cpp
         src/utils/fen.h
         src/utils/helpers.cpp
