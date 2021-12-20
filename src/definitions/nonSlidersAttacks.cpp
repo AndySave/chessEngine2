@@ -1,7 +1,7 @@
 
 #include "nonSlidersAttacks.h"
 
-ull pawnAttackMask(int sq){
+ull whitePawnAttackMask(int sq){
     ull bb = 0ll;
     int rank = sq/8, file = sq % 8;
 
@@ -10,6 +10,19 @@ ull pawnAttackMask(int sq){
     if (file > 0 && rank < 7){ setBit(bb, sq + 7); }
     // Up Left
     if (file < 7 && rank < 7){ setBit(bb, sq + 9); }
+
+    return bb;
+}
+
+ull blackPawnAttackMask(int sq){
+    ull bb = 0ll;
+    int rank = sq/8, file = sq % 8;
+
+    // Can attack Up Right if file is larger than a-file and rank
+    // is less than the 8th-rank
+    if (file > 0 && rank > 0){ setBit(bb, sq - 9); }
+    // Up Left
+    if (file < 7 && rank > 0){ setBit(bb, sq - 7); }
 
     return bb;
 }
@@ -52,9 +65,16 @@ ull kingAttackMask(int sq){
 /// Fills arrays with attack bb's  ///
 
 // Array: pawnAttacks
-void initPawnAttacks(){
+void initWhitePawnAttacks(){
     for (int sq = 0; sq < 64; sq++){
-        pawnAttacks[sq] = pawnAttackMask(sq);
+        whitePawnAttacks[sq] = whitePawnAttackMask(sq);
+    }
+}
+
+// Array: pawnAttacks
+void initBlackPawnAttacks(){
+    for (int sq = 0; sq < 64; sq++){
+        blackPawnAttacks[sq] = blackPawnAttackMask(sq);
     }
 }
 
