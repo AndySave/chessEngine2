@@ -4,6 +4,8 @@
 #include <iostream>
 #include "std_typedef.h"
 #include "../utils/helpers.h"
+#include "board.h"
+#include "zobristKey.h"
 
 //Macros to extract information from moveVal (value of a move)
 #define fromSquare(move) (move & 0x3f)
