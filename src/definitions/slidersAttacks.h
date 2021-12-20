@@ -20,8 +20,8 @@ void initRookAttackMasks();
 void fillBishopAttacksArray();
 void fillRookAttacksArray();
 
-inline ull bishopAttackMasks[64];
-inline ull rookAttackMasks[64];
+extern ull bishopAttackMasks[64];
+extern ull rookAttackMasks[64];
 extern ull bishopAttacks[64][512];
 extern ull rookAttacks[64][4096];
 

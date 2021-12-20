@@ -1,5 +1,7 @@
-
 #include "slidersAttacks.h"
+
+ull bishopAttackMasks[64];
+ull rookAttackMasks[64];
 
 ull generateOccupancy(ull attackMask, int index){
     ull occupancy = 0ULL;
