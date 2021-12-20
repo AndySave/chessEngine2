@@ -29,6 +29,7 @@ char pieceToChar(int piece){
     return charPieces[piece];
 }
 
+// Example: e3: 20
 int algebraicToSq(string &coords){
     int sq = 0;
 
