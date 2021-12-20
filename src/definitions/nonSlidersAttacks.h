@@ -5,11 +5,13 @@
 #include "../definitions/std_typedef.h"
 #include "../utils/bitops.h"
 
-void initPawnAttacks();
+void initWhitePawnAttacks();
+void initBlackPawnAttacks();
 void initKnightAttacks();
 void initKingAttacks();
 
-inline ull pawnAttacks[64];
+inline ull whitePawnAttacks[64];
+inline ull blackPawnAttacks[64];
 inline ull knightAttacks[64];
 inline ull kingAttacks[64];
 
