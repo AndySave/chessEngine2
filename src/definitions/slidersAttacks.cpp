@@ -183,39 +183,6 @@ ull incrementalRookAttack(ull occ, int sq){
 }
 
 
-ull bishopAttacks[64][512];
-ull rookAttacks[64][4096];
-void fillBishopAttacksArray(){
-    for (int sq = 0; sq < 64; sq++){
-        for (int i = 0; i < (1 << relevantBishopBits[sq]); i++){
-            ull attackMask = bishopAttackMasks[sq];
-            ull occ = generateOccupancy(attackMask, i);
-            ull attack = incrementalBishopAttack(occ, sq);
-
-            occ *= bishopMagics[sq];
-            occ >>= 64 - relevantBishopBits[sq];
-
-            bishopAttacks[sq][occ] = attack;
-        }
-    }
-}
-
-void fillRookAttacksArray(){
-    for (int sq = 0; sq < 64; sq++){
-        for (int i = 0; i < (1 << relevantRookBits[sq]); i++){
-            ull attackMask = rookAttackMasks[sq];
-            ull occ = generateOccupancy(attackMask, i);
-            ull attack = incrementalRookAttack(occ, sq);
-
-            occ *= rookMagics[sq];
-            occ >>= 64 - relevantRookBits[sq];
-
-            rookAttacks[sq][occ] = attack;
-        }
-    }
-}
-
-
 // Gets pseudo legal moves for a bishop on a given square
 ull bishopAttackRay(ull occ, int sq) {
     occ &= bishopAttackMasks[sq];
@@ -253,6 +220,39 @@ void initBishopAttackMasks(){
 void initRookAttackMasks(){
     for (int sq = 0; sq < 64; sq++){
         rookAttackMasks[sq] = generateRookAttackMask(sq);
+    }
+}
+
+
+ull bishopAttacks[64][512];
+ull rookAttacks[64][4096];
+void fillBishopAttacksArray(){
+    for (int sq = 0; sq < 64; sq++){
+        for (int i = 0; i < (1 << relevantBishopBits[sq]); i++){
+            ull attackMask = bishopAttackMasks[sq];
+            ull occ = generateOccupancy(attackMask, i);
+            ull attack = incrementalBishopAttack(occ, sq);
+
+            occ *= bishopMagics[sq];
+            occ >>= 64 - relevantBishopBits[sq];
+
+            bishopAttacks[sq][occ] = attack;
+        }
+    }
+}
+
+void fillRookAttacksArray(){
+    for (int sq = 0; sq < 64; sq++){
+        for (int i = 0; i < (1 << relevantRookBits[sq]); i++){
+            ull attackMask = rookAttackMasks[sq];
+            ull occ = generateOccupancy(attackMask, i);
+            ull attack = incrementalRookAttack(occ, sq);
+
+            occ *= rookMagics[sq];
+            occ >>= 64 - relevantRookBits[sq];
+
+            rookAttacks[sq][occ] = attack;
+        }
     }
 }
 
