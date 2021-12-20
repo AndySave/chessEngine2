@@ -5,7 +5,6 @@
 #include "../definitions/zobristKey.h"
 #include "../utils/fen.h"
 #include "../definitions/board.h"
-#include "../utils/board_utils.h"
 #include "../definitions/moveGeneration.h"
 
 
@@ -28,8 +27,6 @@ int main() {
     string fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     FEN(&board, fenString);
     printBoard(&board);
-
-    printAttackedSquares(&board, true);
 }
 
 
