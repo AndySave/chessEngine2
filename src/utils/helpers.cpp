@@ -54,3 +54,12 @@ int algebraicToSq(string &coords){
 
     return sq;
 }
+
+//Square number to algebraic notation. Example: 0 -> a1
+string sqToAlgebraic(int sq) {
+    string algebraic;
+    algebraic += (char) ((sq % 8) + 'a');
+    algebraic += (char) ((sq/8) + '1');
+
+    return algebraic;
+}

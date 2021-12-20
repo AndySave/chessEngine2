@@ -8,6 +8,7 @@
 int charToPiece(char c);
 char pieceToChar(int piece);
 int algebraicToSq(string &coords);
+string sqToAlgebraic(int sq);
 
 
 #endif
