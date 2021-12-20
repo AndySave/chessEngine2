@@ -12,6 +12,12 @@ struct Board{
     int enpassantSq = noSq;
     int castle;
 
+    // Ply is halfmoves since last capture or pawn move
+    int ply;
+    // Move is fullmoves since game started 
+    int move;
+
+    ull hashKey = 0ull;
 };
 
 #endif
