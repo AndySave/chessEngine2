@@ -51,8 +51,14 @@ void FEN(Board *brd, const string &fenStr){
             // Checking if piece is white
             if (piece <= K){
                 setBit(brd->occupancies[white], sq);
+                if (piece == K){
+                    brd->whiteKingPos = sq;
+                }
             }else{
                 setBit(brd->occupancies[black], sq);
+                if (piece == k){
+                    brd->blackKingPos = sq;
+                }
             }
             setBit(brd->occupancies[both], sq);
 
