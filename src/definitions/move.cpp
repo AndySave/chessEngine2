@@ -48,6 +48,13 @@ unsigned short createMove(int fromSq, int toSq, int promotedPiece, int moveFlag)
     return fromSq | (toSq << 6) | (promotedPiece << 12) | (moveFlag << 14);
 }
 
+void addPiece(Board *brd, int sq, int piece) {
+    ull mask = 0;
+    setBit(mask, sq);
+    brd->bitboards[piece] |= mask;
+    hashPiece(piece, sq); //board must be called brd.
+}
+
 
 void clearPiece(Board *brd, int sq){
     int col = getBit(brd->occupancies[white], sq) ? white : black;
