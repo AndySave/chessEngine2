@@ -18,6 +18,8 @@ add_executable(
         src/definitions/zobristKey.h
         src/definitions/moveGeneration.cpp
         src/definitions/moveGeneration.h
+        src/definitions/move.cpp
+        src/definitions/move.h
 
         src/ui/terminal_ui.cpp
         src/ui/terminal_ui.h
