@@ -49,11 +49,28 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 #Test 1
-add_executable(test1 tests/test1.cpp)
+add_executable(
+        test1 tests/test1.cpp
+
+        src/definitions/move.cpp
+        src/definitions/move.h
+        src/definitions/std_typedef.h
+        src/utils/helpers.cpp
+        src/utils/helpers.h
+        )
 target_link_libraries(test1 gtest_main)
 
 #Test 2
-add_executable(test2 tests/test2.cpp)
+add_executable(
+        test2 tests/test2.cpp
+
+        src/definitions/slidersAttacks.cpp
+        src/definitions/slidersAttacks.h
+        src/definitions/std_typedef.h
+        src/utils/bitops.cpp
+        src/utils/bitops.h
+
+        )
 target_link_libraries(test2 gtest_main)
 
 include(GoogleTest)
