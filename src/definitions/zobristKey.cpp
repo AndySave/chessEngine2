@@ -1,7 +1,6 @@
 
 #include "zobristKey.h"
 
-
 ull rand64(){
     ull n = (ull)rand() + ((ull)rand() << 15) + ((ull)rand() << 30) + ((ull)rand() << 45) + (((ull)rand() & 0xf) << 60);
     return n;
@@ -45,11 +44,9 @@ ull generateHash(Board *brd){
         }
     }
 
-
     if (brd->side == white){
         key ^= sideKey;
     }
-
 
     if (brd->enpassantSq != noSq){
         key ^= enpassantKeys[brd->enpassantSq];
