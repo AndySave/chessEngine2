@@ -16,6 +16,8 @@ void cleanBoard(Board *brd){
     brd->ply = 0;
     brd->move = 1;
     brd->hashKey = 0ull;
+    brd->whiteKingPos = 0;
+    brd->blackKingPos = 0;
 }
 
 
