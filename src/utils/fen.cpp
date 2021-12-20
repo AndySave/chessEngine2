@@ -73,21 +73,19 @@ void FEN(Board *brd, const string &fenStr){
             }
             setBit(brd->occupancies[both], sq);
 
-            // Updating hash key
-            hashPiece(brd->hashKey, piece, sq);
-
             file++;
         }
     }
 
     if (sideToMove == "w"){
-        hashSide(brd->hashKey);
+        brd->side = white;
+    }else{
+        brd->side = black;
     }
 
     if (enpassantSquare != "-"){
         int sq = algebraicToSq(enpassantSquare);
         brd->enpassantSq = sq;
-        hashEnpassant(brd->hashKey, sq);
     }
 
     // Updating castle rights
@@ -103,6 +101,9 @@ void FEN(Board *brd, const string &fenStr){
 
     // Updating move number
     brd->move = stoi(fullmove);
+
+    // Generating hash key
+    brd->hashKey = generateHash(brd);
 }
 
 
