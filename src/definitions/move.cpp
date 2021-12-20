@@ -49,18 +49,23 @@ unsigned short createMove(int fromSq, int toSq, int promotedPiece, int moveFlag)
 }
 
 void addPiece(Board *brd, int sq, int piece) {
-    ull mask = 0;
-    setBit(mask, sq);
-    brd->bitboards[piece] |= mask;
-    hashPiece(piece, sq); //board must be called brd.
+    int color = piece <= K ? white : black;
+
+    setBit(brd->bitboards[piece], sq);
+    setBit(brd->occupancies[color], sq);
+    setBit(brd->bitboards[both], sq);
+
+    hashPiece(piece, sq);
+
+    // TODO: Add incremental material update and pieceTable update
 }
 
 
 void clearPiece(Board *brd, int sq){
-    int col = getBit(brd->occupancies[white], sq) ? white : black;
+    int color = getBit(brd->occupancies[white], sq) ? white : black;
 
     int piece = -1;
-    if (col == white){
+    if (color == white){
         for (int pce = P; pce <= K; pce++){
             if (getBit(brd->bitboards[pce], sq)){
                 piece = pce;
@@ -76,5 +81,14 @@ void clearPiece(Board *brd, int sq){
         }
     }
 
+    // Removing piece from all bitboards
+    clearBit(brd->bitboards[piece], sq);
+    clearBit(brd->occupancies[color], sq);
+    clearBit(brd->occupancies[both], sq);
 
+
+    // Hashing piece out of key
+    hashPiece(piece, sq);
+
+    // TODO: Add incremental material update and pieceTable update
 }
