@@ -15,10 +15,10 @@ void initBitMasks(){
 }
 
 void printBitboard(ull bb){
-    for (int i = 7; i >= 0; i--){
-        cout << i+1 << "  ";
-        for (int j = 0; j < 8; j++){
-            if (bb & (1ull << (i*8 + j))){
+    for (int rank = 7; rank >= 0; rank--){
+        cout << rank+1 << "  ";
+        for (int file = 0; file < 8; file++){
+            if (bb & (1ull << (rank*8 + file))){
                 cout << 1 << " ";
             }else{
                 cout << 0 << " ";
