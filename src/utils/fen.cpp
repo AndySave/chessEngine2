@@ -1,23 +1,6 @@
 
 #include "fen.h"
 
-void cleanBoard(Board *brd){
-    for (ull &bitboard : brd->bitboards){
-        bitboard = 0ull;
-    }
-
-    for (ull &occupancy : brd->occupancies){
-        occupancy = 0ull;
-    }
-
-    brd->side = white;
-    brd->enpassantSq = noSq;
-    brd->castle = 0;
-    brd->ply = 0;
-    brd->move = 1;
-    brd->hashKey = 0ull;
-}
-
 
 void FEN(Board *brd, const string &fenStr){
 
