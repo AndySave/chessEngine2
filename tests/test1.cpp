@@ -1,68 +1,32 @@
-#include "../src/definitions/slidersAttacks.h"
+#include "../src/definitions/move.h"
+
 #include <gtest/gtest.h>
 
+struct MagicTest : public ::testing::Test {
+    // If the constructor and destructor are not enough for setting up
+    // and cleaning up each test, you can define the following methods:
+
+    virtual void SetUp() override {
+        // Code here will be called immediately after the constructor (right
+        // before each test).
+    }
+};
 /*
-cout << "Magic number#" << sq << ": " << magic << " failed!" << endl;
-cout << "Index " << indices[occ]-1 << " collided with index " << i << endl;
-*/
+ * A move consists of 16 bits:
+ * Bits [1, 2] : Special move flag. 00 = nothing, 01 = promotion, 10 = en passant, 11 = castling
+ * Bits [3, 4] : Promoted piece. 00 = knight, 01 = bishop, 10 = rook, 11 = queen
+ * Bits [5, 10]: To square. Square piece is being moved to. Value from 0-63 inclusive.
+ * Bits [11,16]: From square. Square piece is being moved from. Value from 0-63 inclusive.
+ */
+TEST(MagicTest, createMove) {
+    //unsigned short createMove(int fromSq, int toSq, int promotedPiece, int moveFlag)
+    ASSERT_EQ(createMove(54, 50, 1, 3), 56502);
 
-/*
-bool magicOk(ull bb, ull magic, int sq){
-    sq++;
-    int bitsInAttackMask = countBits(bb);
-
-    int indices[1 << bitsInAttackMask];
-    for (int i = 0; i < (1 << bitsInAttackMask); i++){
-        indices[i] = 0;
-    }
-
-    for (int i = 0; i < (1 << bitsInAttackMask); i++){
-        ull occ = generateOccupancy(bb, i);
-        occ *= magic;
-        occ >>= (64-bitsInAttackMask);
-
-        if (indices[occ]){
-            return false;
-        }
-
-        indices[occ] = sq;
-    }
-
-    return true;
 }
-
-
-TEST(bishopMagicsTest, TEST) {
-
-    bool ans = true;
-
-    for (int sq = 0; sq < 64; sq++){
-        ull magic = bishopMagics[sq];
-        ull bb = bishopAttackMasks[sq];
-
-        ans &= magicOk(bb, magic, sq);
-    }
-
-    EXPECT_TRUE(ans);
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
-
-
-TEST(rookMagicsTest, TEST) {
-
-    bool ans = true;
-
-    for (int sq = 0; sq < 64; sq++){
-        ull magic = rookMagics[sq];
-        ull bb = rookAttackMasks[sq];
-
-        ans &= magicOk(bb, magic, sq);
-    }
-
-    EXPECT_TRUE(ans);
-}
-
-*/
-
 
 
 
