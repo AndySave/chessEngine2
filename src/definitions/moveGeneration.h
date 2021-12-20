@@ -11,5 +11,7 @@
 bool isSquareAttacked(Board *brd, int sq, bool whiteAttacking);
 void printAttackedSquares(Board *brd, bool whiteAttacking);
 
+void generateMoves(Board *brd);
+
 
 #endif
