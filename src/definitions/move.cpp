@@ -44,5 +44,5 @@ void printMove(Move &move) {
 }
 
 unsigned short createMove(int fromSq, int toSq, int promotedPiece, int moveFlag) {
-    return fromSq | (6 << toSq) | (12 << promotedPiece) | (14 << moveFlag);
+    return fromSq | (toSq << 6) | (promotedPiece << 12) | (moveFlag << 14);
 }

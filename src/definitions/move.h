@@ -23,6 +23,19 @@ struct Move {
     int score;
 };
 
+struct Movelist{
+    Move moves[512];
+    int count;
+};
+
+struct Undo{
+    int move;
+    int castlePerm;
+    int enPas;
+    int fiftyMove;
+    ull posKey;
+};
+
 /*
  * Prints a move "move" in a nice format
  */
