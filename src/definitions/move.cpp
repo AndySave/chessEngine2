@@ -372,9 +372,9 @@ void undoMove(Board *brd){
 
     if (specialMoveFlag == epFlag){
         if (brd->side == white){
-            addPiece(brd, to-8, piece);
+            addPiece(brd, to-8, p);
         }else{
-            addPiece(brd, to+8, piece);
+            addPiece(brd, to+8, P);
         }
     }else if (specialMoveFlag == castleFlag){
         // If move is a castle move, move the rook
