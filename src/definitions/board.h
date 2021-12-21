@@ -7,6 +7,7 @@
 #include "../utils/bitops.h"
 #include "../utils/helpers.h"
 #include <bitset>
+#include "moveStructs.h"
 
 
 struct Board{
@@ -28,6 +29,8 @@ struct Board{
     int blackKingPos;
 
     ull hashKey = 0ull;
+
+    Undo history[2048];
 };
 
 void printBoard(Board *brd);
