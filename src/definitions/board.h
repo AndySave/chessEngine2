@@ -17,10 +17,12 @@ struct Board{
     int enpassantSq = noSq;
     int castle;
 
-    // Ply is halfmoves since last capture or pawn move
+    // Halfmoves since game started
     int ply;
-    // Move is fullmoves since game started
+    // Fullmoves since game started
     int move;
+    // Halfmoves since last capture or pawn move
+    int fiftyMove;
 
     int whiteKingPos;
     int blackKingPos;
