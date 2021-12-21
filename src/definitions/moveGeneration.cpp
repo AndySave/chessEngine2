@@ -359,7 +359,7 @@ void generateMoves(Board *brd, Movelist *lst){
             clearBit(rookPositions, rookPos);
 
             // Getting moves and removing self captures
-            ull moves = rookAttackRay(occ, rookPos) & (~brd->occupancies[black]);;
+            ull moves = rookAttackRay(occ, rookPos) & (~brd->occupancies[black]);
             // Getting attacks from moves
             ull attacks = moves & brd->occupancies[white];
             // Removing attacks from quiet moves
@@ -388,7 +388,7 @@ void generateMoves(Board *brd, Movelist *lst){
             clearBit(queenPositions, queenPos);
 
             // Getting moves and removing self captures
-            ull moves = queenAttackRay(occ, queenPos) & (~brd->occupancies[black]);;
+            ull moves = queenAttackRay(occ, queenPos) & (~brd->occupancies[black]);
             // Getting attacks from moves
             ull attacks = moves & brd->occupancies[white];
             // Removing attacks from quiet moves
