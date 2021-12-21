@@ -86,7 +86,7 @@ void FEN(Board *brd, const string &fenStr){
     }
 
     // Updating plies since last capture or pawn advance
-    brd->ply = stoi(halfmove);
+    brd->fiftyMove = stoi(halfmove);
 
     // Updating move number
     brd->move = stoi(fullmove);
