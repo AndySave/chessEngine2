@@ -23,10 +23,10 @@ struct Movelist{
 
 struct Undo{
     int move;
-    int castlePerm;
-    int enPas;
+    int castle;
+    int enpassantSq;
     int fiftyMove;
-    ull posKey;
+    ull hashKey;
 };
 
 
