@@ -21,6 +21,9 @@ add_executable(
         src/definitions/move.cpp
         src/definitions/move.h
 
+        src/evaluation/mainEvaluation.cpp
+        src/evaluation/mainEvaluation.h
+
         src/ui/terminal_ui.cpp
         src/ui/terminal_ui.h
         src/ui/uci.cpp
