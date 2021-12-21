@@ -71,7 +71,6 @@ int findPiece(Board *brd, int sq, int color){
         }
     }
 
-    cout << "-----------NOT GOOD----------" << endl;
     return piece;
 }
 
@@ -338,12 +337,12 @@ bool makeMove(Board *brd, unsigned short move){
 
 
     if (brd->side == white){
-        if (isSquareAttacked(brd, brd->blackKingPos, true)){
+        if (isSquareAttacked(brd, brd->whiteKingPos, false)){
             undoMove(brd);
             return false;
         }
     }else{
-        if (isSquareAttacked(brd, brd->whiteKingPos, false)){
+        if (isSquareAttacked(brd, brd->blackKingPos, true)){
             undoMove(brd);
             return false;
         }
