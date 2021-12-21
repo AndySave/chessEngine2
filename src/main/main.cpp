@@ -6,6 +6,7 @@
 #include "../utils/fen.h"
 #include "../definitions/board.h"
 #include "../definitions/moveGeneration.h"
+#include "../evaluation/mainEvaluation.h"
 
 
 int main() {
@@ -24,7 +25,7 @@ int main() {
 
 
     Board board;
-    string fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    string fenString = "rnbqkbnr/pppp1pp1/7p/3Pp3/8/8/PPP1PPPP/RNBQKBNR w KQkq e6 0 3";
     FEN(&board, fenString);
     printBoard(&board);
 
