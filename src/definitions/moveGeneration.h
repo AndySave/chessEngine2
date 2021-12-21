@@ -7,6 +7,7 @@
 #include "slidersAttacks.h"
 #include "std_typedef.h"
 #include <iostream>
+#include "moveStructs.h"
 
 bool isSquareAttacked(Board *brd, int sq, bool whiteAttacking);
 void printAttackedSquares(Board *brd, bool whiteAttacking);
