@@ -37,6 +37,9 @@ void printMove(Move& move);
  * Creates a move value (unsigned short) from input fromSq, toSq, promotedPiece and moveFlag.
  */
 unsigned short createMove(int fromSq, int toSq, int promotedPiece, int moveFlag);
+void addQuietMove(Board *brd, Movelist *lst, unsigned short move);
+void addCaptureMove(Board *brd, Movelist *lst, unsigned short move);
+void addEPMove(Board *brd, Movelist *lst, unsigned short move);
 void addPiece(Board *brd, int sq, int piece);
 void clearPiece(Board *brd, int sq);
 bool makeMove(Board *brd, unsigned short move);
