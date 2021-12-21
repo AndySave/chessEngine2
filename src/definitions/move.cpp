@@ -48,22 +48,7 @@ unsigned short createMove(int fromSq, int toSq, int promotedPiece, int moveFlag)
     return fromSq | (toSq << 6) | (promotedPiece << 12) | (moveFlag << 14);
 }
 
-void addPiece(Board *brd, int sq, int piece) {
-    int color = (piece <= K) ? white : black;
-
-    setBit(brd->bitboards[piece], sq);
-    setBit(brd->occupancies[color], sq);
-    setBit(brd->occupancies[both], sq);
-
-    hashPiece(piece, sq);
-
-    // TODO: Add incremental material update and pieceTable update
-}
-
-
-void clearPiece(Board *brd, int sq){
-    int color = getBit(brd->occupancies[white], sq) ? white : black;
-
+int findPiece(Board *brd, int sq, int color){
     int piece = -1;
     if (color == white){
         for (int pce = P; pce <= K; pce++){
@@ -80,6 +65,27 @@ void clearPiece(Board *brd, int sq){
             }
         }
     }
+
+    return piece;
+}
+
+void addPiece(Board *brd, int sq, int piece) {
+    int color = (piece <= K) ? white : black;
+
+    setBit(brd->bitboards[piece], sq);
+    setBit(brd->occupancies[color], sq);
+    setBit(brd->occupancies[both], sq);
+
+    hashPiece(piece, sq);
+
+    // TODO: Add incremental material update and pieceTable update
+}
+
+
+void clearPiece(Board *brd, int sq){
+    int color = getBit(brd->occupancies[white], sq) ? white : black;
+
+    int piece = findPiece(brd, sq, color);
 
     // Removing piece from all bitboards
     clearBit(brd->bitboards[piece], sq);
@@ -99,22 +105,7 @@ void movePiece(Board *brd, int fromSq, int toSq){
     int color = getBit(brd->occupancies[white], fromSq) ? white : black;
 
     // Find piece type
-    int piece = -1;
-    if (color == white){
-        for (int pce = P; pce <= K; pce++){
-            if (getBit(brd->bitboards[pce], fromSq)){
-                piece = pce;
-                break;
-            }
-        }
-    }else{
-        for (int pce = p; pce <= k; pce++){
-            if (getBit(brd->bitboards[pce], fromSq)){
-                piece = pce;
-                break;
-            }
-        }
-    }
+    int piece = findPiece(brd, fromSq, color);
 
     // Removing piece from all bitboards
     clearBit(brd->bitboards[piece], fromSq);
@@ -141,9 +132,13 @@ bool makeMove(Board *brd, unsigned short move){
     int to = toSquare(move);
     int promoted = promotedPiece(move);
     int specialMoveFlag = moveFlag(move);
+    int piece = findPiece(brd, from, brd->side);
 
-
-    // TODO: Add all info to history array
+    brd->history[brd->ply].move = move;
+    brd->history[brd->ply].hashKey = brd->hashKey;
+    brd->history[brd->ply].fiftyMove = brd->fiftyMove;
+    brd->history[brd->ply].enpassantSq = brd->enpassantSq;
+    brd->history[brd->ply].castle = brd->castle;
 
     if (specialMoveFlag == epFlag){
         if (brd->side == white){
@@ -185,26 +180,22 @@ bool makeMove(Board *brd, unsigned short move){
     }
 
     brd->enpassantSq = noSq;
-    if (brd->side == white){
-        bool isPawn = getBit(brd->bitboards[P], from);
-        // If piece is a pawn and moved two squares it generates an enPassant square
-        if (isPawn){
-            // Resetting fiftyMove counter because of pawn move
-            brd->fiftyMove = 0;
-            if (from - to == -16){
-                brd->enpassantSq = from + 8;
-            }
-        }
-    }else{
-        bool isPawn = getBit(brd->bitboards[p], from);
-        if (isPawn){
-            // Resetting fiftyMove counter because of pawn move
-            brd->fiftyMove = 0;
-            if (from - to == 16){
-                brd->enpassantSq = from - 8;
-            }
-        }
 
+    if (piece == P){
+        // If piece is a pawn and moved two squares it generates an enPassant square
+        // Resetting fiftyMove counter because of pawn move
+        brd->fiftyMove = 0;
+        if (from - to == -16){
+            brd->enpassantSq = from + 8;
+        }
+        // Hashing in enPassant square
+        hashEnpassant(brd->enpassantSq);
+    }else if (piece == p){
+        // Resetting fiftyMove counter because of pawn move
+        brd->fiftyMove = 0;
+        if (from - to == 16){
+            brd->enpassantSq = from - 8;
+        }
         // Hashing in enPassant square
         hashEnpassant(brd->enpassantSq);
     }
@@ -212,23 +203,26 @@ bool makeMove(Board *brd, unsigned short move){
     // If piece exists on to square, it must be a capture
     bool isCapture = getBit(brd->occupancies[both], to);
     if (isCapture){
+        // Finding piece type
+        int capturedPiece = findPiece(brd, to, brd->side ^ 1);
+
+        brd->history[brd->ply].capturedPiece = capturedPiece;
+
         clearPiece(brd, to);
         // Capture resets fiftyMove counter
         brd->fiftyMove = 0;
     }else{
+        brd->history[brd->ply].capturedPiece = noPiece;
         brd->fiftyMove++;
     }
 
     // Updating king pos
-    if (brd->side == white){
-        if (from == brd->whiteKingPos){
-            brd->whiteKingPos = to;
-        }
-    }else{
-        if (from == brd->blackKingPos){
-            brd->blackKingPos = to;
-        }
+    if (piece == K){
+        brd->whiteKingPos = to;
+    }else if (piece == k){
+        brd->blackKingPos = to;
     }
+
 
     // Incrementing halfmoves
     brd->ply++;
@@ -270,5 +264,71 @@ bool makeMove(Board *brd, unsigned short move){
 }
 
 void undoMove(Board *brd){
+    brd->ply--;
 
+    // swapping sides
+    brd->side ^= 1;
+
+    int move = brd->history[brd->ply].move;
+    int from = fromSquare(move);
+    int to = toSquare(move);
+    int specialMoveFlag = moveFlag(move);
+    int color = brd->side;
+
+    // Finding piece type
+    int piece = findPiece(brd, to, color);
+
+    brd->castle = brd->history[brd->ply].castle;
+    brd->fiftyMove = brd->history[brd->ply].fiftyMove;
+    brd->enpassantSq = brd->history[brd->ply].enpassantSq;
+
+    if (specialMoveFlag == epFlag){
+        if (brd->side == white){
+            addPiece(brd, to-8, piece);
+        }else{
+            addPiece(brd, to+8, piece);
+        }
+    }else if (specialMoveFlag == castleFlag){
+        // If move is a castle move, move the rook
+        if (brd->side == white){
+            if (to == g1){
+                movePiece(brd, f1, h1);
+            }else{
+                movePiece(brd, d1, a1);
+            }
+        }else{
+            if (to == g8){
+                movePiece(brd, f8, h8);
+            }else{
+                movePiece(brd, d8, a8);
+            }
+        }
+    }
+
+    // Moving piece back
+    movePiece(brd, to, from);
+
+    if (piece == K){
+        brd->whiteKingPos = from;
+    }else if (piece == k){
+        brd->blackKingPos = from;
+    }
+
+    // Adding back captured piece if move was capture move
+    if (brd->history[brd->ply].capturedPiece != noPiece){
+        addPiece(brd, to, brd->history[brd->ply].capturedPiece);
+    }
+
+    if (specialMoveFlag == promFlag){
+        if (brd->side == white){
+            clearPiece(brd, from);
+            addPiece(brd, from, p);
+        }else{
+            clearPiece(brd, from);
+            addPiece(brd, from, P);
+        }
+    }
+
+    // Reverting back to old hashKey
+    brd->hashKey = brd->history[brd->ply].hashKey;
 }
