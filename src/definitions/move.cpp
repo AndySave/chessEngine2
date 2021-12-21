@@ -49,11 +49,11 @@ unsigned short createMove(int fromSq, int toSq, int promotedPiece, int moveFlag)
 }
 
 void addPiece(Board *brd, int sq, int piece) {
-    int color = piece <= K ? white : black;
+    int color = (piece <= K) ? white : black;
 
     setBit(brd->bitboards[piece], sq);
     setBit(brd->occupancies[color], sq);
-    setBit(brd->bitboards[both], sq);
+    setBit(brd->occupancies[both], sq);
 
     hashPiece(piece, sq);
 
