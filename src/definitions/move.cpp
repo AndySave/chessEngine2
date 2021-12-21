@@ -423,13 +423,12 @@ void undoMove(Board *brd){
 
 // Checks through history array if position has already occurred
 bool isRepetition(Board *brd){
-    for (int i = brd->ply - brd->fiftyMove; i < brd->ply-1; ++i){
+    for (int i = brd->ply - brd->fiftyMove; i < brd->ply-1; i++){
         if (brd->hashKey == brd->history[i].hashKey){
             return true;
         }
     }
     return false;
 }
-
 
 
