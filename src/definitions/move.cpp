@@ -45,8 +45,10 @@ void printMove(Move &move) {
 
 void printMovelist(Movelist *lst){
     for (int i = 0; i < lst->count; i++){
+        cout << "------- MOVE #" << i+1 << " -------" << endl;
         Move move = lst->moves[i];
         printMove(move);
+        cout << "-----------------------" << endl;
     }
 }
 
