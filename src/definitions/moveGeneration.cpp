@@ -37,12 +37,11 @@ void generateMoves(Board *brd, Movelist *lst){
             while (attacks){
                 index = getLSB(attacks);
                 clearBit(attacks, index);
+                addCaptureMove(brd, lst, createMove(pawnPos, index, 0, noFlag));
+            }
 
-                if (index == brd->enpassantSq){
-                    addEPMove(brd, lst, createMove(pawnPos, index, 0, epFlag));
-                }else{
-                    addCaptureMove(brd, lst, createMove(pawnPos, index, 0, noFlag));
-                }
+            if (brd->enpassantSq != noSq && getBit(whitePawnAttacks[pawnPos], brd->enpassantSq)){
+                addEPMove(brd, lst, createMove(pawnPos, brd->enpassantSq, 0, epFlag));
             }
         }
 
@@ -241,12 +240,11 @@ void generateMoves(Board *brd, Movelist *lst){
             while (attacks){
                 index = getLSB(attacks);
                 clearBit(attacks, index);
+                addCaptureMove(brd, lst, createMove(pawnPos, index, 0, noFlag));
+            }
 
-                if (index == brd->enpassantSq){
-                    addEPMove(brd, lst, createMove(pawnPos, index, 0, epFlag));
-                }else{
-                    addCaptureMove(brd, lst, createMove(pawnPos, index, 0, noFlag));
-                }
+            if (brd->enpassantSq != noSq && getBit(blackPawnAttacks[pawnPos], brd->enpassantSq)){
+                addEPMove(brd, lst, createMove(pawnPos, brd->enpassantSq, 0, epFlag));
             }
         }
 
