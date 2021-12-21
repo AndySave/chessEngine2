@@ -65,7 +65,9 @@ void printAttackedSquares(Board *brd, bool whiteAttacking){
 }
 
 
-void generateMoves(Board *brd){
+void generateMoves(Board *brd, Movelist *lst){
+    lst->count = 0;
+
     ull occ = brd->occupancies[both];
     if (brd->side == white){
         /// -----WHITE MOVE GEN----- ///
@@ -80,14 +82,19 @@ void generateMoves(Board *brd){
             if (!getBit(occ, pawnPos+8)){
                 if (rank == 6){
                     cout << "Pawn promotion: " << pawnPos << " -> " << pawnPos+8 << endl;
+                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos+8, N, promFlag));
+                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos+8, B, promFlag));
+                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos+8, R, promFlag));
+                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos+8, Q, promFlag));
                 }else{
                     cout << "Pawn quiet move  : " << pawnPos << " -> " << pawnPos+8 << endl;
+                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos+8, 0, noFlag));
                 }
 
                 // Checking if pawn hasn't moved, if so it can move up two squares
                 if (rank == 1 && !getBit(occ, pawnPos+16)){
-                    // Add en passant square
                     cout << "Pawn quiet move  : " << pawnPos << " -> " << pawnPos+16 << endl;
+                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos+16, 0, noFlag));
                 }
             }
 
@@ -97,7 +104,13 @@ void generateMoves(Board *brd){
                 index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                cout << "Pawn capture move: " << pawnPos << " -> " << index << endl;
+                if (index == brd->enpassantSq){
+                    cout << "Pawn EP move: " << pawnPos << " -> " << index << endl;
+                    addEPMove(brd, lst, createMove(pawnPos, index, 0, epFlag));
+                }else{
+                    cout << "Pawn capture move: " << pawnPos << " -> " << index << endl;
+                    addCaptureMove(brd, lst, createMove(pawnPos, index, 0, noFlag));
+                }
             }
         }
 
@@ -115,6 +128,7 @@ void generateMoves(Board *brd){
             clearBit(moves, index);
 
             cout << "King quiet move: " << brd->whiteKingPos << " -> " << index << endl;
+            addQuietMove(brd, lst, createMove(brd->whiteKingPos, index, 0, noFlag));
         }
 
         // Handling capture moves
@@ -123,6 +137,7 @@ void generateMoves(Board *brd){
             clearBit(attacks, index);
 
             cout << "King capture move: " << brd->whiteKingPos << " -> " << index << endl;
+            addCaptureMove(brd, lst, createMove(brd->whiteKingPos, index, 0, noFlag));
         }
 
         // Handling castling
@@ -130,17 +145,19 @@ void generateMoves(Board *brd){
         if (WKC & brd->castle || WQC & brd->castle){
             if (!isSquareAttacked(brd, brd->whiteKingPos, false)){
                 // Checking that we have castle rights and squares between king and rook are empty
-                if (WKC & brd->castle && !getBit(occ, 5) && !getBit(occ, 6)){
+                if (WKC & brd->castle && !getBit(occ, f1) && !getBit(occ, g1)){
                     // Checking if squares between king and rook is under attack
-                    if (!isSquareAttacked(brd, 5, false) && !isSquareAttacked(brd, 6, false)){
+                    if (!isSquareAttacked(brd, f1, false) && !isSquareAttacked(brd, g1, false)){
                         cout << "King side castle" << endl;
+                        addQuietMove(brd, lst, createMove(brd->whiteKingPos, g1, 0, castleFlag));
                     }
                 }
                 // Checking that we have castle rights and squares between king and rook are empty
-                if (WQC & brd->castle && !getBit(occ, 3) && !getBit(occ, 2)){
+                if (WQC & brd->castle && !getBit(occ, d1) && !getBit(occ, c1)){
                     // Checking if squares between king and rook is under attack
-                    if (!isSquareAttacked(brd, 3, false) && !isSquareAttacked(brd, 2, false)){
+                    if (!isSquareAttacked(brd, d1, false) && !isSquareAttacked(brd, c1, false)){
                         cout << "Queen side castle" << endl;
+                        addQuietMove(brd, lst, createMove(brd->whiteKingPos, c1, 0, castleFlag));
                     }
                 }
             }
@@ -165,6 +182,7 @@ void generateMoves(Board *brd){
                 clearBit(moves, index);
 
                 cout << "Knight quiet move: " << knightPos << " -> " << index << endl;
+                addQuietMove(brd, lst, createMove(knightPos, index, 0, noFlag));
             }
 
             // Handle capture moves
@@ -173,6 +191,7 @@ void generateMoves(Board *brd){
                 clearBit(attacks, index);
 
                 cout << "Knight capture move: " << knightPos << " -> " << index << endl;
+                addCaptureMove(brd, lst, createMove(knightPos, index, 0, noFlag));
             }
         }
 
@@ -195,6 +214,7 @@ void generateMoves(Board *brd){
                 clearBit(moves, index);
 
                 cout << "Bishop quiet move: " << bishopPos << " -> " << index << endl;
+                addQuietMove(brd, lst, createMove(bishopPos, index, 0, noFlag));
             }
 
             // Handle capture moves
@@ -203,6 +223,7 @@ void generateMoves(Board *brd){
                 clearBit(attacks, index);
 
                 cout << "Bishop capture move: " << bishopPos << " -> " << index << endl;
+                addCaptureMove(brd, lst, createMove(bishopPos, index, 0, noFlag));
             }
         }
 
@@ -225,6 +246,7 @@ void generateMoves(Board *brd){
                 clearBit(moves, index);
 
                 cout << "Rook quiet move: " << rookPos << " -> " << index << endl;
+                addQuietMove(brd, lst, createMove(rookPos, index, 0, noFlag));
             }
 
             while (attacks){
@@ -232,6 +254,7 @@ void generateMoves(Board *brd){
                 clearBit(attacks, index);
 
                 cout << "Rook capture move: " << rookPos << " -> " << index << endl;
+                addCaptureMove(brd, lst, createMove(rookPos, index, 0, noFlag));
             }
         }
 
@@ -254,6 +277,7 @@ void generateMoves(Board *brd){
                 clearBit(moves, index);
 
                 cout << "Queen quiet move: " << queenPos << " -> " << index << endl;
+                addQuietMove(brd, lst, createMove(queenPos, index, 0, noFlag));
             }
 
             while (attacks){
@@ -261,6 +285,7 @@ void generateMoves(Board *brd){
                 clearBit(attacks, index);
 
                 cout << "Queen capture move: " << queenPos << " -> " << index << endl;
+                addCaptureMove(brd, lst, createMove(queenPos, index, 0, noFlag));
             }
         }
 
@@ -278,14 +303,19 @@ void generateMoves(Board *brd){
             if (!getBit(occ, pawnPos-8)){
                 if (rank == 1){
                     cout << "Pawn promotion: " << pawnPos << " -> " << pawnPos-8 << endl;
+                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos-8, n, promFlag));
+                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos-8, b, promFlag));
+                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos-8, r, promFlag));
+                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos-8, q, promFlag));
                 }else{
                     cout << "Pawn quiet move  : " << pawnPos << " -> " << pawnPos-8 << endl;
+                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos-8, 0, noFlag));
                 }
 
                 // Checking if pawn hasn't moved, if so it can move up two squares
                 if (rank == 6 && !getBit(occ, pawnPos-16)){
-                    // Add en passant square
                     cout << "Pawn quiet move  : " << pawnPos << " -> " << pawnPos-16 << endl;
+                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos-16, 0, noFlag));
                 }
             }
 
@@ -295,7 +325,13 @@ void generateMoves(Board *brd){
                 index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                cout << "Pawn capture move: " << pawnPos << " -> " << index << endl;
+                if (index == brd->enpassantSq){
+                    cout << "Pawn EP move: " << pawnPos << " -> " << index << endl;
+                    addEPMove(brd, lst, createMove(pawnPos, index, 0, epFlag));
+                }else{
+                    cout << "Pawn capture move: " << pawnPos << " -> " << index << endl;
+                    addCaptureMove(brd, lst, createMove(pawnPos, index, 0, noFlag));
+                }
             }
         }
 
@@ -313,6 +349,7 @@ void generateMoves(Board *brd){
             clearBit(moves, index);
 
             cout << "King quiet move: " << brd->blackKingPos << " -> " << index << endl;
+            addQuietMove(brd, lst, createMove(brd->blackKingPos, index, 0, noFlag));
         }
 
         // Handling capture moves
@@ -321,6 +358,7 @@ void generateMoves(Board *brd){
             clearBit(attacks, index);
 
             cout << "King capture move: " << brd->blackKingPos << " -> " << index << endl;
+            addCaptureMove(brd, lst, createMove(brd->blackKingPos, index, 0, noFlag));
         }
 
         // Handling castling
@@ -328,17 +366,19 @@ void generateMoves(Board *brd){
         if (BKC & brd->castle || BQC & brd->castle){
             if (!isSquareAttacked(brd, brd->blackKingPos, true)){
                 // Checking that we have castle rights and squares between king and rook are empty
-                if (BKC & brd->castle && !getBit(occ, 61) && !getBit(occ, 62)){
+                if (BKC & brd->castle && !getBit(occ, f8) && !getBit(occ, g8)){
                     // Checking if squares between king and rook is under attack
-                    if (!isSquareAttacked(brd, 61, true) && !isSquareAttacked(brd, 62, true)){
+                    if (!isSquareAttacked(brd, f8, true) && !isSquareAttacked(brd, g8, true)){
                         cout << "King side castle" << endl;
+                        addQuietMove(brd, lst, createMove(brd->blackKingPos, g8, 0, castleFlag));
                     }
                 }
                 // Checking that we have castle rights and squares between king and rook are empty
-                if (BQC & brd->castle && !getBit(occ, 59) && !getBit(occ, 58)){
+                if (BQC & brd->castle && !getBit(occ, d8) && !getBit(occ, c8)){
                     // Checking if squares between king and rook is under attack
-                    if (!isSquareAttacked(brd, 59, true) && !isSquareAttacked(brd, 58, true)){
+                    if (!isSquareAttacked(brd, d8, true) && !isSquareAttacked(brd, c8, true)){
                         cout << "Queen side castle" << endl;
+                        addQuietMove(brd, lst, createMove(brd->blackKingPos, c8, 0, castleFlag));
                     }
                 }
             }
@@ -363,6 +403,7 @@ void generateMoves(Board *brd){
                 clearBit(moves, index);
 
                 cout << "Knight quiet move: " << knightPos << " -> " << index << endl;
+                addQuietMove(brd, lst, createMove(knightPos, index, 0, noFlag));
             }
 
             // Handle capture moves
@@ -371,6 +412,7 @@ void generateMoves(Board *brd){
                 clearBit(attacks, index);
 
                 cout << "Knight capture move: " << knightPos << " -> " << index << endl;
+                addCaptureMove(brd, lst, createMove(knightPos, index, 0, noFlag));
             }
         }
 
@@ -393,6 +435,7 @@ void generateMoves(Board *brd){
                 clearBit(moves, index);
 
                 cout << "Bishop quiet move: " << bishopPos << " -> " << index << endl;
+                addQuietMove(brd, lst, createMove(bishopPos, index, 0, noFlag));
             }
 
             while (attacks){
@@ -400,6 +443,7 @@ void generateMoves(Board *brd){
                 clearBit(attacks, index);
 
                 cout << "Bishop capture move: " << bishopPos << " -> " << index << endl;
+                addCaptureMove(brd, lst, createMove(bishopPos, index, 0, noFlag));
             }
         }
 
@@ -422,6 +466,7 @@ void generateMoves(Board *brd){
                 clearBit(moves, index);
 
                 cout << "Rook quiet move: " << rookPos << " -> " << index << endl;
+                addQuietMove(brd, lst, createMove(rookPos, index, 0, noFlag));
             }
 
             while (attacks){
@@ -429,6 +474,7 @@ void generateMoves(Board *brd){
                 clearBit(attacks, index);
 
                 cout << "Rook capture move: " << rookPos << " -> " << index << endl;
+                addCaptureMove(brd, lst, createMove(rookPos, index, 0, noFlag));
             }
         }
 
@@ -451,6 +497,7 @@ void generateMoves(Board *brd){
                 clearBit(moves, index);
 
                 cout << "Queen quiet move: " << queenPos << " -> " << index << endl;
+                addQuietMove(brd, lst, createMove(queenPos, index, 0, noFlag));
             }
 
             while (attacks){
@@ -458,6 +505,7 @@ void generateMoves(Board *brd){
                 clearBit(attacks, index);
 
                 cout << "Queen capture move: " << queenPos << " -> " << index << endl;
+                addCaptureMove(brd, lst, createMove(queenPos, index, 0, noFlag));
             }
         }
     }
