@@ -8,6 +8,7 @@ typedef long long ll;
 enum color {white, black, both};
 enum pieces {P, N, B, R, Q, K, p, n, b, r, q, k};
 enum castle {WKC = 1, WQC = 2, BKC = 4, BQC = 8};
+enum specialMove {noFlag, promFlag, epFlag, castleFlag};
 
 enum squares {
     a1, b1, c1, d1, e1, f1, g1, h1,
