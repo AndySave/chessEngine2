@@ -71,6 +71,7 @@ int findPiece(Board *brd, int sq, int color){
         }
     }
 
+    cout << "-----------NOT GOOD----------" << endl;
     return piece;
 }
 
