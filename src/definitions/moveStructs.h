@@ -23,6 +23,7 @@ struct Movelist{
 
 struct Undo{
     int move;
+    int capturedPiece;
     int castle;
     int enpassantSq;
     int fiftyMove;
