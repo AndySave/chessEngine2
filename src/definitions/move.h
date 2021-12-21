@@ -7,7 +7,10 @@
 #include "../utils/helpers.h"
 #include "board.h"
 #include "zobristKey.h"
-#include "moveGeneration.h"
+#include "nonSlidersAttacks.h"
+#include "slidersAttacks.h"
+#include "moveStructs.h"
+
 
 //Macros to extract information from moveVal (value of a move)
 #define fromSquare(move) (move & 0x3f)
@@ -32,6 +35,7 @@ const int castlePerm[64] ={
  * Prints a move "move" in a nice format
  */
 void printMove(Move& move);
+void printMovelist(Movelist *lst);
 
 /*
  * Creates a move value (unsigned short) from input fromSq, toSq, promotedPiece and moveFlag.
@@ -44,6 +48,8 @@ void addPiece(Board *brd, int sq, int piece);
 void clearPiece(Board *brd, int sq);
 bool makeMove(Board *brd, unsigned short move);
 void undoMove(Board *brd);
+bool isSquareAttacked(Board *brd, int sq, bool whiteAttacking);
+void printAttackedSquares(Board *brd, bool whiteAttacking);
 
 #endif
 
