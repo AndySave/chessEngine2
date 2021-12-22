@@ -81,7 +81,7 @@ void generateMoves(Board *brd, Movelist *lst){
                     }
                 }
                 // Checking that we have castle rights and squares between king and rook are empty
-                if (WQC & brd->castle && !getBit(occ, d1) && !getBit(occ, c1)){
+                if (WQC & brd->castle && !getBit(occ, d1) && !getBit(occ, c1) && !getBit(occ, b1)){
                     // Checking if squares between king and rook is under attack
                     if (!isSquareAttacked(brd, d1, false) && !isSquareAttacked(brd, c1, false)){
                         addQuietMove(lst, createMove(brd->whiteKingPos, c1, 0, castleFlag));
@@ -284,7 +284,7 @@ void generateMoves(Board *brd, Movelist *lst){
                     }
                 }
                 // Checking that we have castle rights and squares between king and rook are empty
-                if (BQC & brd->castle && !getBit(occ, d8) && !getBit(occ, c8)){
+                if (BQC & brd->castle && !getBit(occ, d8) && !getBit(occ, c8) && !getBit(occ, b8)){
                     // Checking if squares between king and rook is under attack
                     if (!isSquareAttacked(brd, d8, true) && !isSquareAttacked(brd, c8, true)){
                         addQuietMove(lst, createMove(brd->blackKingPos, c8, 0, castleFlag));
