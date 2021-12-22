@@ -57,11 +57,11 @@ void perftRec(Board* brd, int depth) {
         return;
     }
 
-    Movelist* moveList = new Movelist;
-    generateMoves(brd, moveList);
+    Movelist moveList;
+    generateMoves(brd, &moveList);
 
-    for (int i = 0 ; i<moveList->count; i++) {
-        bool legalMove = makeMove(brd, moveList->moves[i].move);
+    for (int i = 0 ; i<moveList.count; i++) {
+        bool legalMove = makeMove(brd, moveList.moves[i].move);
         if (legalMove) {
             perftRec(brd, depth-1);
             undoMove(brd);
