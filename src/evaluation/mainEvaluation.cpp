@@ -83,7 +83,9 @@ void removeMaterial(int piece){
 }
 
 
-
+/*
+ * Main eval. Every evaluation function should be in here
+ */
 int eval(Board *brd){
     int score = 0;
     int egFactor = (phase * taperedFactor + (totalPhase / 2)) / totalPhase;
