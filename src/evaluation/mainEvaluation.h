@@ -5,6 +5,7 @@
 #include "../definitions/board.h"
 #include "../definitions/std_typedef.h"
 #include "../utils/bitops.h"
+#include "pieceTables.h"
 
 
 /// --------------------TAPERED VALUES-------------------- ///
