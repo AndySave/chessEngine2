@@ -161,9 +161,12 @@ void addPiece(Board *brd, int sq, int piece) {
     setBit(brd->occupancies[color], sq);
     setBit(brd->occupancies[both], sq);
 
+    // Hashing piece in key
     hashPiece(piece, sq);
 
-    // TODO: Add incremental material update and pieceTable update
+    // Incrementally updating eval values
+    addMaterial(piece);
+    addPieceTableScore(piece, sq);
 }
 
 
@@ -179,7 +182,9 @@ void clearPiece(Board *brd, int sq, int piece){
     // Hashing piece out of key
     hashPiece(piece, sq);
 
-    // TODO: Add incremental material update and pieceTable update
+    // Incrementally updating eval values
+    removeMaterial(piece);
+    removePieceTableScore(piece, sq);
 }
 
 
@@ -205,7 +210,9 @@ void movePiece(Board *brd, int fromSq, int toSq){
     // Hashing in new piece pos
     hashPiece(piece, toSq);
 
-    // TODO: Add incremental material update and pieceTable update
+    // Incrementally updating eval values
+    removePieceTableScore(piece, fromSq);
+    addPieceTableScore(piece, toSq);
 }
 
 //IMPORTANT: If a move is made and is not legal, it will be undone automatically.
