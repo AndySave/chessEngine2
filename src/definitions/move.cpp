@@ -404,10 +404,10 @@ void undoMove(Board *brd){
     if (specialMoveFlag == promFlag){
         if (brd->side == white){
             clearPiece(brd, from, piece);
-            addPiece(brd, from, p);
+            addPiece(brd, from, P);
         }else{
             clearPiece(brd, from, piece);
-            addPiece(brd, from, P);
+            addPiece(brd, from, p);
         }
     }
 
