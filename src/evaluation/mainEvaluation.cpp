@@ -92,6 +92,9 @@ int eval(Board *brd){
     // Adding material to score
     score += (materialMG*mgFactor + materialEG*egFactor) / taperedFactor;
 
+    // Adding piece tables to score
+    score += (pieceTableScoreMG*mgFactor + pieceTableScoreEG*egFactor) / taperedFactor;
+
     if (brd->side == white){
         return score;
     }
