@@ -44,22 +44,9 @@ inline unsigned short createMove(int fromSq, int toSq, int promotedPiece, int mo
     return fromSq | (toSq << 6) | (promotedPiece << 12) | (moveFlag << 14);
 }
 
-inline void addQuietMove(Movelist *lst, unsigned short move){
-    lst->moves[lst->count].move = move;
-    lst->count++;
-}
-
-inline void addCaptureMove(Movelist *lst, unsigned short move){
-    lst->moves[lst->count].move = move;
-    lst->count++;
-}
-
-inline void addEPMove(Movelist *lst, unsigned short move){
-    lst->moves[lst->count].move = move;
-    lst->count++;
-}
-
-
+void addQuietMove(Movelist *lst, unsigned short move);
+void addCaptureMove(Movelist *lst, unsigned short move);
+void addEPMove(Movelist *lst, unsigned short move);
 void addPiece(Board *brd, int sq, int piece);
 void clearPiece(Board *brd, int sq);
 bool makeMove(Board *brd, unsigned short move);

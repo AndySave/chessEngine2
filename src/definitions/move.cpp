@@ -74,6 +74,21 @@ int findPiece(Board *brd, int sq, int color){
     return piece;
 }
 
+void addQuietMove(Movelist *lst, unsigned short move){
+    lst->moves[lst->count].move = move;
+    lst->count++;
+}
+
+void addCaptureMove(Movelist *lst, unsigned short move){
+    lst->moves[lst->count].move = move;
+    lst->count++;
+}
+
+void addEPMove(Movelist *lst, unsigned short move){
+    lst->moves[lst->count].move = move;
+    lst->count++;
+}
+
 
 bool isSquareAttacked(Board *brd, int sq, bool whiteAttacking){
     ull occ = brd->occupancies[both];
