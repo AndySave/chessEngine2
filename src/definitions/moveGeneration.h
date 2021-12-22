@@ -12,6 +12,7 @@
 
 
 void generateMoves(Board *brd, Movelist *lst);
+void generateCaptureMoves(Board *brd, Movelist *lst);
 
 
 #endif
