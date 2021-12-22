@@ -10,6 +10,7 @@
 #include "nonSlidersAttacks.h"
 #include "slidersAttacks.h"
 #include "moveStructs.h"
+#include "../evaluation/mainEvaluation.h"
 
 
 //Macros to extract information from moveVal (value of a move)
