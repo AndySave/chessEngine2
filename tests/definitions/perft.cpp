@@ -19,7 +19,7 @@ struct PerftTest : public ::testing::Test {
     }
 };
 
-int cnt = 0;
+ll cnt = 0;
 
 void setup() {
     initBitMasks();
