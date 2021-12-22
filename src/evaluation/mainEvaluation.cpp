@@ -1,27 +1,48 @@
 
 #include "mainEvaluation.h"
 
+/*
+ * Initializes the phase value. Must be called after FEN function has been called because it
+ * needs board info.
+ */
+void initPhase(Board *brd){
+    phase = totalPhase;
 
-int pceScore[12] = {1, 3, 3, 5, 9, 100, 1, 3, 3, 5, 9, 100};
-int material(Board *brd){
-    int score = 0;
+    for (int pce = P; pce <= k; pce++){
+        if (pce == K || pce == k){ continue; }
+        int count = countBits(brd->bitboards[pce]);
 
-    for (int pce = P; pce <= K; pce++){
-        score += countBits(brd->bitboards[pce]) * pceScore[pce];
+        phase -= tapered[pce] * count;
     }
-
-    for (int pce = p; pce <= k; pce++){
-        score -= countBits(brd->bitboards[pce]) * pceScore[pce];
-    }
-
-    return score;
 }
+
+/*
+ * Call whenever a piece gets captured or a new piece gets added to the board i.e. promotion.
+ * This function incrementally updates the game phase.
+ */
+void updatePhase(int piece){
+    phase -= tapered[piece];
+}
+
+/*
+ * Returns an int between 0 and 256. The bigger the value, the later we are in the game.
+ * 0 = Opening, 256 = Endgame
+ */
+int getPhase(){
+    return (phase * 256 + (totalPhase / 2)) / totalPhase;
+}
+
+
+void initMaterial(Board *brd){
+
+}
+
 
 
 int eval(Board *brd){
     int score = 0;
 
-    score += material(brd);
+
 
     if (brd->side == white){
         return score;
