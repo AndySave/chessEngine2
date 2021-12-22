@@ -27,7 +27,7 @@ extern ull rookAttacks[64][4096];
 
 
 /// ------------ Relevant bits ------------ ///
-inline ull relevantBishopBits[64] = {
+constexpr inline ull relevantBishopBits[64] = {
         6, 5, 5, 5, 5, 5, 5, 6,
         5, 5, 5, 5, 5, 5, 5, 5,
         5, 5, 7, 7, 7, 7, 5, 5,
@@ -38,7 +38,7 @@ inline ull relevantBishopBits[64] = {
         6, 5, 5, 5, 5, 5, 5, 6
 };
 
-inline ull relevantRookBits[64] = {
+constexpr inline ull relevantRookBits[64] = {
         12, 11, 11, 11, 11, 11, 11, 12,
         11, 10, 10, 10, 10, 10, 10, 11,
         11, 10, 10, 10, 10, 10, 10, 11,
@@ -58,7 +58,7 @@ inline ull relevantRookBits[64] = {
 /// rook magics from:                                                        ///
 /// https://github.com/goutham/magic-bits/blob/master/include/magic_bits.hpp ///
 
-inline ull bishopMagics[64] = {
+constexpr inline ull bishopMagics[64] = {
         0x0002020202020200, 0x0002020202020000, 0x0004010202000000,
         0x0004040080000000, 0x0001104000000000, 0x0000821040000000,
         0x0000410410400000, 0x0000104104104000, 0x0000040404040400,
@@ -83,7 +83,7 @@ inline ull bishopMagics[64] = {
         0x0002020202020200
 };
 
-inline ull rookMagics[64] = {
+constexpr inline ull rookMagics[64] = {
         612498416294952992ULL,  2377936612260610304ULL,  36037730568766080ULL,
         72075188908654856ULL,   144119655536003584ULL,   5836666216720237568ULL,
         9403535813175676288ULL, 1765412295174865024ULL,  3476919663777054752ULL,
