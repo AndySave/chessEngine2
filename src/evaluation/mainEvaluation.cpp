@@ -38,12 +38,17 @@ int getPhase(){
  * board info
  */
 void initMaterial(Board *brd){
-    for (int pce = P; pce <= K; pce++){
+    for (int pce = P; pce <= k; pce++){
         ull pieces = brd->bitboards[pce];
         int cnt = countBits(pieces);
 
-        materialMG += cnt * pieceValuesMg[pce];
-        materialEG += cnt * pieceValuesEg[pce];
+        if (pce <= K){
+            materialMG += cnt * pieceValuesMg[pce];
+            materialEG += cnt * pieceValuesEg[pce];
+        }else{
+            materialMG -= cnt * pieceValuesMg[pce];
+            materialEG -= cnt * pieceValuesEg[pce];
+        }
     }
 }
 
@@ -51,16 +56,30 @@ void initMaterial(Board *brd){
  * Used to incrementally add material to the material variable
  */
 void addMaterial(int piece){
-    materialMG += pieceValuesMg[piece];
-    materialEG += pieceValuesEg[piece];
+    int color = piece <= K ? white : black;
+
+    if (color == white){
+        materialMG += pieceValuesMg[piece];
+        materialEG += pieceValuesEg[piece];
+    }else{
+        materialMG -= pieceValuesMg[piece];
+        materialEG -= pieceValuesEg[piece];
+    }
 }
 
 /*
  * Used to incrementally remove material from the material variable
  */
 void removeMaterial(int piece){
-    materialMG -= pieceValuesMg[piece];
-    materialEG -= pieceValuesEg[piece];
+    int color = piece <= K ? white : black;
+
+    if (color == white){
+        materialMG -= pieceValuesMg[piece];
+        materialEG -= pieceValuesEg[piece];
+    }else{
+        materialMG += pieceValuesMg[piece];
+        materialEG += pieceValuesEg[piece];
+    }
 }
 
 
