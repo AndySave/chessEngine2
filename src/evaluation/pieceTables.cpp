@@ -20,8 +20,8 @@ void addPieceTableScore(int piece, int sq){
         pieceTableScoreEG += pieceTables[piece][sq][1];
 
     }else{
-        pieceTableScoreMG += pieceTables[piece][getMirror(sq)][0];
-        pieceTableScoreEG += pieceTables[piece][getMirror(sq)][1];
+        pieceTableScoreMG -= pieceTables[piece][getMirror(sq)][0];
+        pieceTableScoreEG -= pieceTables[piece][getMirror(sq)][1];
     }
 }
 
@@ -32,7 +32,7 @@ void removePieceTableScore(int piece, int sq){
         pieceTableScoreEG -= pieceTables[piece][sq][1];
 
     }else{
-        pieceTableScoreMG -= pieceTables[piece][getMirror(sq)][0];
-        pieceTableScoreEG -= pieceTables[piece][getMirror(sq)][1];
+        pieceTableScoreMG += pieceTables[piece][getMirror(sq)][0];
+        pieceTableScoreEG += pieceTables[piece][getMirror(sq)][1];
     }
 }
