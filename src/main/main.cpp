@@ -7,46 +7,9 @@
 #include "../definitions/board.h"
 #include "../definitions/moveGeneration.h"
 #include "../evaluation/mainEvaluation.h"
+#include "../evaluation/pieceTables.h"
 
 
-long long count = 0;
-long long totCount = 0;
-
-void perftRec(Board* brd, int depth) {
-    if (depth <= 0) { // Base case
-        count++;
-        totCount++;
-        return;
-    }
-
-    Movelist moveList;
-    generateMoves(brd, &moveList);
-
-    for (int i = 0 ; i<moveList.count; i++) {
-        bool legalMove = makeMove(brd, moveList.moves[i].move);
-        if (legalMove) {
-            perftRec(brd, depth-1);
-            undoMove(brd);
-        }
-    }
-}
-
-void perft(Board* brd, int depth) {
-    Movelist l;
-    generateMoves(brd, &l);
-
-    for (int i = 0; i<l.count; ++i) {
-        makeMove(brd, l.moves[i].move);
-        perftRec(brd, depth-1);
-        undoMove(brd);
-        cout << i+1 << ", " << count << "\n";
-        printMove(l.moves[i]);
-        cout << "\n\n";
-        count =  0;
-    }
-
-    cout << totCount << endl;
-}
 
 int main() {
     initBitMasks();
@@ -67,14 +30,10 @@ int main() {
     FEN(&board, fenString);
     printBoard(&board);
 
-    //makeMove(&board, createMove(b2, b3, 0, noFlag));
-    //makeMove(&board, createMove(e7, e5, 0, noFlag));
-
-
     // Late inits
     initPhase(&board);
+    initMaterial(&board);
+    initPieceTable(&board);
 
-    for (int i = 0; i < 1; i++){
-        perft(&board, 6);
-    }
+    cout << pieceTableScoreMG << endl;
 }
