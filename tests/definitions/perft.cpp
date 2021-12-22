@@ -99,10 +99,9 @@ TEST(PerftTest, perft) {
 
     //perft test
     for (int i = 0; i<n; i++) {
+        cout << "Test #" << i+1 << endl;
         Board brd;
         FEN(&brd, fenPositions[i]);
-        if (i == 1) continue;
-
 
         for (int j = 1; j<=6; j++) {
             perftRec(&brd, j);
@@ -113,7 +112,6 @@ TEST(PerftTest, perft) {
             cnt = 0;
         }
     }
-
 }
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
