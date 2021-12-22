@@ -10,10 +10,10 @@ void initBlackPawnAttacks();
 void initKnightAttacks();
 void initKingAttacks();
 
-inline ull whitePawnAttacks[64];
-inline ull blackPawnAttacks[64];
-inline ull knightAttacks[64];
-inline ull kingAttacks[64];
+extern ull whitePawnAttacks[64];
+extern ull blackPawnAttacks[64];
+extern ull knightAttacks[64];
+extern ull kingAttacks[64];
 
 
 

@@ -1,6 +1,12 @@
 
 #include "nonSlidersAttacks.h"
 
+
+ull whitePawnAttacks[64];
+ull blackPawnAttacks[64];
+ull knightAttacks[64];
+ull kingAttacks[64];
+
 ull whitePawnAttackMask(int sq){
     ull bb = 0ll;
     int rank = sq/8, file = sq % 8;
