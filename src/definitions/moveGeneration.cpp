@@ -18,10 +18,10 @@ void generateMoves(Board *brd, Movelist *lst){
             int rank = pawnPos/8;
             if (!getBit(occ, pawnPos+8)){
                 if (rank == 6){
-                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, N, promFlag));
-                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, B, promFlag));
-                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, R, promFlag));
-                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, Q, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, 0, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, 1, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, 2, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, 3, promFlag));
                 }else{
                     addQuietMove(lst, createMove(pawnPos, pawnPos+8, 0, noFlag));
                 }
@@ -37,7 +37,15 @@ void generateMoves(Board *brd, Movelist *lst){
             while (attacks){
                 index = getLSB(attacks);
                 clearBit(attacks, index);
-                addCaptureMove(lst, createMove(pawnPos, index, 0, noFlag));
+
+                if (rank == 6){
+                    addCaptureMove(lst, createMove(pawnPos, index, 0, promFlag));
+                    addCaptureMove(lst, createMove(pawnPos, index, 1, promFlag));
+                    addCaptureMove(lst, createMove(pawnPos, index, 2, promFlag));
+                    addCaptureMove(lst, createMove(pawnPos, index, 3, promFlag));
+                }else{
+                    addCaptureMove(lst, createMove(pawnPos, index, 0, noFlag));
+                }
             }
 
             if (brd->enpassantSq != noSq && getBit(whitePawnAttacks[pawnPos], brd->enpassantSq)){
@@ -221,10 +229,10 @@ void generateMoves(Board *brd, Movelist *lst){
             int rank = pawnPos/8;
             if (!getBit(occ, pawnPos-8)){
                 if (rank == 1){
-                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, n, promFlag));
-                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, b, promFlag));
-                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, r, promFlag));
-                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, q, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, 0, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, 1, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, 2, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, 3, promFlag));
                 }else{
                     addQuietMove(lst, createMove(pawnPos, pawnPos-8, 0, noFlag));
                 }
@@ -240,7 +248,15 @@ void generateMoves(Board *brd, Movelist *lst){
             while (attacks){
                 index = getLSB(attacks);
                 clearBit(attacks, index);
-                addCaptureMove(lst, createMove(pawnPos, index, 0, noFlag));
+
+                if (rank == 1){
+                    addCaptureMove(lst, createMove(pawnPos, index, 0, promFlag));
+                    addCaptureMove(lst, createMove(pawnPos, index, 1, promFlag));
+                    addCaptureMove(lst, createMove(pawnPos, index, 2, promFlag));
+                    addCaptureMove(lst, createMove(pawnPos, index, 3, promFlag));
+                }else{
+                    addCaptureMove(lst, createMove(pawnPos, index, 0, noFlag));
+                }
             }
 
             if (brd->enpassantSq != noSq && getBit(blackPawnAttacks[pawnPos], brd->enpassantSq)){
