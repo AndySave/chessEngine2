@@ -211,8 +211,7 @@ void movePiece(Board *brd, int fromSq, int toSq){
     // TODO: Add incremental material update and pieceTable update
 }
 
-
-// Returns true if move is legal, false otherwise
+//IMPORTANT: If a move is made and is not legal, it will be undone automatically.
 bool makeMove(Board *brd, unsigned short move){
     int from = fromSquare(move);
     int to = toSquare(move);
@@ -220,6 +219,7 @@ bool makeMove(Board *brd, unsigned short move){
     int specialMoveFlag = moveFlag(move);
     int piece = findPiece(brd, from, brd->side);
 
+    //Updating the history of game (stored in brd)
     brd->history[brd->ply].move = move;
     brd->history[brd->ply].hashKey = brd->hashKey;
     brd->history[brd->ply].fiftyMove = brd->fiftyMove;
@@ -308,7 +308,6 @@ bool makeMove(Board *brd, unsigned short move){
     }else if (piece == k){
         brd->blackKingPos = to;
     }
-
 
     // Incrementing halfmoves
     brd->ply++;
