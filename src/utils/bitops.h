@@ -22,14 +22,15 @@ inline void setBit(ull &bitBoard, int sq){
     bitBoard |= setMask[sq];
 }
 
-inline int countBits(ull bitBoard){
-    int count = 0;
-
-    while (bitBoard){
-        count++;
-        bitBoard &= bitBoard - 1;
-    }
-    return count;
+constexpr ull m1  = 0x5555555555555555; //binary: 0101...
+constexpr ull m2  = 0x3333333333333333; //binary: 00110011..
+constexpr ull m4  = 0x0f0f0f0f0f0f0f0f; //binary:  4 zeros,  4 ones ...
+constexpr ull h01 = 0x0101010101010101; //the sum of 256 to the power of 0,1,2,3...
+inline int countBits(ull x){
+    x -= (x >> 1) & m1;
+    x = (x & m2) + ((x >> 2) & m2);
+    x = (x + (x >> 4)) & m4;
+    return (x * h01) >> 56;
 }
 
 // Gets index of Least Significant Bit
@@ -38,5 +39,11 @@ inline int getLSB(ull bb){
         return countBits((bb & -bb) - 1);
     return -1;
 }
+
+
+
+
+
+
 
 #endif
