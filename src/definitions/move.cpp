@@ -138,24 +138,6 @@ void printAttackedSquares(Board *brd, bool whiteAttacking){
     cout << endl;
 }
 
-unsigned short createMove(int fromSq, int toSq, int promotedPiece, int moveFlag) {
-    return fromSq | (toSq << 6) | (promotedPiece << 12) | (moveFlag << 14);
-}
-
-void addQuietMove(Board *brd, Movelist *lst, unsigned short move){
-    lst->moves[lst->count].move = move;
-    lst->count++;
-}
-
-void addCaptureMove(Board *brd, Movelist *lst, unsigned short move){
-    lst->moves[lst->count].move = move;
-    lst->count++;
-}
-
-void addEPMove(Board *brd, Movelist *lst, unsigned short move){
-    lst->moves[lst->count].move = move;
-    lst->count++;
-}
 
 void addPiece(Board *brd, int sq, int piece) {
     int color = (piece <= K) ? white : black;
