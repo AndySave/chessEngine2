@@ -1,7 +1,8 @@
 #include "bitops.h"
 #include <iostream>
 
-
+ull setMask[64];
+ull clearMask[64];
 void initBitMasks(){
     for (ull &i : setMask){
         i = 0ULL;

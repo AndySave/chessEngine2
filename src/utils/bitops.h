@@ -4,8 +4,8 @@
 
 #include "../definitions/std_typedef.h"
 
-inline ull setMask[64];
-inline ull clearMask[64];
+extern ull setMask[64];
+extern ull clearMask[64];
 
 void initBitMasks();
 void printBitboard(ull bb);
