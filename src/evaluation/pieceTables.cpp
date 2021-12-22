@@ -1,5 +1,9 @@
 #include "pieceTables.h"
 
+/*
+ * Initializes values pieceTableScoreMG and pieceTableScoreEG.
+ * Must be called after FEN because it need board values
+ */
 void initPieceTable(Board *brd){
     for (int pce = P; pce <= k; pce++){
         ull piecePositions = brd->bitboards[pce];
