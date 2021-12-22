@@ -18,17 +18,17 @@ void generateMoves(Board *brd, Movelist *lst){
             int rank = pawnPos/8;
             if (!getBit(occ, pawnPos+8)){
                 if (rank == 6){
-                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos+8, N, promFlag));
-                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos+8, B, promFlag));
-                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos+8, R, promFlag));
-                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos+8, Q, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, N, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, B, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, R, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, Q, promFlag));
                 }else{
-                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos+8, 0, noFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, 0, noFlag));
                 }
 
                 // Checking if pawn hasn't moved, if so it can move up two squares
                 if (rank == 1 && !getBit(occ, pawnPos+16)){
-                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos+16, 0, noFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+16, 0, noFlag));
                 }
             }
 
@@ -37,11 +37,11 @@ void generateMoves(Board *brd, Movelist *lst){
             while (attacks){
                 index = getLSB(attacks);
                 clearBit(attacks, index);
-                addCaptureMove(brd, lst, createMove(pawnPos, index, 0, noFlag));
+                addCaptureMove(lst, createMove(pawnPos, index, 0, noFlag));
             }
 
             if (brd->enpassantSq != noSq && getBit(whitePawnAttacks[pawnPos], brd->enpassantSq)){
-                addEPMove(brd, lst, createMove(pawnPos, brd->enpassantSq, 0, epFlag));
+                addEPMove(lst, createMove(pawnPos, brd->enpassantSq, 0, epFlag));
             }
         }
 
@@ -58,7 +58,7 @@ void generateMoves(Board *brd, Movelist *lst){
             int index = getLSB(moves);
             clearBit(moves, index);
 
-            addQuietMove(brd, lst, createMove(brd->whiteKingPos, index, 0, noFlag));
+            addQuietMove(lst, createMove(brd->whiteKingPos, index, 0, noFlag));
         }
 
         // Handling capture moves
@@ -66,7 +66,7 @@ void generateMoves(Board *brd, Movelist *lst){
             int index = getLSB(attacks);
             clearBit(attacks, index);
 
-            addCaptureMove(brd, lst, createMove(brd->whiteKingPos, index, 0, noFlag));
+            addCaptureMove(lst, createMove(brd->whiteKingPos, index, 0, noFlag));
         }
 
         // Handling castling
@@ -77,14 +77,14 @@ void generateMoves(Board *brd, Movelist *lst){
                 if (WKC & brd->castle && !getBit(occ, f1) && !getBit(occ, g1)){
                     // Checking if squares between king and rook is under attack
                     if (!isSquareAttacked(brd, f1, false) && !isSquareAttacked(brd, g1, false)){
-                        addQuietMove(brd, lst, createMove(brd->whiteKingPos, g1, 0, castleFlag));
+                        addQuietMove(lst, createMove(brd->whiteKingPos, g1, 0, castleFlag));
                     }
                 }
                 // Checking that we have castle rights and squares between king and rook are empty
                 if (WQC & brd->castle && !getBit(occ, d1) && !getBit(occ, c1)){
                     // Checking if squares between king and rook is under attack
                     if (!isSquareAttacked(brd, d1, false) && !isSquareAttacked(brd, c1, false)){
-                        addQuietMove(brd, lst, createMove(brd->whiteKingPos, c1, 0, castleFlag));
+                        addQuietMove(lst, createMove(brd->whiteKingPos, c1, 0, castleFlag));
                     }
                 }
             }
@@ -108,7 +108,7 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(moves);
                 clearBit(moves, index);
 
-                addQuietMove(brd, lst, createMove(knightPos, index, 0, noFlag));
+                addQuietMove(lst, createMove(knightPos, index, 0, noFlag));
             }
 
             // Handle capture moves
@@ -116,7 +116,7 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(brd, lst, createMove(knightPos, index, 0, noFlag));
+                addCaptureMove(lst, createMove(knightPos, index, 0, noFlag));
             }
         }
 
@@ -138,7 +138,7 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(moves);
                 clearBit(moves, index);
 
-                addQuietMove(brd, lst, createMove(bishopPos, index, 0, noFlag));
+                addQuietMove(lst, createMove(bishopPos, index, 0, noFlag));
             }
 
             // Handle capture moves
@@ -146,7 +146,7 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(brd, lst, createMove(bishopPos, index, 0, noFlag));
+                addCaptureMove(lst, createMove(bishopPos, index, 0, noFlag));
             }
         }
 
@@ -168,14 +168,14 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(moves);
                 clearBit(moves, index);
 
-                addQuietMove(brd, lst, createMove(rookPos, index, 0, noFlag));
+                addQuietMove(lst, createMove(rookPos, index, 0, noFlag));
             }
 
             while (attacks){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(brd, lst, createMove(rookPos, index, 0, noFlag));
+                addCaptureMove(lst, createMove(rookPos, index, 0, noFlag));
             }
         }
 
@@ -197,14 +197,14 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(moves);
                 clearBit(moves, index);
 
-                addQuietMove(brd, lst, createMove(queenPos, index, 0, noFlag));
+                addQuietMove(lst, createMove(queenPos, index, 0, noFlag));
             }
 
             while (attacks){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(brd, lst, createMove(queenPos, index, 0, noFlag));
+                addCaptureMove(lst, createMove(queenPos, index, 0, noFlag));
             }
         }
 
@@ -221,17 +221,17 @@ void generateMoves(Board *brd, Movelist *lst){
             int rank = pawnPos/8;
             if (!getBit(occ, pawnPos-8)){
                 if (rank == 1){
-                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos-8, n, promFlag));
-                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos-8, b, promFlag));
-                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos-8, r, promFlag));
-                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos-8, q, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, n, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, b, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, r, promFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, q, promFlag));
                 }else{
-                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos-8, 0, noFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, 0, noFlag));
                 }
 
                 // Checking if pawn hasn't moved, if so it can move up two squares
                 if (rank == 6 && !getBit(occ, pawnPos-16)){
-                    addQuietMove(brd, lst, createMove(pawnPos, pawnPos-16, 0, noFlag));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-16, 0, noFlag));
                 }
             }
 
@@ -240,11 +240,11 @@ void generateMoves(Board *brd, Movelist *lst){
             while (attacks){
                 index = getLSB(attacks);
                 clearBit(attacks, index);
-                addCaptureMove(brd, lst, createMove(pawnPos, index, 0, noFlag));
+                addCaptureMove(lst, createMove(pawnPos, index, 0, noFlag));
             }
 
             if (brd->enpassantSq != noSq && getBit(blackPawnAttacks[pawnPos], brd->enpassantSq)){
-                addEPMove(brd, lst, createMove(pawnPos, brd->enpassantSq, 0, epFlag));
+                addEPMove(lst, createMove(pawnPos, brd->enpassantSq, 0, epFlag));
             }
         }
 
@@ -261,7 +261,7 @@ void generateMoves(Board *brd, Movelist *lst){
             int index = getLSB(moves);
             clearBit(moves, index);
 
-            addQuietMove(brd, lst, createMove(brd->blackKingPos, index, 0, noFlag));
+            addQuietMove(lst, createMove(brd->blackKingPos, index, 0, noFlag));
         }
 
         // Handling capture moves
@@ -269,7 +269,7 @@ void generateMoves(Board *brd, Movelist *lst){
             int index = getLSB(attacks);
             clearBit(attacks, index);
 
-            addCaptureMove(brd, lst, createMove(brd->blackKingPos, index, 0, noFlag));
+            addCaptureMove(lst, createMove(brd->blackKingPos, index, 0, noFlag));
         }
 
         // Handling castling
@@ -280,14 +280,14 @@ void generateMoves(Board *brd, Movelist *lst){
                 if (BKC & brd->castle && !getBit(occ, f8) && !getBit(occ, g8)){
                     // Checking if squares between king and rook is under attack
                     if (!isSquareAttacked(brd, f8, true) && !isSquareAttacked(brd, g8, true)){
-                        addQuietMove(brd, lst, createMove(brd->blackKingPos, g8, 0, castleFlag));
+                        addQuietMove(lst, createMove(brd->blackKingPos, g8, 0, castleFlag));
                     }
                 }
                 // Checking that we have castle rights and squares between king and rook are empty
                 if (BQC & brd->castle && !getBit(occ, d8) && !getBit(occ, c8)){
                     // Checking if squares between king and rook is under attack
                     if (!isSquareAttacked(brd, d8, true) && !isSquareAttacked(brd, c8, true)){
-                        addQuietMove(brd, lst, createMove(brd->blackKingPos, c8, 0, castleFlag));
+                        addQuietMove(lst, createMove(brd->blackKingPos, c8, 0, castleFlag));
                     }
                 }
             }
@@ -311,7 +311,7 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(moves);
                 clearBit(moves, index);
 
-                addQuietMove(brd, lst, createMove(knightPos, index, 0, noFlag));
+                addQuietMove(lst, createMove(knightPos, index, 0, noFlag));
             }
 
             // Handle capture moves
@@ -319,7 +319,7 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(brd, lst, createMove(knightPos, index, 0, noFlag));
+                addCaptureMove(lst, createMove(knightPos, index, 0, noFlag));
             }
         }
 
@@ -341,14 +341,14 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(moves);
                 clearBit(moves, index);
 
-                addQuietMove(brd, lst, createMove(bishopPos, index, 0, noFlag));
+                addQuietMove(lst, createMove(bishopPos, index, 0, noFlag));
             }
 
             while (attacks){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(brd, lst, createMove(bishopPos, index, 0, noFlag));
+                addCaptureMove(lst, createMove(bishopPos, index, 0, noFlag));
             }
         }
 
@@ -370,14 +370,14 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(moves);
                 clearBit(moves, index);
 
-                addQuietMove(brd, lst, createMove(rookPos, index, 0, noFlag));
+                addQuietMove(lst, createMove(rookPos, index, 0, noFlag));
             }
 
             while (attacks){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(brd, lst, createMove(rookPos, index, 0, noFlag));
+                addCaptureMove(lst, createMove(rookPos, index, 0, noFlag));
             }
         }
 
@@ -399,14 +399,14 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(moves);
                 clearBit(moves, index);
 
-                addQuietMove(brd, lst, createMove(queenPos, index, 0, noFlag));
+                addQuietMove(lst, createMove(queenPos, index, 0, noFlag));
             }
 
             while (attacks){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(brd, lst, createMove(queenPos, index, 0, noFlag));
+                addCaptureMove(lst, createMove(queenPos, index, 0, noFlag));
             }
         }
     }
