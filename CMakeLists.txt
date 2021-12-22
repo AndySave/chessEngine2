@@ -76,7 +76,44 @@ add_executable(
         )
 target_link_libraries(test2 gtest_main)
 
+#Test: tests/definitions/perft.cpp
+add_executable(
+        test_defintions_perft tests/definitions/perft.cpp
+
+        src/definitions/std_typedef.h
+        src/definitions/board.cpp
+        src/definitions/board.h
+        src/definitions/nonSlidersAttacks.cpp
+        src/definitions/nonSlidersAttacks.h
+        src/definitions/slidersAttacks.cpp
+        src/definitions/slidersAttacks.h
+        src/definitions/zobristKey.cpp
+        src/definitions/zobristKey.h
+        src/definitions/moveGeneration.cpp
+        src/definitions/moveGeneration.h
+        src/definitions/move.cpp
+        src/definitions/move.h
+
+        src/evaluation/mainEvaluation.cpp
+        src/evaluation/mainEvaluation.h
+
+        src/ui/terminal_ui.cpp
+        src/ui/terminal_ui.h
+        src/ui/uci.cpp
+        src/ui/uci.h
+
+        src/utils/bitops.cpp
+        src/utils/bitops.h
+        src/utils/fen.cpp
+        src/utils/fen.h
+        src/utils/helpers.cpp
+        src/utils/helpers.h
+)
+
+target_link_libraries(test_defintions_perft gtest_main)
+
 include(GoogleTest)
 
 gtest_discover_tests(test1)
 gtest_discover_tests(test2)
+gtest_discover_tests(test_defintions_perft)
