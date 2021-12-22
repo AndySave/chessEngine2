@@ -40,10 +40,26 @@ void printMovelist(Movelist *lst);
 /*
  * Creates a move value (unsigned short) from input fromSq, toSq, promotedPiece and moveFlag.
  */
-unsigned short createMove(int fromSq, int toSq, int promotedPiece, int moveFlag);
-void addQuietMove(Board *brd, Movelist *lst, unsigned short move);
-void addCaptureMove(Board *brd, Movelist *lst, unsigned short move);
-void addEPMove(Board *brd, Movelist *lst, unsigned short move);
+inline unsigned short createMove(int fromSq, int toSq, int promotedPiece, int moveFlag) {
+    return fromSq | (toSq << 6) | (promotedPiece << 12) | (moveFlag << 14);
+}
+
+inline void addQuietMove(Movelist *lst, unsigned short move){
+    lst->moves[lst->count].move = move;
+    lst->count++;
+}
+
+inline void addCaptureMove(Movelist *lst, unsigned short move){
+    lst->moves[lst->count].move = move;
+    lst->count++;
+}
+
+inline void addEPMove(Movelist *lst, unsigned short move){
+    lst->moves[lst->count].move = move;
+    lst->count++;
+}
+
+
 void addPiece(Board *brd, int sq, int piece);
 void clearPiece(Board *brd, int sq);
 bool makeMove(Board *brd, unsigned short move);
