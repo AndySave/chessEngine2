@@ -331,12 +331,13 @@ bool makeMove(Board *brd, unsigned short move){
         addPiece(brd, to, promoted);
     }
 
+    int realColor = brd->side;
     // Swapping side to move
     brd->side ^= 1;
     hashSide;
 
 
-    if (brd->side == white){
+    if (realColor == white){
         if (isSquareAttacked(brd, brd->whiteKingPos, false)){
             undoMove(brd);
             return false;
