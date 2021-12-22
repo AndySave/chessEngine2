@@ -170,10 +170,8 @@ void addPiece(Board *brd, int sq, int piece) {
 }
 
 
-void clearPiece(Board *brd, int sq){
-    int color = getBit(brd->occupancies[white], sq) ? white : black;
-
-    int piece = findPiece(brd, sq, color);
+void clearPiece(Board *brd, int sq, int piece){
+    int color = piece <= K ? white : black;
 
     // Removing piece from all bitboards
     clearBit(brd->bitboards[piece], sq);
@@ -230,9 +228,9 @@ bool makeMove(Board *brd, unsigned short move){
 
     if (specialMoveFlag == epFlag){
         if (brd->side == white){
-            clearPiece(brd, to-8);
+            clearPiece(brd, to-8, p);
         }else{
-            clearPiece(brd, to+8);
+            clearPiece(brd, to+8, P);
         }
     }else if (specialMoveFlag == castleFlag){
         // If move is a castle move, move the rook
@@ -296,7 +294,7 @@ bool makeMove(Board *brd, unsigned short move){
 
         brd->history[brd->ply].capturedPiece = capturedPiece;
 
-        clearPiece(brd, to);
+        clearPiece(brd, to, capturedPiece);
         // Capture resets fiftyMove counter
         brd->fiftyMove = 0;
     }else{
@@ -320,7 +318,7 @@ bool makeMove(Board *brd, unsigned short move){
 
     if (specialMoveFlag == promFlag){
         // remove pawn
-        clearPiece(brd, to);
+        clearPiece(brd, to, piece);
 
         // incrementing promoted piece to match piece values
         promoted++;
@@ -331,19 +329,18 @@ bool makeMove(Board *brd, unsigned short move){
         addPiece(brd, to, promoted);
     }
 
-    int realColor = brd->side;
     // Swapping side to move
     brd->side ^= 1;
     hashSide;
 
 
-    if (realColor == white){
-        if (isSquareAttacked(brd, brd->whiteKingPos, false)){
+    if (brd->side == white){
+        if (isSquareAttacked(brd, brd->blackKingPos, true)){
             undoMove(brd);
             return false;
         }
     }else{
-        if (isSquareAttacked(brd, brd->blackKingPos, true)){
+        if (isSquareAttacked(brd, brd->whiteKingPos, false)){
             undoMove(brd);
             return false;
         }
@@ -410,10 +407,10 @@ void undoMove(Board *brd){
 
     if (specialMoveFlag == promFlag){
         if (brd->side == white){
-            clearPiece(brd, from);
+            clearPiece(brd, from, piece);
             addPiece(brd, from, p);
         }else{
-            clearPiece(brd, from);
+            clearPiece(brd, from, piece);
             addPiece(brd, from, P);
         }
     }
