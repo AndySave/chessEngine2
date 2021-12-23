@@ -33,6 +33,10 @@ struct SearchInfo{
 };
 
 int miniMax(Board *brd, int depth);
+int askMax(Board *brd, int depth, int alpha, int beta);
+void search(Board *brd, int depth);
+
+extern int searchCounter;
 
 
 #endif //CHESSENGINE2_MAIN_SEARCH_H
