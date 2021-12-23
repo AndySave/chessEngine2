@@ -10,6 +10,8 @@
 #include "../definitions/moveGeneration.h"
 #include "../evaluation/mainEvaluation.h"
 #include "../definitions/moveStructs.h"
+#include <cstring>
+#include <algorithm>
 
 
 #define INF 1000000000
