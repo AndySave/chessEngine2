@@ -6,6 +6,10 @@ int pvTable[64][64];
 
 int searchCounter = 0;
 
+bool comp(const Move &lhs, const Move &rhs){
+    return lhs.score > rhs.score;
+}
+
 
 int quiescence(Board *brd, int alpha, int beta){
 
@@ -19,6 +23,12 @@ int quiescence(Board *brd, int alpha, int beta){
 
     Movelist ml;
     generateCaptureMoves(brd, &ml);
+
+
+    // Sorting moves after score
+    sort(ml.moves, ml.moves+ml.count, comp);
+
+    /// -------------SEARCHING STARTS------------- ///
     for (int i = 0; i<ml.count; i++) {
         bool legalMove = makeMove(brd, ml.moves[i].move);
         if (!legalMove){
@@ -48,18 +58,33 @@ int askMax(Board *brd, int depth, int alpha, int beta) {
     if (brd->fiftyMove == 100) return 0;
 
     if (depth == 0) {
-        //return eval(brd);
         return quiescence(brd, alpha, beta);
     }
 
     int side = brd->side;
     Movelist ml;
     generateMoves(brd, &ml);
-    int oldAlpha = alpha;
-    int bestmove = 0;
+    int bestmove;
 
+
+    // If a move in the move list is a pv move, then give it a high score
+    int pvMove = pvTable[ply][ply];
+    if (pvMove != 0){
+        for (int i = 0; i < ml.count; i++){
+            if (ml.moves[i].move == pvMove){
+                ml.moves[i].score = 2000000;
+                break;
+            }
+        }
+    }
+
+    // Sorting moves after score
+    sort(ml.moves, ml.moves+ml.count, comp);
+
+
+    /// -------------SEARCHING STARTS------------- ///
     bool existsLegal = false;
-    for (int i = 0; i<ml.count; i++) {
+    for (int i = 0; i < ml.count; i++) {
         bool legalMove = makeMove(brd, ml.moves[i].move);
         if (!legalMove) continue;
 
@@ -94,6 +119,9 @@ int askMax(Board *brd, int depth, int alpha, int beta) {
 }
 
 void search(Board *brd, int depth) {
+    memset(pvLength, 0, size(pvLength));
+    memset(pvTable, 0, sizeof(pvTable));
+
     for (int i = 1; i <= depth; i ++) {
         searchCounter = 0;
         int score = askMax(brd, i, -INF, INF);
@@ -109,3 +137,4 @@ void search(Board *brd, int depth) {
         cout << "\n";
     }
 }
+
