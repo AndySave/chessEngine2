@@ -9,10 +9,12 @@
 #include "../definitions/board.h"
 #include "../definitions/moveGeneration.h"
 #include "../evaluation/mainEvaluation.h"
-#include "../evaluation/pieceTables.h"
+#include "../definitions/moveStructs.h"
+
 
 #define INF 1000000000
 #define mateScore 1000000
+
 
 struct SearchInfo{
     int startTime;
