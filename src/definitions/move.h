@@ -11,6 +11,7 @@
 #include "slidersAttacks.h"
 #include "moveStructs.h"
 #include "../evaluation/mainEvaluation.h"
+#include "../search/move_ordering.h"
 
 
 //Macros to extract information from moveVal (value of a move)
@@ -46,7 +47,7 @@ inline unsigned short createMove(int fromSq, int toSq, int promotedPiece, int mo
 }
 
 void addQuietMove(Movelist *lst, unsigned short move);
-void addCaptureMove(Movelist *lst, unsigned short move);
+void addCaptureMove(Movelist *lst, unsigned short move, int piece, int capturedPiece);
 void addEPMove(Movelist *lst, unsigned short move);
 void addPiece(Board *brd, int sq, int piece);
 void clearPiece(Board *brd, int sq);
@@ -54,6 +55,7 @@ bool makeMove(Board *brd, unsigned short move);
 void undoMove(Board *brd);
 bool isSquareAttacked(Board *brd, int sq, bool whiteAttacking);
 void printAttackedSquares(Board *brd, bool whiteAttacking);
+int findPiece(Board *brd, int sq, int color);
 
 #endif
 
