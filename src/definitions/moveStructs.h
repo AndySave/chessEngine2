@@ -12,7 +12,7 @@
  * Bits [11,16]: From square. Square piece is being moved from. Value from 0-63 inclusive.
  */
 struct Move {
-    unsigned short move; //The move
+    int move;
     int score;
 };
 
