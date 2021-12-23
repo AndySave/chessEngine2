@@ -42,16 +42,16 @@ void printMovelist(Movelist *lst);
 /*
  * Creates a move value (unsigned short) from input fromSq, toSq, promotedPiece and moveFlag.
  */
-inline unsigned short createMove(int fromSq, int toSq, int promotedPiece, int moveFlag) {
+inline int createMove(int fromSq, int toSq, int promotedPiece, int moveFlag) {
     return fromSq | (toSq << 6) | (promotedPiece << 12) | (moveFlag << 14);
 }
 
-void addQuietMove(Movelist *lst, unsigned short move);
-void addCaptureMove(Movelist *lst, unsigned short move, int piece, int capturedPiece);
-void addEPMove(Movelist *lst, unsigned short move);
+void addQuietMove(Movelist *lst, int move);
+void addCaptureMove(Movelist *lst, int move, int piece, int capturedPiece);
+void addEPMove(Movelist *lst, int move);
 void addPiece(Board *brd, int sq, int piece);
 void clearPiece(Board *brd, int sq);
-bool makeMove(Board *brd, unsigned short move);
+bool makeMove(Board *brd, int move);
 void undoMove(Board *brd);
 bool isSquareAttacked(Board *brd, int sq, bool whiteAttacking);
 void printAttackedSquares(Board *brd, bool whiteAttacking);
