@@ -1,7 +1,7 @@
 #include "move.h"
 
 void printMove(Move &move) {
-    unsigned short moveVal = move.move;
+    int moveVal = move.move;
 
     string moveFlag;
     switch (moveFlag(moveVal)) {
@@ -74,19 +74,19 @@ int findPiece(Board *brd, int sq, int color){
     return piece;
 }
 
-void addQuietMove(Movelist *lst, unsigned short move){
+void addQuietMove(Movelist *lst, int move){
     lst->moves[lst->count].move = move;
     lst->moves[lst->count].score = 0;
     lst->count++;
 }
 
-void addCaptureMove(Movelist *lst, unsigned short move, int piece, int capturedPiece){
+void addCaptureMove(Movelist *lst, int move, int piece, int capturedPiece){
     lst->moves[lst->count].move = move;
     lst->moves[lst->count].score = mvvlvaScore[capturedPiece][piece];
     lst->count++;
 }
 
-void addEPMove(Movelist *lst, unsigned short move){
+void addEPMove(Movelist *lst, int move){
     lst->moves[lst->count].move = move;
     lst->moves[lst->count].score = 105;
     lst->count++;
@@ -219,7 +219,7 @@ void movePiece(Board *brd, int fromSq, int toSq){
 }
 
 //IMPORTANT: If a move is made and is not legal, it will be undone automatically.
-bool makeMove(Board *brd, unsigned short move){
+bool makeMove(Board *brd, int move){
     int from = fromSquare(move);
     int to = toSquare(move);
     int promoted = promotedPiece(move);
