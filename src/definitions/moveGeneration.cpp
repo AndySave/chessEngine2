@@ -37,13 +37,15 @@ void generateMoves(Board *brd, Movelist *lst){
                 index = getLSB(attacks);
                 clearBit(attacks, index);
 
+                int captured = findPiece(brd, index, black);
+
                 if (rank == 6){
-                    addCaptureMove(lst, createMove(pawnPos, index, 0, promFlag));
-                    addCaptureMove(lst, createMove(pawnPos, index, 1, promFlag));
-                    addCaptureMove(lst, createMove(pawnPos, index, 2, promFlag));
-                    addCaptureMove(lst, createMove(pawnPos, index, 3, promFlag));
+                    addCaptureMove(lst, createMove(pawnPos, index, 0, promFlag), P, captured);
+                    addCaptureMove(lst, createMove(pawnPos, index, 1, promFlag), P, captured);
+                    addCaptureMove(lst, createMove(pawnPos, index, 2, promFlag), P, captured);
+                    addCaptureMove(lst, createMove(pawnPos, index, 3, promFlag), P, captured);
                 }else{
-                    addCaptureMove(lst, createMove(pawnPos, index, 0, noFlag));
+                    addCaptureMove(lst, createMove(pawnPos, index, 0, noFlag), P, captured);
                 }
             }
 
@@ -73,7 +75,9 @@ void generateMoves(Board *brd, Movelist *lst){
             int index = getLSB(attacks);
             clearBit(attacks, index);
 
-            addCaptureMove(lst, createMove(brd->whiteKingPos, index, 0, noFlag));
+            int captured = findPiece(brd, index, black);
+
+            addCaptureMove(lst, createMove(brd->whiteKingPos, index, 0, noFlag), K, captured);
         }
 
         // Handling castling
@@ -123,7 +127,9 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(lst, createMove(knightPos, index, 0, noFlag));
+                int captured = findPiece(brd, index, black);
+
+                addCaptureMove(lst, createMove(knightPos, index, 0, noFlag), K, captured);
             }
         }
 
@@ -153,7 +159,9 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(lst, createMove(bishopPos, index, 0, noFlag));
+                int captured = findPiece(brd, index, black);
+
+                addCaptureMove(lst, createMove(bishopPos, index, 0, noFlag), B, captured);
             }
         }
 
@@ -182,7 +190,9 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(lst, createMove(rookPos, index, 0, noFlag));
+                int captured = findPiece(brd, index, black);
+
+                addCaptureMove(lst, createMove(rookPos, index, 0, noFlag), R, captured);
             }
         }
 
@@ -211,7 +221,9 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(lst, createMove(queenPos, index, 0, noFlag));
+                int captured = findPiece(brd, index, black);
+
+                addCaptureMove(lst, createMove(queenPos, index, 0, noFlag), Q, captured);
             }
         }
 
@@ -248,13 +260,15 @@ void generateMoves(Board *brd, Movelist *lst){
                 index = getLSB(attacks);
                 clearBit(attacks, index);
 
+                int captured = findPiece(brd, index, white);
+
                 if (rank == 1){
-                    addCaptureMove(lst, createMove(pawnPos, index, 0, promFlag));
-                    addCaptureMove(lst, createMove(pawnPos, index, 1, promFlag));
-                    addCaptureMove(lst, createMove(pawnPos, index, 2, promFlag));
-                    addCaptureMove(lst, createMove(pawnPos, index, 3, promFlag));
+                    addCaptureMove(lst, createMove(pawnPos, index, 0, promFlag), p, captured);
+                    addCaptureMove(lst, createMove(pawnPos, index, 1, promFlag), p, captured);
+                    addCaptureMove(lst, createMove(pawnPos, index, 2, promFlag), p, captured);
+                    addCaptureMove(lst, createMove(pawnPos, index, 3, promFlag), p, captured);
                 }else{
-                    addCaptureMove(lst, createMove(pawnPos, index, 0, noFlag));
+                    addCaptureMove(lst, createMove(pawnPos, index, 0, noFlag), p, captured);
                 }
             }
 
@@ -284,7 +298,9 @@ void generateMoves(Board *brd, Movelist *lst){
             int index = getLSB(attacks);
             clearBit(attacks, index);
 
-            addCaptureMove(lst, createMove(brd->blackKingPos, index, 0, noFlag));
+            int captured = findPiece(brd, index, white);
+
+            addCaptureMove(lst, createMove(brd->blackKingPos, index, 0, noFlag), k, captured);
         }
 
         // Handling castling
@@ -334,7 +350,9 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(lst, createMove(knightPos, index, 0, noFlag));
+                int captured = findPiece(brd, index, white);
+
+                addCaptureMove(lst, createMove(knightPos, index, 0, noFlag), n, captured);
             }
         }
 
@@ -363,7 +381,9 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(lst, createMove(bishopPos, index, 0, noFlag));
+                int captured = findPiece(brd, index, white);
+
+                addCaptureMove(lst, createMove(bishopPos, index, 0, noFlag), b, captured);
             }
         }
 
@@ -392,7 +412,9 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(lst, createMove(rookPos, index, 0, noFlag));
+                int captured = findPiece(brd, index, white);
+
+                addCaptureMove(lst, createMove(rookPos, index, 0, noFlag), r, captured);
             }
         }
 
@@ -421,7 +443,9 @@ void generateMoves(Board *brd, Movelist *lst){
                 int index = getLSB(attacks);
                 clearBit(attacks, index);
 
-                addCaptureMove(lst, createMove(queenPos, index, 0, noFlag));
+                int captured = findPiece(brd, index, white);
+
+                addCaptureMove(lst, createMove(queenPos, index, 0, noFlag), q, captured);
             }
         }
     }
@@ -450,13 +474,16 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
             while(attacks) { //Loops thorugh each square current pawn attacks
                 int curAttack = getLSB(attacks);
                 clearBit(attacks, curAttack);
+
+                int captured = findPiece(brd, curAttack, black);
+
                 if (rank == 6) { //When a white pawn is on 7th rank and attacks a piece, it promotes too.
-                    addCaptureMove(lst, createMove(curPos, curAttack, 0, promFlag));
-                    addCaptureMove(lst, createMove(curPos, curAttack, 1, promFlag));
-                    addCaptureMove(lst, createMove(curPos, curAttack, 2, promFlag));
-                    addCaptureMove(lst, createMove(curPos, curAttack, 3, promFlag));
+                    addCaptureMove(lst, createMove(curPos, curAttack, 0, promFlag), P, captured);
+                    addCaptureMove(lst, createMove(curPos, curAttack, 1, promFlag), P, captured);
+                    addCaptureMove(lst, createMove(curPos, curAttack, 2, promFlag), P, captured);
+                    addCaptureMove(lst, createMove(curPos, curAttack, 3, promFlag), P, captured);
                 } else { //When the pawn is not on 7th rank it does not promote, only capture.
-                    addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag));
+                    addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag), P, captured);
                 }
             }
 
@@ -479,13 +506,16 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
             while(attacks) { //Loops through each square current pawn attacks
                 int curAttack = getLSB(attacks);
                 clearBit(attacks, curAttack);
+
+                int captured = findPiece(brd, curAttack, white);
+
                 if (rank == 1) { //When a white pawn is on 2nd rank and attacks a piece, it promotes too.
-                    addCaptureMove(lst, createMove(curPos, curAttack, 0, promFlag));
-                    addCaptureMove(lst, createMove(curPos, curAttack, 1, promFlag));
-                    addCaptureMove(lst, createMove(curPos, curAttack, 2, promFlag));
-                    addCaptureMove(lst, createMove(curPos, curAttack, 3, promFlag));
+                    addCaptureMove(lst, createMove(curPos, curAttack, 0, promFlag), p, captured);
+                    addCaptureMove(lst, createMove(curPos, curAttack, 1, promFlag), p, captured);
+                    addCaptureMove(lst, createMove(curPos, curAttack, 2, promFlag), p, captured);
+                    addCaptureMove(lst, createMove(curPos, curAttack, 3, promFlag), p, captured);
                 } else { //When the pawn is not on 2nd rank it does not promote, only capture.
-                    addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag));
+                    addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag), p, captured);
                 }
             }
 
@@ -498,7 +528,8 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
 
 
     //Generating capture moves of: KING.
-    ull kingPositions = brd->bitboards[(side) ? k : K];
+    int piece = side ? k : K;
+    ull kingPositions = brd->bitboards[piece];
 
     while (kingPositions) { //Loops through each king of current side
         int curPos = getLSB(kingPositions); //The position of current king being evaluated
@@ -509,12 +540,16 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
         while(attacks) { //Loops through each square current king attacks
             int curAttack = getLSB(attacks);
             clearBit(attacks, curAttack);
-            addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag));
+
+            int captured = findPiece(brd, curAttack, !side);
+
+            addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag), piece, captured);
         }
     }
 
     //Generating capture moves of: BISHOP.
-    ull bishopPositions = brd->bitboards[(side) ? b : B];
+    piece = side ? b : B;
+    ull bishopPositions = brd->bitboards[piece];
 
     while (bishopPositions) { //Loops through each bishop of current side
         int curPos = getLSB(bishopPositions); //The position of current bishop being evaluated
@@ -525,12 +560,16 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
         while(attacks) { //Loops through each square current bishop attacks
             int curAttack = getLSB(attacks);
             clearBit(attacks, curAttack);
-            addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag));
+
+            int captured = findPiece(brd, curAttack, !side);
+
+            addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag), piece, captured);
         }
     }
 
     //Generating capture moves of: ROOK.
-    ull rookPositions = brd->bitboards[(side) ? r : R];
+    piece = side ? r : R;
+    ull rookPositions = brd->bitboards[piece];
 
     while (rookPositions) { //Loops through each rook of current side
         int curPos = getLSB(rookPositions); //The position of current rook being evaluated
@@ -541,12 +580,16 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
         while(attacks) { //Loops through each square current rook attacks
             int curAttack = getLSB(attacks);
             clearBit(attacks, curAttack);
-            addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag));
+
+            int captured = findPiece(brd, curAttack, !side);
+
+            addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag), piece, captured);
         }
     }
 
     //Generating capture moves of: KNIGHT.
-    ull knightPositions = brd->bitboards[(side) ? n : N];
+    piece = side ? n : N;
+    ull knightPositions = brd->bitboards[side];
 
     while (knightPositions){ //Loops through each knight of current side
         int curPos = getLSB(knightPositions); //The position of current knight being evaluated
@@ -557,12 +600,16 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
         while (attacks){ //Loops through each square current knight attacks
             int curAttack = getLSB(attacks);
             clearBit(attacks, curAttack);
-            addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag));
+
+            int captured = findPiece(brd, curAttack, !side);
+
+            addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag), piece, captured);
         }
     }
 
     //Generating capture moves of: QUEEN.
-    ull queenPositions = brd->bitboards[(side) ? q : Q];
+    piece = side ? q : Q;
+    ull queenPositions = brd->bitboards[piece];
 
     while (queenPositions){ //Loops through each queen of current side
         int curPos = getLSB(queenPositions); //The position of current queen being evaluated
@@ -573,10 +620,13 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
         while (attacks){ //Loops through each square current queen attacks
             int curAttack = getLSB(attacks);
             clearBit(attacks, curAttack);
-            addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag));
+
+            int captured = findPiece(brd, curAttack, !side);
+
+            addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag), piece, captured);
         }
     }
-
 }
+
 
 
