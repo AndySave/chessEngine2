@@ -63,3 +63,9 @@ string sqToAlgebraic(int sq) {
 
     return algebraic;
 }
+
+
+int getTime(){
+    return GetTickCount();
+}
+
