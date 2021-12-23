@@ -76,16 +76,19 @@ int findPiece(Board *brd, int sq, int color){
 
 void addQuietMove(Movelist *lst, unsigned short move){
     lst->moves[lst->count].move = move;
+    lst->moves[lst->count].score = 0;
     lst->count++;
 }
 
-void addCaptureMove(Movelist *lst, unsigned short move){
+void addCaptureMove(Movelist *lst, unsigned short move, int piece, int capturedPiece){
     lst->moves[lst->count].move = move;
+    lst->moves[lst->count].score = mvvlvaScore[capturedPiece][piece];
     lst->count++;
 }
 
 void addEPMove(Movelist *lst, unsigned short move){
     lst->moves[lst->count].move = move;
+    lst->moves[lst->count].score = 105;
     lst->count++;
 }
 
