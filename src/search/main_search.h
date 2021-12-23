@@ -10,6 +10,7 @@
 #include "../definitions/moveGeneration.h"
 #include "../evaluation/mainEvaluation.h"
 #include "../definitions/moveStructs.h"
+#include "../utils/helpers.h"
 #include <cstring>
 #include <algorithm>
 
@@ -22,7 +23,7 @@ struct SearchInfo{
     int startTime;
     int stopTime;
     int depth;
-    int depthSet;
+    int depthMax;
     int timeSet;
     int movesToGo;
     int infinite;
@@ -36,10 +37,10 @@ struct SearchInfo{
     float fhf;
 };
 
-int askMax(Board *brd, int depth, int alpha, int beta);
+int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info);
 void search(Board *brd, int depth);
 
-extern int searchCounter;
+extern int nodes;
 
 
 #endif //CHESSENGINE2_MAIN_SEARCH_H
