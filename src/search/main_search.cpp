@@ -1,50 +1,55 @@
 #include "main_search.h"
 
+int ply = 0;
+int pvLength[64];
+int pvTable[64][64];
+
+int searchCounter = 0;
+
 
 int quiescence(Board *brd, int alpha, int beta){
+
+    searchCounter++;
+
     int score = eval(brd);
 
-    if (score >= beta){
-        return beta;
-    }
+    if (score >= beta){ return beta; }
 
     if (score > alpha){ alpha = score; }
 
     Movelist ml;
     generateCaptureMoves(brd, &ml);
-    int bestmove = 0;
-    int oldAlpha = alpha;
-    bool existsLegal = false;
     for (int i = 0; i<ml.count; i++) {
         bool legalMove = makeMove(brd, ml.moves[i].move);
-        if (!legalMove) continue;
+        if (!legalMove){
+            continue;
+        }
 
-        existsLegal = true;
+        ply++;
         int value = -quiescence(brd, -beta, -alpha);
         undoMove(brd);
+        ply--;
 
         if (value >= beta){ return beta; }
         if (value > alpha){
             alpha = value;
-            bestmove = ml.moves[i].move;
         }
     }
-
-    if (alpha > oldAlpha){
-
-    }
-
 
     return alpha;
 }
 
-int searchCounter = 0;
 int askMax(Board *brd, int depth, int alpha, int beta) {
+
+    searchCounter++;
+
+    pvLength[ply] = ply;
+
     if (brd->fiftyMove == 100) return 0;
 
     if (depth == 0) {
-        searchCounter++;
-        return quiescence(brd, -beta, -alpha);
+        //return eval(brd);
+        return quiescence(brd, alpha, beta);
     }
 
     int side = brd->side;
@@ -59,24 +64,30 @@ int askMax(Board *brd, int depth, int alpha, int beta) {
         if (!legalMove) continue;
 
         existsLegal = true;
+        ply++;
         int value = -askMax(brd, depth-1, -beta, -alpha);
         undoMove(brd);
+        ply--;
 
         if (value >= beta){ return beta; }
         if (value > alpha){
             alpha = value;
             bestmove = ml.moves[i].move;
+
+            pvTable[ply][ply] = bestmove;
+
+            for (int nextPly = ply+1; nextPly < pvLength[ply+1]; nextPly++){
+                pvTable[ply][nextPly] = pvTable[ply+1][nextPly];
+            }
+
+            pvLength[ply] = pvLength[ply+1];
         }
     }
 
     if (!existsLegal) {
-        if (side == white && isSquareAttacked(brd, brd->whiteKingPos, false)) return -mateScore + depth;
-        if (side == black && isSquareAttacked(brd, brd->blackKingPos, true)) return -mateScore + depth;
+        if (side == white && isSquareAttacked(brd, brd->whiteKingPos, false)) return -mateScore + ply;
+        if (side == black && isSquareAttacked(brd, brd->blackKingPos, true)) return -mateScore + ply;
         return 0;
-    }
-
-    if (alpha > oldAlpha){
-
     }
 
     return alpha;
@@ -89,7 +100,12 @@ void search(Board *brd, int depth) {
         cout << "D" << i << ": " << searchCounter << "\n";
         cout << "Score: " << score << "\n";
         cout << "Pv: ";
-
+        for (int ct = 0; ct < pvLength[0]; ct++){
+            int move = pvTable[0][ct];
+            int fromSq = fromSquare(move);
+            int toSq = toSquare(move);
+            cout << "d"<< ct+1 << ": " << sqToAlgebraic(fromSq) << sqToAlgebraic(toSq) << " ";
+        }
         cout << "\n";
     }
 }
