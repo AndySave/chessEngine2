@@ -101,7 +101,11 @@ add_executable(
 
         src/evaluation/mainEvaluation.cpp
         src/evaluation/mainEvaluation.h
+        src/evaluation/pieceTables.cpp
+        src/evaluation/pieceTables.h
 
+        src/search/main_search.cpp
+        src/search/main_search.h
 
         src/ui/terminal_ui.cpp
         src/ui/terminal_ui.h
