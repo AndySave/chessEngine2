@@ -593,7 +593,7 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
 
     //Generating capture moves of: KNIGHT.
     piece = side ? n : N;
-    ull knightPositions = brd->bitboards[side];
+    ull knightPositions = brd->bitboards[piece];
 
     while (knightPositions){ //Loops through each knight of current side
         int curPos = getLSB(knightPositions); //The position of current knight being evaluated
