@@ -21,10 +21,10 @@ void generateMoves(Board *brd, Movelist *lst){
             int rank = pawnPos/8;
             if (!getBit(occ, pawnPos+8)){
                 if (rank == 6){
-                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, 0, promFlag, N, noPiece));
-                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, 1, promFlag, B, noPiece));
-                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, 2, promFlag, R, noPiece));
-                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, 3, promFlag, Q, noPiece));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, 0, promFlag, P, noPiece));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, 1, promFlag, P, noPiece));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, 2, promFlag, P, noPiece));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos+8, 3, promFlag, P, noPiece));
                 }else{
                     addQuietMove(lst, createMove(pawnPos, pawnPos+8, 0, noFlag, P, noPiece));
                 }
@@ -44,10 +44,10 @@ void generateMoves(Board *brd, Movelist *lst){
                 int captured = findPiece(brd, index, black);
 
                 if (rank == 6){
-                    addCaptureMove(lst, createMove(pawnPos, index, 0, promFlag, N, captured));
-                    addCaptureMove(lst, createMove(pawnPos, index, 1, promFlag, B, captured));
-                    addCaptureMove(lst, createMove(pawnPos, index, 2, promFlag, R, captured));
-                    addCaptureMove(lst, createMove(pawnPos, index, 3, promFlag, Q, captured));
+                    addCaptureMove(lst, createMove(pawnPos, index, 0, promFlag, P, captured));
+                    addCaptureMove(lst, createMove(pawnPos, index, 1, promFlag, P, captured));
+                    addCaptureMove(lst, createMove(pawnPos, index, 2, promFlag, P, captured));
+                    addCaptureMove(lst, createMove(pawnPos, index, 3, promFlag, P, captured));
                 }else{
                     addCaptureMove(lst, createMove(pawnPos, index, 0, noFlag, P, captured));
                 }
@@ -244,10 +244,10 @@ void generateMoves(Board *brd, Movelist *lst){
             int rank = pawnPos/8;
             if (!getBit(occ, pawnPos-8)){
                 if (rank == 1){
-                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, 0, promFlag, n, noPiece));
-                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, 1, promFlag, b, noPiece));
-                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, 2, promFlag, r, noPiece));
-                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, 3, promFlag, q, noPiece));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, 0, promFlag, p, noPiece));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, 1, promFlag, p, noPiece));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, 2, promFlag, p, noPiece));
+                    addQuietMove(lst, createMove(pawnPos, pawnPos-8, 3, promFlag, p, noPiece));
                 }else{
                     addQuietMove(lst, createMove(pawnPos, pawnPos-8, 0, noFlag, p, noPiece));
                 }
@@ -267,10 +267,10 @@ void generateMoves(Board *brd, Movelist *lst){
                 int captured = findPiece(brd, index, white);
 
                 if (rank == 1){
-                    addCaptureMove(lst, createMove(pawnPos, index, 0, promFlag, n, captured));
-                    addCaptureMove(lst, createMove(pawnPos, index, 1, promFlag, b, captured));
-                    addCaptureMove(lst, createMove(pawnPos, index, 2, promFlag, r, captured));
-                    addCaptureMove(lst, createMove(pawnPos, index, 3, promFlag, q, captured));
+                    addCaptureMove(lst, createMove(pawnPos, index, 0, promFlag, p, captured));
+                    addCaptureMove(lst, createMove(pawnPos, index, 1, promFlag, p, captured));
+                    addCaptureMove(lst, createMove(pawnPos, index, 2, promFlag, p, captured));
+                    addCaptureMove(lst, createMove(pawnPos, index, 3, promFlag, p, captured));
                 }else{
                     addCaptureMove(lst, createMove(pawnPos, index, 0, noFlag, p, captured));
                 }
@@ -482,10 +482,10 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
                 int captured = findPiece(brd, curAttack, black);
 
                 if (rank == 6) { //When a white pawn is on 7th rank and attacks a piece, it promotes too.
-                    addCaptureMove(lst, createMove(curPos, curAttack, 0, promFlag, N, captured));
-                    addCaptureMove(lst, createMove(curPos, curAttack, 1, promFlag, B, captured));
-                    addCaptureMove(lst, createMove(curPos, curAttack, 2, promFlag, R, captured));
-                    addCaptureMove(lst, createMove(curPos, curAttack, 3, promFlag, Q, captured));
+                    addCaptureMove(lst, createMove(curPos, curAttack, 0, promFlag, P, captured));
+                    addCaptureMove(lst, createMove(curPos, curAttack, 1, promFlag, P, captured));
+                    addCaptureMove(lst, createMove(curPos, curAttack, 2, promFlag, P, captured));
+                    addCaptureMove(lst, createMove(curPos, curAttack, 3, promFlag, P, captured));
                 } else { //When the pawn is not on 7th rank it does not promote, only capture.
                     addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag, P, captured));
                 }
@@ -514,10 +514,10 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
                 int captured = findPiece(brd, curAttack, white);
 
                 if (rank == 1) { //When a white pawn is on 2nd rank and attacks a piece, it promotes too.
-                    addCaptureMove(lst, createMove(curPos, curAttack, 0, promFlag, n, captured));
-                    addCaptureMove(lst, createMove(curPos, curAttack, 1, promFlag, b, captured));
-                    addCaptureMove(lst, createMove(curPos, curAttack, 2, promFlag, r, captured));
-                    addCaptureMove(lst, createMove(curPos, curAttack, 3, promFlag, q, captured));
+                    addCaptureMove(lst, createMove(curPos, curAttack, 0, promFlag, p, captured));
+                    addCaptureMove(lst, createMove(curPos, curAttack, 1, promFlag, p, captured));
+                    addCaptureMove(lst, createMove(curPos, curAttack, 2, promFlag, p, captured));
+                    addCaptureMove(lst, createMove(curPos, curAttack, 3, promFlag, p, captured));
                 } else { //When the pawn is not on 2nd rank it does not promote, only capture.
                     addCaptureMove(lst, createMove(curPos, curAttack, 0, noFlag, p, captured));
                 }
