@@ -1,0 +1,5 @@
+
+#ifndef CHESSENGINE2_HASH_TABLE_H
+#define CHESSENGINE2_HASH_TABLE_H
+
+#endif
