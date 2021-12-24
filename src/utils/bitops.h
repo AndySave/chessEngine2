@@ -3,6 +3,7 @@
 #define CHESSENGINE2_BITOPS_H
 
 #include "../definitions/std_typedef.h"
+#include <intrin.h>
 
 extern ull setMask[64];
 extern ull clearMask[64];
@@ -33,16 +34,25 @@ inline int countBits(ull x){
     return (x * h01) >> 56;
 }
 
+/*
 // Gets index of Least Significant Bit
 inline int getLSB(ull bb){
     if (bb != 0)
         return countBits((bb & -bb) - 1);
     return -1;
 }
+*/
 
 
-
-
+inline int getLSB(ull bb) {
+    unsigned long index;
+    if (_BitScanForward64(&index, bb)){
+        return index;
+    }
+    else{
+        return 64;
+    }
+}
 
 
 
