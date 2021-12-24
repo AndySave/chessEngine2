@@ -37,8 +37,7 @@ struct SearchInfo{
     float fhf;
 };
 
-int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info);
-void search(Board *brd, int depth);
+void search(Board *brd, int maxDepth);
 
 extern int nodes;
 
