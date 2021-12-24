@@ -85,10 +85,12 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, bool do
     }
 
     int kingPos = brd->side == white ? brd->whiteKingPos : brd->blackKingPos;
-    bool inCheck = isSquareAttacked(brd, kingPos, brd->side ^ 1);
+    bool inCheck = isSquareAttacked(brd, kingPos, brd->side);
 
     int value;
-    if (doNull && !inCheck && depth >= 3 && ply){
+
+    // Null move pruning
+    if (doNull && depth >= 3 && !inCheck && ply){
         makeNullMove(brd);
         value = -askMax(brd, depth-1-nullMoveReductionLimit, -beta, -beta+1, info, false);
         undoNullMove(brd);
@@ -98,7 +100,6 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, bool do
         }
     }
 
-    int side = brd->side;
     Movelist ml;
     generateMoves(brd, &ml);
     int bestmove;
