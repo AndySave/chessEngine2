@@ -191,12 +191,12 @@ void clearPiece(Board *brd, int sq, int piece){
 }
 
 
-void movePiece(Board *brd, int fromSq, int toSq){
+void movePiece(Board *brd, int fromSq, int toSq, int piece){
     // Find color of piece
     int color = getBit(brd->occupancies[white], fromSq) ? white : black;
 
     // Find piece type
-    int piece = findPiece(brd, fromSq, color);
+    //int piece = findPiece(brd, fromSq, color);
 
     // Removing piece from all bitboards
     clearBit(brd->bitboards[piece], fromSq);
@@ -224,7 +224,8 @@ bool makeMove(Board *brd, int move){
     int to = toSquare(move);
     int promoted = promotedPiece(move);
     int specialMoveFlag = moveFlag(move);
-    int piece = findPiece(brd, from, brd->side);
+    //int piece = findPiece(brd, from, brd->side);
+    int piece = getPiece(move);
 
     //Updating the history of game (stored in brd)
     brd->history[brd->ply].move = move;
@@ -243,15 +244,15 @@ bool makeMove(Board *brd, int move){
         // If move is a castle move, move the rook
         if (brd->side == white){
             if (to == g1){
-                movePiece(brd, h1, f1);
+                movePiece(brd, h1, f1, R);
             }else{
-                movePiece(brd, a1, d1);
+                movePiece(brd, a1, d1, R);
             }
         }else{
             if (to == g8){
-                movePiece(brd, h8, f8);
+                movePiece(brd, h8, f8, r);
             }else{
-                movePiece(brd, a8, d8);
+                movePiece(brd, a8, d8, r);
             }
         }
     }
@@ -294,18 +295,13 @@ bool makeMove(Board *brd, int move){
     }
 
     // If piece exists on to square, it must be a capture
-    bool isCapture = getBit(brd->occupancies[both], to);
-    if (isCapture){
-        // Finding piece type
-        int capturedPiece = findPiece(brd, to, brd->side ^ 1);
-
-        brd->history[brd->ply].capturedPiece = capturedPiece;
-
+    //bool isCapture = getBit(brd->occupancies[both], to);
+    int capturedPiece = getCaptured(move);
+    if (capturedPiece != noPiece){
         clearPiece(brd, to, capturedPiece);
         // Capture resets fiftyMove counter
         brd->fiftyMove = 0;
     }else{
-        brd->history[brd->ply].capturedPiece = noPiece;
         brd->fiftyMove++;
     }
 
@@ -320,18 +316,19 @@ bool makeMove(Board *brd, int move){
     brd->ply++;
 
 
-    movePiece(brd, from, to);
+    movePiece(brd, from, to, piece);
 
     if (specialMoveFlag == promFlag){
-        // remove pawn
-        clearPiece(brd, to, piece);
 
-        // incrementing promoted piece to match piece values
-        promoted++;
-        if (brd->side == black){
-            promoted += 6;
+        if (brd->side == white){
+            // remove pawn
+            clearPiece(brd, to, P);
+            promoted += 1;
+        }else{
+            clearPiece(brd, to, p);
+            promoted += 7;
         }
-        // add promoted piece
+
         addPiece(brd, to, promoted);
     }
 
@@ -365,10 +362,10 @@ void undoMove(Board *brd){
     int from = fromSquare(move);
     int to = toSquare(move);
     int specialMoveFlag = moveFlag(move);
-    int color = brd->side;
 
     // Finding piece type
-    int piece = findPiece(brd, to, color);
+    //int piece = findPiece(brd, to, brd->side);
+    int piece = getPiece(move);
 
     brd->castle = brd->history[brd->ply].castle;
     brd->fiftyMove = brd->history[brd->ply].fiftyMove;
@@ -384,21 +381,33 @@ void undoMove(Board *brd){
         // If move is a castle move, move the rook
         if (brd->side == white){
             if (to == g1){
-                movePiece(brd, f1, h1);
+                movePiece(brd, f1, h1, R);
             }else{
-                movePiece(brd, d1, a1);
+                movePiece(brd, d1, a1, R);
             }
         }else{
             if (to == g8){
-                movePiece(brd, f8, h8);
+                movePiece(brd, f8, h8, r);
             }else{
-                movePiece(brd, d8, a8);
+                movePiece(brd, d8, a8, r);
             }
         }
     }
 
+    // Piece will be stored as Pawn in move so we have to change the piece to
+    // the promoted piece
+    if (specialMoveFlag == promFlag){
+        piece = promotedPiece(move);
+
+        if (brd->side == white){
+            piece += 1;
+        }else{
+            piece += 7;
+        }
+    }
+
     // Moving piece back
-    movePiece(brd, to, from);
+    movePiece(brd, to, from, piece);
 
     if (piece == K){
         brd->whiteKingPos = from;
@@ -407,8 +416,8 @@ void undoMove(Board *brd){
     }
 
     // Adding back captured piece if move was capture move
-    if (brd->history[brd->ply].capturedPiece != noPiece){
-        addPiece(brd, to, brd->history[brd->ply].capturedPiece);
+    if (getCaptured(move) != noPiece){
+        addPiece(brd, to, getCaptured(move));
     }
 
     if (specialMoveFlag == promFlag){
