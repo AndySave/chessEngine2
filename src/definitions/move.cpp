@@ -434,6 +434,47 @@ void undoMove(Board *brd){
     brd->hashKey = brd->history[brd->ply].hashKey;
 }
 
+void makeNullMove(Board *brd){
+    //Updating the history of game (stored in brd)
+    brd->history[brd->ply].move = 0;
+    brd->history[brd->ply].hashKey = brd->hashKey;
+    brd->history[brd->ply].fiftyMove = brd->fiftyMove;
+    brd->history[brd->ply].enpassantSq = brd->enpassantSq;
+    brd->history[brd->ply].castle = brd->castle;
+
+
+
+    // Hashing out old enPassant square
+    if (brd->enpassantSq != noSq){
+        hashEnpassant(brd->enpassantSq);
+    }
+
+    brd->enpassantSq = noSq;
+
+
+    // Incrementing halfmoves
+    brd->ply++;
+
+    // Swapping side to move
+    brd->side ^= 1;
+    hashSide;
+}
+
+void undoNullMove(Board *brd){
+    brd->ply--;
+
+    // swapping sides
+    brd->side ^= 1;
+
+    brd->castle = brd->history[brd->ply].castle;
+    brd->fiftyMove = brd->history[brd->ply].fiftyMove;
+    brd->enpassantSq = brd->history[brd->ply].enpassantSq;
+
+    // Reverting back to old hashKey
+    brd->hashKey = brd->history[brd->ply].hashKey;
+}
+
+
 // Checks through history array if position has already occurred
 bool isRepetition(Board *brd){
     for (int i = brd->ply - brd->fiftyMove; i < brd->ply-1; i++){
