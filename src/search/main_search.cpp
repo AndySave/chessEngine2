@@ -82,10 +82,12 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info) {
 
     // If a move in the move list is a pv move, then give it a high score
     int pvMove = pvTable[ply][ply];
+    bool foundPvMove = false;
     if (pvMove != 0){
         for (int i = 0; i < ml.count; i++){
             if (ml.moves[i].move == pvMove){
                 ml.moves[i].score = 2000000;
+                foundPvMove = true;
                 break;
             }
         }
@@ -104,7 +106,7 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info) {
         ply++;
 
         int value;
-        if (legal == 1){
+        if (legal == 1 || foundPvMove){
             value = -askMax(brd, depth-1, -beta, -alpha, info);
         }else{
             // Window is closed and we look if we fail high or fail low
