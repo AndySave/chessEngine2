@@ -12,6 +12,9 @@ int pvTable[64][64];
 int searchHistory[12][64];
 int searchKillers[2][maxdepth];
 
+const int fullDepthMoves = 5;
+const int reductionLimit = 3;
+
 
 bool comp(const Move &lhs, const Move &rhs){
     return lhs.score > rhs.score;
@@ -107,14 +110,25 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info) {
 
         int value;
         if (legal == 1 || foundPvMove){
+            // Trust the move ordering and do a full search on first move
             value = -askMax(brd, depth-1, -beta, -alpha, info);
         }else{
-            // Window is closed and we look if we fail high or fail low
-            value = -askMax(brd, depth-1, -alpha-1, -alpha, info);
-            // If move fails high but is less than beta it is a new best move and
-            // we have to do a re-search with full window
-            if (value > alpha && value < beta){
-                value = max(value, -askMax(brd, depth-1, -beta, -alpha, info));
+            // If we have searched many moves without a fail high and we are not
+            // too close to the root, we do a reduced search
+            if (legal >= fullDepthMoves && depth >= reductionLimit){
+                value = -askMax(brd, depth-2, -alpha-1, -alpha, info);
+            }else{
+                value = alpha+1;
+            }
+
+            if (value > alpha){
+                // Window is closed and we look if we fail high or fail low
+                value = -askMax(brd, depth-1, -alpha-1, -alpha, info);
+                // If move fails high but is less than beta it is a new best move and
+                // we have to do a re-search with full window
+                if (value > alpha && value < beta){
+                    value = -askMax(brd, depth-1, -beta, -alpha, info);
+                }
             }
         }
 
