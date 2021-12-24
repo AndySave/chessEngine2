@@ -15,6 +15,9 @@ int searchKillers[2][maxdepth];
 const int fullDepthMoves = 5;
 const int reductionLimit = 3;
 
+const int nullMoveReductionLimit = 2;
+
+int aspirationFac = 65;
 
 bool comp(const Move &lhs, const Move &rhs){
     return lhs.score > rhs.score;
@@ -67,7 +70,7 @@ int quiescence(Board *brd, int alpha, int beta, SearchInfo *info){
     return alpha;
 }
 
-int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info) {
+int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, bool doNull) {
 
     nodes++;
 
@@ -81,11 +84,24 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info) {
         return quiescence(brd, alpha, beta, info);
     }
 
+    int kingPos = brd->side == white ? brd->whiteKingPos : brd->blackKingPos;
+    bool inCheck = isSquareAttacked(brd, kingPos, brd->side ^ 1);
+
+    int value;
+    if (doNull && !inCheck && depth >= 3 && ply){
+        makeNullMove(brd);
+        value = -askMax(brd, depth-1-nullMoveReductionLimit, -beta, -beta+1, info, false);
+        undoNullMove(brd);
+
+        if (value >= beta){
+            return beta;
+        }
+    }
+
     int side = brd->side;
     Movelist ml;
     generateMoves(brd, &ml);
     int bestmove;
-
 
     // If a move in the move list is a pv move, then give it a high score
     int pvMove = pvTable[ply][ply];
@@ -112,27 +128,26 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info) {
         legal++;
         ply++;
 
-        int value;
         if (legal == 1 || foundPvMove){
             // Trust the move ordering and do a full search on first move
-            value = -askMax(brd, depth-1, -beta, -alpha, info);
+            value = -askMax(brd, depth-1, -beta, -alpha, info, true);
         }else{
             // If we have searched many moves without a fail high and we are not
             // too close to the root, we do a reduced search
             // TODO: Might not want to do a reduced search if we are in check or if move is a capture
             if (legal >= fullDepthMoves && depth >= reductionLimit){
-                value = -askMax(brd, depth-2, -alpha-1, -alpha, info);
+                value = -askMax(brd, depth-2, -alpha-1, -alpha, info, true);
             }else{
                 value = alpha+1;
             }
 
             if (value > alpha){
                 // Window is closed and we look if we fail high or fail low
-                value = -askMax(brd, depth-1, -alpha-1, -alpha, info);
+                value = -askMax(brd, depth-1, -alpha-1, -alpha, info, true);
                 // If move fails high but is less than beta it is a new best move and
                 // we have to do a re-search with full window
                 if (value > alpha && value < beta){
-                    value = -askMax(brd, depth-1, -beta, -alpha, info);
+                    value = -askMax(brd, depth-1, -beta, -alpha, info, true);
                 }
             }
         }
@@ -166,15 +181,14 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info) {
     }
 
     if (!legal) {
-        if (side == white && isSquareAttacked(brd, brd->whiteKingPos, false)) return -mateScore + ply;
-        if (side == black && isSquareAttacked(brd, brd->blackKingPos, true)) return -mateScore + ply;
+        if  (inCheck){ return -mateScore + ply; }
         return 0;
     }
 
     return alpha;
 }
 
-void search(Board *brd, int depth) {
+void search(Board *brd, int maxDepth) {
     memset(pvLength, 0, sizeof(pvLength));
     memset(pvTable, 0, sizeof(pvTable));
 
@@ -183,12 +197,32 @@ void search(Board *brd, int depth) {
 
     SearchInfo info;
 
-    for (int i = 1; i <= depth; i ++) {
+    int alpha = -INF, beta = INF;
+    int searchTime = 0;
+    for (int depth = 1; depth <= maxDepth; depth++) {
         nodes = 0;
         int t1 = getTime();
-        int score = askMax(brd, i, -INF, INF, &info);
+        int score = askMax(brd, depth, alpha, beta, &info, true);
         int t2 = getTime();
-        cout << "D" << i << ": " << "nodes: " << nodes << " leafs: " << leafNodes << " score: " << score << " ordering: " << info.fhf / info.fh << " time: " << t2-t1 << "ms" << '\n';
+        searchTime += t2-t1;
+
+        if (score <= alpha){
+            alpha = -INF;
+            depth--;
+            continue;
+        }
+
+        if (score >= beta){
+            beta = INF;
+            depth--;
+            continue;
+        }
+
+        alpha = score - aspirationFac;
+        beta = score + aspirationFac;
+
+
+        cout << "D" << depth << ": " << "nodes: " << nodes << " leafs: " << leafNodes << " score: " << score << " ordering: " << info.fhf / info.fh << " time: " << searchTime << "ms" << '\n';
         cout << "Pv: ";
         for (int ct = 0; ct < pvLength[0]; ct++){
             int move = pvTable[0][ct];
@@ -197,7 +231,8 @@ void search(Board *brd, int depth) {
             cout << "d"<< ct+1 << ": " << sqToAlgebraic(fromSq) << sqToAlgebraic(toSq) << " ";
         }
         cout << "\n\n";
+
+        searchTime = 0;
     }
 }
-
 
