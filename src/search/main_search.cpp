@@ -17,15 +17,14 @@ bool comp(const Move &lhs, const Move &rhs){
     return lhs.score > rhs.score;
 }
 
-
 int quiescence(Board *brd, int alpha, int beta, SearchInfo *info){
     nodes++;
 
-    int score = eval(brd);
-
-    if (score >= beta){ return beta; }
-
-    if (score > alpha){ alpha = score; }
+    // Standing pat (doing nothing). Setting a lower bound on the score which we can do because we can always
+    // assume that there is at least one move that can match or beat the lower bound.
+    int standPat = eval(brd);
+    if (standPat >= beta){ return beta; }
+    if (standPat > alpha){ alpha = standPat; }
 
     Movelist ml;
     generateCaptureMoves(brd, &ml);
@@ -103,10 +102,24 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info) {
 
         legal++;
         ply++;
-        int value = -askMax(brd, depth-1, -beta, -alpha, info);
+
+        int value;
+        if (legal == 1){
+            value = -askMax(brd, depth-1, -beta, -alpha, info);
+        }else{
+            // Window is closed and we look if we fail high or fail low
+            value = -askMax(brd, depth-1, -alpha-1, -alpha, info);
+            // If move fails high but is less than beta it is a new best move and
+            // we have to do a re-search with full window
+            if (value > alpha && value < beta){
+                value = -askMax(brd, depth-1, -beta, -alpha, info);
+            }
+        }
+
         undoMove(brd);
         ply--;
 
+        // Move fails hard (Move was too good. Opponent has better option somewhere else in the tree)
         if (value >= beta){
             if (legal == 1){
                 info->fhf++;
@@ -114,6 +127,8 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info) {
             info->fh++;
             return beta;
         }
+
+        // Move beat alpha (new best move)
         if (value > alpha){
             alpha = value;
             bestmove = ml.moves[i].move;
