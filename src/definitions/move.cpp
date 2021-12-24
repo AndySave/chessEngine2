@@ -80,9 +80,9 @@ void addQuietMove(Movelist *lst, int move){
     lst->count++;
 }
 
-void addCaptureMove(Movelist *lst, int move, int piece, int capturedPiece){
+void addCaptureMove(Movelist *lst, int move){
     lst->moves[lst->count].move = move;
-    lst->moves[lst->count].score = mvvlvaScore[capturedPiece][piece];
+    lst->moves[lst->count].score = mvvlvaScore[getCaptured(move)][getPiece(move)];
     lst->count++;
 }
 

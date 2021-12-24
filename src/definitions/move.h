@@ -19,6 +19,8 @@
 #define toSquare(move) ((move >> 6) & 0x3f)
 #define promotedPiece(move) ((move >> 12) & 0x3)
 #define moveFlag(move) ((move >> 14) & 0x3)
+#define getPiece(move) ((move >> 16) & 0xf)
+#define getCaptured(move) ((move >> 20) & 0xf)
 
 // Used to update castle permissions
 const int castlePerm[64] ={
@@ -42,12 +44,12 @@ void printMovelist(Movelist *lst);
 /*
  * Creates a move value (unsigned short) from input fromSq, toSq, promotedPiece and moveFlag.
  */
-inline int createMove(int fromSq, int toSq, int promotedPiece, int moveFlag) {
-    return fromSq | (toSq << 6) | (promotedPiece << 12) | (moveFlag << 14);
+inline int createMove(int fromSq, int toSq, int promotedPiece, int moveFlag, int piece, int capturedPiece) {
+    return fromSq | (toSq << 6) | (promotedPiece << 12) | (moveFlag << 14) | (piece << 16) | (capturedPiece << 20);
 }
 
 void addQuietMove(Movelist *lst, int move);
-void addCaptureMove(Movelist *lst, int move, int piece, int capturedPiece);
+void addCaptureMove(Movelist *lst, int move);
 void addEPMove(Movelist *lst, int move);
 void addPiece(Board *brd, int sq, int piece);
 void clearPiece(Board *brd, int sq);
