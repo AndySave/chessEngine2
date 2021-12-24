@@ -108,13 +108,13 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info) {
         int value;
         if (legal == 1 || foundPvMove){
             value = -askMax(brd, depth-1, -beta, -alpha, info);
-        }else{
+        }else{ // TODO: Find out if calling pvs on moveNumber > 1 is correct or if it might fail
             // Window is closed and we look if we fail high or fail low
             value = -askMax(brd, depth-1, -alpha-1, -alpha, info);
             // If move fails high but is less than beta it is a new best move and
             // we have to do a re-search with full window
             if (value > alpha && value < beta){
-                value = -askMax(brd, depth-1, -beta, -alpha, info);
+                value = max(value, -askMax(brd, depth-1, -beta, -alpha, info));
             }
         }
 
@@ -132,6 +132,7 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info) {
 
         // Move beat alpha (new best move)
         if (value > alpha){
+            foundPvMove = true;
             alpha = value;
             bestmove = ml.moves[i].move;
 
