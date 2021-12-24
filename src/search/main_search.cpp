@@ -23,6 +23,9 @@ bool comp(const Move &lhs, const Move &rhs){
 int quiescence(Board *brd, int alpha, int beta, SearchInfo *info){
     nodes++;
 
+    // Fifty move rule and repetition check
+    if (brd->fiftyMove == 100 || isRepetition(brd)){ return 0; }
+
     // Standing pat (doing nothing). Setting a lower bound on the score which we can do because we can always
     // assume that there is at least one move that can match or beat the lower bound.
     int standPat = eval(brd);
@@ -70,7 +73,8 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info) {
 
     pvLength[ply] = ply;
 
-    if (brd->fiftyMove == 100) return 0;
+    // Fifty move rule and repetition check
+    if (brd->fiftyMove == 100 || isRepetition(brd)){ return 0; }
 
     if (depth == 0) {
         leafNodes++;
@@ -115,6 +119,7 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info) {
         }else{
             // If we have searched many moves without a fail high and we are not
             // too close to the root, we do a reduced search
+            // TODO: Might not want to do a reduced search if we are in check or if move is a capture
             if (legal >= fullDepthMoves && depth >= reductionLimit){
                 value = -askMax(brd, depth-2, -alpha-1, -alpha, info);
             }else{
