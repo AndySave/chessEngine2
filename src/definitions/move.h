@@ -58,6 +58,7 @@ void undoMove(Board *brd);
 bool isSquareAttacked(Board *brd, int sq, bool whiteAttacking);
 void printAttackedSquares(Board *brd, bool whiteAttacking);
 int findPiece(Board *brd, int sq, int color);
+bool isRepetition(Board *brd);
 
 #endif
 
