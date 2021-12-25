@@ -25,6 +25,8 @@ add_executable(
         src/evaluation/mainEvaluation.h
         src/evaluation/pieceTables.cpp
         src/evaluation/pieceTables.h
+        src/evaluation/mobility.cpp
+        src/evaluation/mobility.h
 
         src/search/main_search.cpp
         src/search/main_search.h
