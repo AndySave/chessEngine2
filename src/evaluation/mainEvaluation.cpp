@@ -97,9 +97,12 @@ int eval(Board *brd){
     // Adding piece tables to score
     score += (pieceTableScoreMG*mgFactor + pieceTableScoreEG*egFactor) / taperedFactor;
 
+    // Adding evaluation score of position mobility
+    mobilityEvaluation(brd);
+    score += (midMobility*mgFactor + endMobility*egFactor) / taperedFactor;
+
     if (brd->side == white){
         return score;
     }
     return -score;
 }
-
