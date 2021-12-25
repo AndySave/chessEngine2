@@ -5,7 +5,10 @@
 #include "../definitions/board.h"
 #include "../definitions/std_typedef.h"
 #include "../utils/bitops.h"
+#include "../definitions/nonSlidersAttacks.h"
+#include "../definitions/slidersAttacks.h"
 #include "pieceTables.h"
+#include "mobility.h"
 
 
 /// --------------------TAPERED VALUES-------------------- ///
