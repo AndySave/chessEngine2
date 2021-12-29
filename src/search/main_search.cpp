@@ -13,9 +13,6 @@ constexpr int nullMoveReductionLimit = 3;
 
 constexpr int aspirationFac = 65;
 
-bool comp(const Move &lhs, const Move &rhs){
-    return lhs.score > rhs.score;
-}
 
 int quiescence(Board *brd, int alpha, int beta, SearchInfo *info){
     nodes++;
@@ -32,9 +29,9 @@ int quiescence(Board *brd, int alpha, int beta, SearchInfo *info){
     Movelist ml;
     generateCaptureMoves(brd, &ml);
 
-
     // Sorting moves after score
-    sort(ml.moves, ml.moves+ml.count, comp);
+    sortMoves(&ml);
+
     int legal = 0;
     /// -------------SEARCHING STARTS------------- ///
     for (int i = 0; i<ml.count; i++) {
@@ -80,7 +77,7 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
 
 
     // Fifty move rule and repetition check
-    //if (brd->fiftyMove == 100 || isRepetition(brd)){ return 0; }
+    if (brd->fiftyMove == 100 || isRepetition(brd)){ return 0; }
 
     if (depth == 0) {
         leafNodes++;
@@ -105,7 +102,6 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
     generateMoves(brd, &ml);
 
     // If a move in the move list is a pv move, then give it a high score
-    //int pvMove = pvTable[ply][ply];
     if (bestmove != 0){
         for (int i = 0; i < ml.count; i++){
             if (ml.moves[i].move == bestmove){
@@ -116,7 +112,7 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
     }
 
     // Sorting moves after score
-    sort(ml.moves, ml.moves+ml.count, comp);
+    sortMoves(&ml);
 
     /// -------------SEARCHING STARTS------------- ///
     int legal = 0;
@@ -155,24 +151,6 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
         undoMove(brd);
         ply--;
 
-        // Move fails hard (Move was too good. Opponent has better option somewhere else in the tree)
-        if (value >= beta){
-            if (legal == 1){
-                info->fhf++;
-            }
-            info->fh++;
-
-            // Update killer heuristics
-            if (getCaptured(ml.moves[i].move) == noPiece){
-                brd->searchKillers[1][brd->ply] = brd->searchKillers[0][brd->ply];
-                brd->searchKillers[0][brd->ply] = ml.moves[i].move;
-            }
-
-            storeHash(brd, tt, bestmove, beta, hashBeta, depth);
-
-            return beta;
-        }
-
         // Move beat alpha (new best move)
         if (value > alpha){
             alpha = value;
@@ -183,6 +161,24 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
             }
 
             hashFlag = hashExact;
+
+            // Move fails hard (Move was too good. Opponent has better option somewhere else in the tree)
+            if (value >= beta){
+                if (legal == 1){
+                    info->fhf++;
+                }
+                info->fh++;
+
+                // Update killer heuristics
+                if (getCaptured(ml.moves[i].move) == noPiece){
+                    brd->searchKillers[1][brd->ply] = brd->searchKillers[0][brd->ply];
+                    brd->searchKillers[0][brd->ply] = ml.moves[i].move;
+                }
+
+                storeHash(brd, tt, bestmove, beta, hashBeta, depth);
+
+                return beta;
+            }
         }
     }
 
@@ -197,8 +193,6 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
 }
 
 void search(Board *brd, int maxDepth) {
-
-
     // Clearing searchkillers table
     for (int i = 0; i < 2; i++){
         for (int j = 0; j < 64; j++){
