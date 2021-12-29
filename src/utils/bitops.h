@@ -44,7 +44,7 @@ inline int getLSB(ull bb){
 */
 
 
-inline int getLSB(ull bb) {
+static inline int getLSB(ull &bb) {
     unsigned long index;
     if (_BitScanForward64(&index, bb)){
         return index;
