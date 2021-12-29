@@ -35,6 +35,7 @@ void initHashTable(HashTable *tt);
 void clearHashTable(HashTable *tt);
 void storeHash(Board *brd, HashTable *tt, int move, int value, int flags, int depth);
 bool probeHashTable(Board *brd, HashTable *tt, int *move, int *value, int alpha, int beta, int depth);
+int probePvMove(Board *brd, HashTable *tt);
 int getPvLine(Board *brd, HashTable *tt, int depth);
 
 #endif
