@@ -23,17 +23,11 @@ void initHashTable(HashTable *tt){
 
 
 void storeHash(Board *brd, HashTable *tt, int move, int value, int flags, int depth){
-    int index = brd->hashKey & tt->numEntries;
+    int index = brd->hashKey % tt->numEntries;
 
     if (tt->pTable[index].key == 0){
         tt->newWrite++;
     }else{
-        /*
-        if (tt->pTable[index].flags == hashExact && tt->pTable[index].depth >= depth){
-            return;
-        }
-         */
-
         tt->overWrite++;
     }
 
@@ -46,7 +40,7 @@ void storeHash(Board *brd, HashTable *tt, int move, int value, int flags, int de
 
 
 bool probeHashTable(Board *brd, HashTable *tt, int *move, int *value, int alpha, int beta, int depth){
-    int index = brd->hashKey & tt->numEntries;
+    int index = brd->hashKey % tt->numEntries;
 
     if (tt->pTable[index].key == brd->hashKey){
         *move = tt->pTable[index].move;
@@ -87,7 +81,7 @@ bool probeHashTable(Board *brd, HashTable *tt, int *move, int *value, int alpha,
 
 
 int probePvMove(Board *brd, HashTable *tt){
-    int index = brd->hashKey & tt->numEntries;
+    int index = brd->hashKey % tt->numEntries;
 
     if (tt->pTable[index].key == brd->hashKey){
         return tt->pTable[index].move;
