@@ -28,6 +28,10 @@ void storeHash(Board *brd, HashTable *tt, int move, int value, int flags, int de
     if (tt->pTable[index].key == 0){
         tt->newWrite++;
     }else{
+        if (flags != hashExact && tt->pTable[index].flags == hashExact){
+            return;
+        }
+
         tt->overWrite++;
     }
 
