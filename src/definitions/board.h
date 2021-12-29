@@ -28,6 +28,11 @@ struct Board{
     ull hashKey = 0ull; // Key of current board state
 
     Undo history[2048]; // History of previous moves
+
+    int pvTable[64];
+
+    int searchHistory[12][64];
+    int searchKillers[2][64];
 };
 
 // Prints board in a nice format
