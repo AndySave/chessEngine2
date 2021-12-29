@@ -11,6 +11,7 @@
 #include "../search/move_ordering.h"
 #include "../search/main_search.h"
 #include "../utils/helpers.h"
+#include "hashtable.h"
 
 
 int main() {
@@ -31,10 +32,14 @@ int main() {
 
 
     Board board;
-    string fenString = "2r3k1/pbqr1pp1/1p2p2p/2npP2P/1Rp3Q1/2P1BPP1/2P1P1B1/3R2K1 w - - 10 36";
-    fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+    string fenString = "8/5r1k/1Rb5/1p1pB1R1/pP1P4/P2P2K1/2r5/8 w - - 37 77";
+    //fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     FEN(&board, fenString);
     printBoard(&board);
+
+    HashTable tt{};
+    initHashTable(&tt);
 
     // Late inits
     initPhase(&board);
@@ -42,9 +47,8 @@ int main() {
     initPieceTable(&board);
 
 
-    search(&board, 20);
+    search(&board, &tt, 17);
+    search(&board, &tt, 17);
 }
-
-
 
 
