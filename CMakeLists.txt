@@ -32,6 +32,8 @@ add_executable(
         src/search/main_search.h
         src/search/move_ordering.cpp
         src/search/move_ordering.h
+        src/search/hash_table.cpp
+        src/search/hash_table.h
 
         src/ui/terminal_ui.cpp
         src/ui/terminal_ui.h
@@ -112,6 +114,8 @@ add_executable(
         src/search/main_search.h
         src/search/move_ordering.cpp
         src/search/move_ordering.h
+        src/search/hash_table.cpp
+        src/search/hash_table.h
 
         src/ui/terminal_ui.cpp
         src/ui/terminal_ui.h
