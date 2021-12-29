@@ -98,6 +98,37 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
         }
     }
 
+    // Razoring
+    if (!inCheck && depth <= 3){
+        value = eval(brd) + 125;
+
+        int newValue;
+        if (value < beta){
+            if (depth == 1){
+                newValue = quiescence(brd, alpha, beta, info);
+
+                if (newValue > value){
+                    return newValue;
+                }
+                return value;
+            }
+        }
+
+        value += 175;
+
+        if (value < beta && depth <= 2){
+            newValue = quiescence(brd, alpha, beta, info);
+
+            if (newValue < beta){
+                if (newValue > value){
+                    return newValue;
+                }
+                return value;
+            }
+        }
+    }
+
+
     Movelist ml;
     generateMoves(brd, &ml);
 
@@ -192,7 +223,7 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
     return alpha;
 }
 
-void search(Board *brd, int maxDepth) {
+void search(Board *brd, HashTable *tt, int maxDepth) {
     // Clearing searchkillers table
     for (int i = 0; i < 2; i++){
         for (int j = 0; j < 64; j++){
@@ -206,19 +237,15 @@ void search(Board *brd, int maxDepth) {
         }
     }
 
-    // Initializing transposition table
-    HashTable tt;
-    initHashTable(&tt);
-
     // Initializing search info struct
-    SearchInfo info;
+    SearchInfo info{};
 
     int alpha = -INF, beta = INF;
     int searchTime = 0;
     for (int depth = 1; depth <= maxDepth; depth++) {
         nodes = 0;
         int t1 = getTime();
-        int score = askMax(brd, depth, alpha, beta, &info, &tt, true);
+        int score = askMax(brd, depth, alpha, beta, &info, tt, true);
         int t2 = getTime();
         searchTime += t2-t1;
 
@@ -240,7 +267,7 @@ void search(Board *brd, int maxDepth) {
 
         cout << "D" << depth << ": " << "nodes: " << nodes << " leafs: " << leafNodes << " score: " << score << " ordering: " << info.fhf / info.fh << " time: " << searchTime << "ms" << '\n';
         cout << "Pv: ";
-        int total = getPvLine(brd, &tt, depth);
+        int total = getPvLine(brd, tt, depth);
         for (int ct = 0; ct < total; ct++){
             int move = brd->pvTable[ct];
             int fromSq = fromSquare(move);
