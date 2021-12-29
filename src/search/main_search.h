@@ -11,12 +11,13 @@
 #include "../evaluation/mainEvaluation.h"
 #include "../definitions/moveStructs.h"
 #include "../utils/helpers.h"
+#include "hash_table.h"
 #include <cstring>
 #include <algorithm>
 
 
-#define INF 1000000000
-#define mateScore 1000000
+#define INF 100001
+#define mateScore 100000
 
 
 struct SearchInfo{
