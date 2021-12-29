@@ -74,21 +74,28 @@ int findPiece(Board *brd, int sq, int color){
     return piece;
 }
 
-void addQuietMove(Movelist *lst, int move){
+void addQuietMove(Board *brd, Movelist *lst, int move){
     lst->moves[lst->count].move = move;
-    lst->moves[lst->count].score = 0;
+
+    if (brd->searchKillers[0][brd->ply] == move){
+        lst->moves[lst->count].score = 900000;
+    }else if (brd->searchKillers[1][brd->ply] == move){
+        lst->moves[lst->count].score = 800000;
+    }else{
+        lst->moves[lst->count].score = brd->searchHistory[getPiece(move)][toSquare(move)];
+    }
     lst->count++;
 }
 
 void addCaptureMove(Movelist *lst, int move){
     lst->moves[lst->count].move = move;
-    lst->moves[lst->count].score = mvvlvaScore[getCaptured(move)][getPiece(move)];
+    lst->moves[lst->count].score = mvvlvaScore[getCaptured(move)][getPiece(move)] + 1000000;
     lst->count++;
 }
 
 void addEPMove(Movelist *lst, int move){
     lst->moves[lst->count].move = move;
-    lst->moves[lst->count].score = 105;
+    lst->moves[lst->count].score = 105 + 1000000;
     lst->count++;
 }
 
