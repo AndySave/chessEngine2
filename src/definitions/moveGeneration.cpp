@@ -1,9 +1,6 @@
 
 #include "moveGeneration.h"
 
-// TODO: When generateMoves add capture moves it should store the captured piece somewhere
-// which will then be used in the makeMove function. This might help improve speed
-
 
 void generateMoves(Board *brd, Movelist *lst){
     lst->count = 0;
@@ -633,7 +630,7 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
 }
 
 bool moveExists(Board *brd, int move){
-    Movelist moves;
+    Movelist moves{};
     generateMoves(brd, &moves);
 
     for (int count = 0; count < moves.count; count++){
