@@ -13,6 +13,7 @@
 
 void generateMoves(Board *brd, Movelist *lst);
 void generateCaptureMoves(Board *brd, Movelist *lst);
+bool moveExists(Board *brd, int move);
 
 
 #endif
