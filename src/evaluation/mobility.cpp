@@ -25,10 +25,9 @@ void mobilityEvaluation(Board *brd) {
     while (wBishopPositions) {
         int curBishop = getLSB(wBishopPositions);
         clearBit(wBishopPositions, curBishop);
-        int bishopMobility = countBits(bishopAttackRay(brd->bitboards[both],curBishop) & (~brd->bitboards[white]));
+        int bishopMobility = countBits(bishopAttackRay(brd->occupancies[both], curBishop) & (~brd->occupancies[white]));
         midMobility += mobilityBonus[2][bishopMobility][0];
         endMobility += mobilityBonus[2][bishopMobility][1];
-
     }
 
     //Rook
@@ -36,7 +35,7 @@ void mobilityEvaluation(Board *brd) {
     while (wRookPositions) {
         int curRook = getLSB(wRookPositions);
         clearBit(wRookPositions, curRook);
-        int rookMobility = countBits(rookAttackRay(brd->bitboards[both], curRook) & (~brd->bitboards[white]));
+        int rookMobility = countBits(rookAttackRay(brd->occupancies[both], curRook) & (~brd->occupancies[white]));
         midMobility += mobilityBonus[3][rookMobility][0];
         endMobility += mobilityBonus[3][rookMobility][1];
     }
@@ -46,7 +45,7 @@ void mobilityEvaluation(Board *brd) {
     while (wQueenPositions) {
         int curQueen = getLSB(wQueenPositions);
         clearBit(wQueenPositions, curQueen);
-        int queenMobility = countBits(queenAttackRay(brd->bitboards[both], curQueen) & (~brd->bitboards[white]));
+        int queenMobility = countBits(queenAttackRay(brd->occupancies[both], curQueen) & (~brd->occupancies[white]));
         midMobility += mobilityBonus[4][queenMobility][0];
         endMobility += mobilityBonus[4][queenMobility][1];
     }
@@ -71,7 +70,7 @@ void mobilityEvaluation(Board *brd) {
     while (bBishopPositions) {
         int curBishop = getLSB(bBishopPositions);
         clearBit(bBishopPositions, curBishop);
-        int bishopMobility = countBits(bishopAttackRay(brd->bitboards[both],curBishop) & (~brd->bitboards[black]));
+        int bishopMobility = countBits(bishopAttackRay(brd->occupancies[both],curBishop) & (~brd->occupancies[black]));
         midMobility -= mobilityBonus[2][bishopMobility][0];
         endMobility -= mobilityBonus[2][bishopMobility][1];
 
@@ -82,7 +81,7 @@ void mobilityEvaluation(Board *brd) {
     while (bRookPositions) {
         int curRook = getLSB(bRookPositions);
         clearBit(bRookPositions, curRook);
-        int rookMobility = countBits(rookAttackRay(brd->bitboards[both], curRook) & (~brd->bitboards[black]));
+        int rookMobility = countBits(rookAttackRay(brd->occupancies[both], curRook) & (~brd->occupancies[black]));
         midMobility -= mobilityBonus[3][rookMobility][0];
         endMobility -= mobilityBonus[3][rookMobility][1];
     }
@@ -92,9 +91,10 @@ void mobilityEvaluation(Board *brd) {
     while (bQueenPositions) {
         int curQueen = getLSB(bQueenPositions);
         clearBit(bQueenPositions, curQueen);
-        int queenMobility = countBits(queenAttackRay(brd->bitboards[both], curQueen) & (~brd->bitboards[black]));
+        int queenMobility = countBits(queenAttackRay(brd->occupancies[both], curQueen) & (~brd->occupancies[black]));
         midMobility -= mobilityBonus[4][queenMobility][0];
         endMobility -= mobilityBonus[4][queenMobility][1];
     }
 }
+
 
