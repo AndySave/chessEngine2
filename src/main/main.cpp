@@ -10,7 +10,7 @@
 #include "../evaluation/pieceTables.h"
 #include "../search/move_ordering.h"
 #include "../search/main_search.h"
-
+#include "../utils/helpers.h"
 
 
 int main() {
@@ -31,7 +31,8 @@ int main() {
 
 
     Board board;
-    string fenString = "6k1/5ppp/8/8/8/8/8/1K1R4 w - - 0 1";
+    string fenString = "2r3k1/pbqr1pp1/1p2p2p/2npP2P/1Rp3Q1/2P1BPP1/2P1P1B1/3R2K1 w - - 10 36";
+    fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     FEN(&board, fenString);
     printBoard(&board);
 
@@ -40,7 +41,10 @@ int main() {
     initMaterial(&board);
     initPieceTable(&board);
 
-    search(&board, 10);
+
+    search(&board, 20);
 }
+
+
 
 
