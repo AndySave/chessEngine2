@@ -48,7 +48,7 @@ inline int createMove(int fromSq, int toSq, int promotedPiece, int moveFlag, int
     return fromSq | (toSq << 6) | (promotedPiece << 12) | (moveFlag << 14) | (piece << 16) | (capturedPiece << 20);
 }
 
-void addQuietMove(Movelist *lst, int move);
+void addQuietMove(Board *brd, Movelist *lst, int move);
 void addCaptureMove(Movelist *lst, int move);
 void addEPMove(Movelist *lst, int move);
 void addPiece(Board *brd, int sq, int piece);
