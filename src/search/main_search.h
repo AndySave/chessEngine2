@@ -38,6 +38,18 @@ struct SearchInfo{
     float fhf;
 };
 
+
+static inline void sortMoves(Movelist *moves){
+    for (int currentMove = 0; currentMove < moves->count; currentMove++){
+        for (int nextMove = currentMove+1; nextMove < moves->count; nextMove++){
+            if (moves->moves[currentMove].score < moves->moves[nextMove].score){
+                swap(moves->moves[currentMove], moves->moves[nextMove]);
+            }
+        }
+    }
+}
+
+
 void search(Board *brd, int maxDepth);
 
 extern int nodes;
