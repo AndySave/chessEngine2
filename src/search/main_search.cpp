@@ -1,6 +1,7 @@
 #include "main_search.h"
 
 #define maxdepth 32
+#define STOPPED 1000000000
 
 int ply = 0;
 int nodes = 0;
@@ -13,8 +14,21 @@ constexpr int nullMoveReductionLimit = 3;
 
 constexpr int aspirationFac = 65;
 
+void checkIfStopped(SearchInfo *info){
+    if (getTime() > info->stopTime){
+        info->stopped = true;
+    }
+}
+
 int quiescence(Board *brd, int alpha, int beta, SearchInfo *info){
     nodes++;
+
+    if ((nodes & 2047) == 0){
+        checkIfStopped(info);
+    }
+    if (info->stopped){
+        return STOPPED;
+    }
 
     // Fifty move rule and repetition check
     if (brd->fiftyMove == 100 || isRepetition(brd)){ return 0; }
@@ -68,8 +82,14 @@ int quiescence(Board *brd, int alpha, int beta, SearchInfo *info){
 }
 
 int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTable *tt, bool doNull) {
-
     nodes++;
+
+    if ((nodes & 2047) == 0){
+        checkIfStopped(info);
+    }
+    if (info->stopped){
+        return STOPPED;
+    }
 
     // Fifty move rule and repetition check
     if (brd->fiftyMove == 100 || isRepetition(brd)){ return 0; }
@@ -231,7 +251,7 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
     return alpha;
 }
 
-void search(Board *brd, HashTable *tt, int maxDepth) {
+void search(Board *brd, HashTable *tt, SearchInfo *info, int maxDepth) {
     // Clearing searchkillers table
     for (int i = 0; i < 2; i++){
         for (int j = 0; j < 64; j++){
@@ -245,18 +265,23 @@ void search(Board *brd, HashTable *tt, int maxDepth) {
         }
     }
 
-    // Initializing search info struct
-    SearchInfo info{};
-
     int alpha = -INF, beta = INF;
     int searchTime = 0;
+    int previousBestMove = 0;
     for (int depth = 1; depth <= maxDepth; depth++) {
-        info.depthMax = depth+3;
+        info->depthMax = depth+3;
         nodes = 0;
         int t1 = getTime();
-        int score = askMax(brd, depth, alpha, beta, &info, tt, true);
+        int score = askMax(brd, depth, alpha, beta, info, tt, true);
         int t2 = getTime();
         searchTime += t2-t1;
+
+        if (score == STOPPED){
+            storeHash(brd, tt, previousBestMove, 0, hashExact, 10);
+            return;
+        }
+
+        previousBestMove = probePvMove(brd, tt);
 
         if (score <= alpha){
             alpha = -INF;
@@ -278,7 +303,7 @@ void search(Board *brd, HashTable *tt, int maxDepth) {
         cout << "nodes: " << nodes;
         cout << " leafs: " << leafNodes;
         cout << " score: " << score;
-        cout << " ordering: " << info.fhf / info.fh;
+        cout << " ordering: " << info->fhf / info->fh;
         cout << " time: " << searchTime << "ms ";
         cout << "Pv: ";
         int total = getPvLine(brd, tt, depth);
