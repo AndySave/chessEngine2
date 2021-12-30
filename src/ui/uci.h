@@ -60,11 +60,12 @@ inline int algebraicMoveToInt(char* charPtr, Board* board) {
     }
 
     //check if it is en passant
-    if (board->enpassantSq != noSq) moveFlag = epFlag;
+    if (board->enpassantSq != noSq){ moveFlag = epFlag; }
 
+    int tet = ord(fromAlgebraic[0]);
     //check if it is castling
-    if (board->whiteKingPos == fromSq && abs(charPtr[3]-charPtr[1]) > 1 ) moveFlag = castleFlag;
-    if (board->blackKingPos == fromSq && abs(charPtr[3]-charPtr[1]) > 1 ) moveFlag = castleFlag;
+    if (board->whiteKingPos == fromSq && abs(ord(fromAlgebraic[0]) - ord(toAlgebraic[0])) == 2){ moveFlag = castleFlag; }
+    if (board->blackKingPos == fromSq && abs(ord(fromAlgebraic[0]) - ord(toAlgebraic[0])) == 2){ moveFlag = castleFlag; }
 
     int piece = findPiece(board, fromSq, board->side);
     int capturedPiece = findPiece(board, toSq, board->side ^ 1);
