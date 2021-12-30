@@ -50,7 +50,7 @@ static inline void sortMoves(Movelist *moves){
 }
 
 
-void search(Board *brd, HashTable *tt, int maxDepth);
+void search(Board *brd, HashTable *tt, SearchInfo *info, int maxDepth);
 
 extern int nodes;
 
