@@ -15,6 +15,7 @@
 #include "../evaluation/pieceTables.h"
 #include "../search/move_ordering.h"
 #include "../search/main_search.h"
+#include "../evaluation/pawn_structure.h"
 
 #define INPUT_BUFFER 4096
 #define ENGINE_NAME "Humu v2"
