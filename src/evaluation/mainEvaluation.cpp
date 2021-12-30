@@ -38,6 +38,9 @@ int getPhase(){
  * board info
  */
 void initMaterial(Board *brd){
+    materialMG = 0;
+    materialEG = 0;
+
     for (int pce = P; pce <= k; pce++){
         ull pieces = brd->bitboards[pce];
         int cnt = countBits(pieces);
