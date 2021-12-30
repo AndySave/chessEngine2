@@ -4,11 +4,16 @@
 
 #include "../utils/bitops.h"
 #include "../definitions/std_typedef.h"
+#include "../definitions/board.h"
 
 
-ull passedPawnMasks[64];
+inline ull whitePassedPawnMasks[64];
+inline ull blackPassedPawnMasks[64];
 
-void initPassedPawnMask();
+void initWhitePassedPawnMask();
+void initBlackPassedPawnMask();
+
+bool pawnIsPassed(Board *brd, int sq, int color);
 
 
 #endif
