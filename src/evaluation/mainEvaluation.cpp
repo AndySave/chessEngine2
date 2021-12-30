@@ -20,7 +20,11 @@ void initPhase(Board *brd){
  * Call whenever a piece gets captured or a new piece gets added to the board i.e. promotion.
  * This function incrementally updates the game phase.
  */
-void updatePhase(int piece){
+void addPhase(int piece){
+    phase += tapered[piece];
+}
+
+void removePhase(int piece){
     phase -= tapered[piece];
 }
 
