@@ -66,3 +66,33 @@ bool pawnIsPassed(Board *brd, int sq, int color){
 
     return false;
 }
+
+
+int passedPawnEvaluation(Board *brd){
+    int score = 0;
+
+    ull whitePawns = brd->bitboards[P];
+    while (whitePawns){
+        int index = getLSB(whitePawns);
+        clearBit(whitePawns, index);
+
+        if (pawnIsPassed(brd, index, white)){
+            score += passedPawnBonus;
+        }
+    }
+
+    ull blackPawns = brd->bitboards[p];
+    while (blackPawns){
+        int index = getLSB(blackPawns);
+        clearBit(blackPawns, index);
+
+        if (pawnIsPassed(brd, index, black)){
+            score -= passedPawnBonus;
+        }
+    }
+
+    return score;
+}
+
+
+
