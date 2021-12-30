@@ -9,6 +9,9 @@ void preInit() {
     initBishopAttackMasks();
     initRookAttackMasks();
 
+    initWhitePassedPawnMask();
+    initBlackPassedPawnMask();
+
     initHashkeys();
 
     initMvvLva();
