@@ -54,7 +54,7 @@ void printMovelist(Movelist *lst){
 
 
 int findPiece(Board *brd, int sq, int color){
-    int piece = -1;
+    int piece = noPiece;
     if (color == white){
         for (int pce = P; pce <= K; pce++){
             if (getBit(brd->bitboards[pce], sq)){
