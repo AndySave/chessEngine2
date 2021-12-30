@@ -84,6 +84,9 @@ void commandPosition(char* line, Board *board) {
             int move = algebraicMoveToInt(charPtr, board);
             if(move == 0) break;
             makeMove(board, move);
+            cout << sqToAlgebraic(fromSquare(move)) << sqToAlgebraic(toSquare(move)) << endl;
+
+            printBoard(board);
 
             while(*charPtr && *charPtr!= ' ') charPtr++;
             charPtr++;
@@ -94,7 +97,7 @@ void commandPosition(char* line, Board *board) {
 void commandGo(char* line, SearchInfo* info, Board* board, HashTable* tt) {
     cout << "info string command go was called" << endl;
 
-    int depth = -1, movestogo = 30,movetime = -1;
+    int depth = -1, movestogo = 30, movetime = -1;
     int time = -1, inc = 0;
     char *ptr = NULL;
     info->timeSet = false;
@@ -136,26 +139,28 @@ void commandGo(char* line, SearchInfo* info, Board* board, HashTable* tt) {
         movestogo = 1;
     }
 
-    info->startTime = getTime();
 
+    /*
     if(time != -1) {
         info->timeSet = true;
         time /= movestogo;
         time -= 50;
         info->stopTime = info->startTime + time + inc;
     }
+     */
 
-    if(depth == -1) {
-        depth = 12; //temporary, based on time later
-    }
+    info->stopped = false;
+    info->timeSet = true;
+    info->startTime = getTime();
+    info->stopTime = info->startTime + 5000;
 
-    info->depth = depth;
+    info->depth = INF; //depth;
 
     printf("time:%d start:%d stop:%d depth:%d timeset:%d\n",
            time,info->startTime,info->stopTime,info->depth,info->timeSet);
 
     cout << info->depth << endl;
-    search(board, tt, info->depth);
+    search(board, tt, info, info->depth);
 
     cout << "bestmove " << intToAlgebraicMove(probePvMove(board, tt)) << endl;
 }
@@ -185,7 +190,6 @@ Commands Engine -> UCI:
 void uci() {
     Board board;
     SearchInfo searchInfo{};
-    searchInfo.depth = 12;
 
     HashTable tt{};
     initHashTable(&tt);
