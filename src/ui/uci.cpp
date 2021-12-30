@@ -43,15 +43,21 @@ void commandUCI() {
 }
 
 void commandIsReady() {
+    cout << "info string command isready was called" << endl;
+
     cout << "readyok" << endl;
 }
 
 void commandUCINewGame(Board* board, HashTable* tt) {
+    cout << "info string command ucinewgame was called" << endl;
+
     allInit(board);
     initHashTable(tt);
 }
 
 void commandPosition(char* line, Board *board) {
+    cout << "info string command position was called" << endl;
+
     line += 9; //increment pointer past "position "
     char *charPtr = line;
 
@@ -67,6 +73,8 @@ void commandPosition(char* line, Board *board) {
         }
 
     }
+
+    postInit(board);
 
     charPtr = strstr(line, "moves");
 
@@ -84,6 +92,8 @@ void commandPosition(char* line, Board *board) {
 }
 
 void commandGo(char* line, SearchInfo* info, Board* board, HashTable* tt) {
+    cout << "info string command go was called" << endl;
+
     int depth = -1, movestogo = 30,movetime = -1;
     int time = -1, inc = 0;
     char *ptr = NULL;
@@ -176,14 +186,13 @@ void uci() {
     Board board;
     SearchInfo searchInfo{};
     searchInfo.depth = 12;
-    allInit(&board);
+
+    HashTable tt{};
+    initHashTable(&tt);
 
     setbuf(stdin, NULL);
     setbuf(stdout, NULL);
     char line[INPUT_BUFFER];
-
-    HashTable tt{};
-    initHashTable(&tt);
 
     while (true) {
         memset(&line[0], 0, sizeof(line));
