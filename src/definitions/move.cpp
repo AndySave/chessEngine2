@@ -177,6 +177,7 @@ void addPiece(Board *brd, int sq, int piece) {
     // Incrementally updating eval values
     addMaterial(piece);
     addPieceTableScore(piece, sq);
+    addPhase(piece);
 }
 
 
@@ -195,6 +196,7 @@ void clearPiece(Board *brd, int sq, int piece){
     // Incrementally updating eval values
     removeMaterial(piece);
     removePieceTableScore(piece, sq);
+    removePhase(piece);
 }
 
 
