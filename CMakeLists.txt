@@ -138,8 +138,62 @@ add_executable(
 
 target_link_libraries(test_defintions_perft gtest_main)
 
+#Test: tests/ui/uci.cpp
+add_executable(
+        test_ui_uci tests/ui/uci.cpp
+
+        src/definitions/std_typedef.h
+        src/definitions/board.cpp
+        src/definitions/board.h
+        src/definitions/nonSlidersAttacks.cpp
+        src/definitions/nonSlidersAttacks.h
+        src/definitions/slidersAttacks.cpp
+        src/definitions/slidersAttacks.h
+        src/definitions/zobristKey.cpp
+        src/definitions/zobristKey.h
+        src/definitions/moveGeneration.cpp
+        src/definitions/moveGeneration.h
+        src/definitions/move.cpp
+        src/definitions/move.h
+
+        src/evaluation/mainEvaluation.cpp
+        src/evaluation/mainEvaluation.h
+        src/evaluation/pieceTables.cpp
+        src/evaluation/pieceTables.h
+        src/evaluation/mobility.cpp
+        src/evaluation/mobility.h
+        src/evaluation/eval_functions.cpp
+        src/evaluation/eval_functions.h
+        src/evaluation/pawn_structure.cpp
+        src/evaluation/pawn_structure.h
+
+        src/search/main_search.cpp
+        src/search/main_search.h
+        src/search/move_ordering.cpp
+        src/search/move_ordering.h
+        src/search/hash_table.cpp
+        src/search/hash_table.h
+
+        src/ui/terminal_ui.cpp
+        src/ui/terminal_ui.h
+        src/ui/uci.cpp
+        src/ui/uci.h
+
+        src/utils/bitops.cpp
+        src/utils/bitops.h
+        src/utils/fen.cpp
+        src/utils/fen.h
+        src/utils/helpers.cpp
+        src/utils/helpers.h
+)
+
+target_link_libraries(test_ui_uci gtest_main)
+
+
+
 include(GoogleTest)
 
 gtest_discover_tests(test1)
 gtest_discover_tests(test2)
 gtest_discover_tests(test_defintions_perft)
+gtest_discover_tests(test_ui_uci)
