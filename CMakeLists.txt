@@ -3,6 +3,8 @@ project(chessEngine2)
 
 #Version of C++
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+set(CMAKE_EXE_LINKER_FLAGS "-static")
 
 add_executable(
         chessEngine2 src/main/main.cpp
