@@ -129,7 +129,7 @@ void commandGo(char* line, SearchInfo* info, Board* board, HashTable* tt) {
     info->startTime = getTime();
 
     if(time != -1) {
-        info->timeSet = TRUE;
+        info->timeSet = true;
         time /= movestogo;
         time -= 50;
         info->stopTime = info->startTime + time + inc;
@@ -174,7 +174,7 @@ Commands Engine -> UCI:
  */
 void uci() {
     Board board;
-    SearchInfo searchInfo;
+    SearchInfo searchInfo{};
     searchInfo.depth = 12;
     allInit(&board);
 
@@ -203,6 +203,7 @@ void uci() {
 
         } else if (isCommand(line, "position")) {
             commandPosition(line, &board);
+            allInit(&board);
             printBoard(&board);
 
         } else if (isCommand(line, "go")) {
