@@ -484,7 +484,7 @@ void undoNullMove(Board *brd){
 
 // Checks through history array if position has already occurred
 bool isRepetition(Board *brd){
-    for (int i = brd->ply - brd->fiftyMove; i < brd->ply; i++){
+    for (int i = max(0, brd->ply - brd->fiftyMove); i < brd->ply; i++){
         if (brd->hashKey == brd->history[i].hashKey){
             return true;
         }
