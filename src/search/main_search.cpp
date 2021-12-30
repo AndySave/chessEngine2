@@ -13,7 +13,6 @@ constexpr int nullMoveReductionLimit = 3;
 
 constexpr int aspirationFac = 65;
 
-
 int quiescence(Board *brd, int alpha, int beta, SearchInfo *info){
     nodes++;
 
@@ -24,6 +23,12 @@ int quiescence(Board *brd, int alpha, int beta, SearchInfo *info){
     // assume that there is at least one move that can match or beat the lower bound.
     int standPat = eval(brd);
     if (standPat >= beta){ return beta; }
+    // Delta pruning
+    // TODO: Turn off in endgame
+    int bigDelta = 1000;  // Value of a rook
+    if (standPat < alpha - bigDelta){
+        return alpha;
+    }
     if (standPat > alpha){ alpha = standPat; }
 
     Movelist ml;
@@ -126,7 +131,6 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
             }
         }
     }
-
 
     Movelist ml;
     generateMoves(brd, &ml);
