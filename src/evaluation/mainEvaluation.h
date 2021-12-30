@@ -31,6 +31,8 @@ void initMaterial(Board *brd);
 /// --------------------UPDATE VALUE FUNCTIONS-------------------- ///
 void addMaterial(int piece);
 void removeMaterial(int piece);
+void addPhase(int piece);
+void removePhase(int piece);
 
 /// --------------------MAIN FUNCTIONS-------------------- ///
 int eval(Board *brd);
