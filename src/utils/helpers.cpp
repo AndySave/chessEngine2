@@ -69,3 +69,6 @@ int getTime(){
     return GetTickCount();
 }
 
+int ord(char c){
+    return int(c);
+}

@@ -13,5 +13,6 @@ char pieceToChar(int piece);
 int algebraicToSq(string &coords);
 string sqToAlgebraic(int sq);
 int getTime();
+int ord(char c);
 
 #endif
