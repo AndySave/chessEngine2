@@ -29,6 +29,8 @@ add_executable(
         src/evaluation/pieceTables.h
         src/evaluation/mobility.cpp
         src/evaluation/mobility.h
+        src/evaluation/pawn_structure.cpp
+        src/evaluation/pawn_structure.h
 
         src/search/main_search.cpp
         src/search/main_search.h
