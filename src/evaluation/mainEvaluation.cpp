@@ -108,6 +108,8 @@ int eval(Board *brd){
     mobilityEvaluation(brd);
     score += (midMobility*mgFactor + endMobility*egFactor) / taperedFactor;
 
+    score += passedPawnEvaluation(brd);
+
     if (brd->side == white){
         return score;
     }
