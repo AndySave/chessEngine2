@@ -97,6 +97,7 @@ inline string intToAlgebraicMove(int move) {
 }
 
 void uci();
+void postInit(Board* board);
 
 
 #endif
