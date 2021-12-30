@@ -91,6 +91,11 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
     int kingPos = brd->side == white ? brd->whiteKingPos : brd->blackKingPos;
     bool inCheck = isSquareAttacked(brd, kingPos, brd->side);
 
+    // Check extension (Search deeper if king in check)
+    if (inCheck && brd->ply < info->depthMax){
+        depth++;
+    }
+
     // Null move pruning
     if (doNull && depth >= nullMoveReductionLimit && !inCheck && ply){
         makeNullMove(brd);
@@ -246,6 +251,7 @@ void search(Board *brd, HashTable *tt, int maxDepth) {
     int alpha = -INF, beta = INF;
     int searchTime = 0;
     for (int depth = 1; depth <= maxDepth; depth++) {
+        info.depthMax = depth+3;
         nodes = 0;
         int t1 = getTime();
         int score = askMax(brd, depth, alpha, beta, &info, tt, true);
