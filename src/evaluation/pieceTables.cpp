@@ -5,6 +5,9 @@
  * Must be called after FEN because it need board values
  */
 void initPieceTable(Board *brd){
+    pieceTableScoreMG = 0;
+    pieceTableScoreEG = 0;
+
     for (int pce = P; pce <= k; pce++){
         ull piecePositions = brd->bitboards[pce];
 
