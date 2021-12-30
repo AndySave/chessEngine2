@@ -273,8 +273,13 @@ void search(Board *brd, HashTable *tt, int maxDepth) {
         alpha = score - aspirationFac;
         beta = score + aspirationFac;
 
-
-        cout << "D" << depth << ": " << "nodes: " << nodes << " leafs: " << leafNodes << " score: " << score << " ordering: " << info.fhf / info.fh << " time: " << searchTime << "ms" << '\n';
+        cout << "info string ";
+        cout << "D" << depth << ": ";
+        cout << "nodes: " << nodes;
+        cout << " leafs: " << leafNodes;
+        cout << " score: " << score;
+        cout << " ordering: " << info.fhf / info.fh;
+        cout << " time: " << searchTime << "ms ";
         cout << "Pv: ";
         int total = getPvLine(brd, tt, depth);
         for (int ct = 0; ct < total; ct++){
@@ -283,9 +288,10 @@ void search(Board *brd, HashTable *tt, int maxDepth) {
             int toSq = toSquare(move);
             cout << "d"<< ct+1 << ": " << sqToAlgebraic(fromSq) << sqToAlgebraic(toSq) << " ";
         }
-        cout << "\n\n";
+        cout << "\n";
 
         searchTime = 0;
     }
 }
+
 
