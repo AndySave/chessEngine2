@@ -18,7 +18,7 @@ int quiescence(Board *brd, int alpha, int beta, SearchInfo *info){
     nodes++;
 
     // Fifty move rule and repetition check
-    //if (brd->fiftyMove == 100 || isRepetition(brd)){ return 0; }
+    if (brd->fiftyMove == 100 || isRepetition(brd)){ return 0; }
 
     // Standing pat (doing nothing). Setting a lower bound on the score which we can do because we can always
     // assume that there is at least one move that can match or beat the lower bound.
@@ -66,6 +66,9 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
 
     nodes++;
 
+    // Fifty move rule and repetition check
+    if (brd->fiftyMove == 100 || isRepetition(brd)){ return 0; }
+
     int hashFlag = hashAlpha;
 
     int value = -INF;
@@ -74,10 +77,6 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
         tt->cut++;
         return value;
     }
-
-
-    // Fifty move rule and repetition check
-    if (brd->fiftyMove == 100 || isRepetition(brd)){ return 0; }
 
     if (depth == 0) {
         leafNodes++;
@@ -279,8 +278,4 @@ void search(Board *brd, HashTable *tt, int maxDepth) {
         searchTime = 0;
     }
 }
-
-
-
-
 
