@@ -9,6 +9,7 @@
 #include "../definitions/slidersAttacks.h"
 #include "pieceTables.h"
 #include "mobility.h"
+#include "pawn_structure.h"
 
 
 /// --------------------TAPERED VALUES-------------------- ///
