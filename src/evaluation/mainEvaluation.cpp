@@ -105,14 +105,17 @@ int eval(Board *brd){
     score += (pieceTableScoreMG*mgFactor + pieceTableScoreEG*egFactor) / taperedFactor;
 
     // Adding evaluation score of position mobility
-    mobilityEvaluation(brd);
-    score += (midMobility*mgFactor + endMobility*egFactor) / taperedFactor;
+    //mobilityEvaluation(brd);
+    //score += (midMobility*mgFactor + endMobility*egFactor) / taperedFactor;
 
     // Giving bonus for passed pawns
     score += passedPawnEvaluation(brd);
 
     // Giving penalty for isolated pawns
     score += isolatedPawnEvaluation(brd);
+
+    // Giving penalty for backwards pawns
+    score += backwardsPawnEvaluation(brd);
 
     if (brd->side == white){
         return score;
