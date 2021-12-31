@@ -215,11 +215,11 @@ void initBackwardPawnMasks(){
  */
 bool pawnIsBackwards(Board *brd, int sq, int color){
     if (color == white){
-        if ((!getBit(brd->occupancies[both], sq+8) && whitePawnAttacks[sq+8] & brd->bitboards[p]) && !(backwardsPawnMasks[sq] & brd->bitboards[P])){
+        if (!(files[sq%8] & brd->occupancies[black]) && (whitePawnAttacks[sq+8] & brd->bitboards[p]) && !(backwardsPawnMasks[sq] & brd->bitboards[P])){
             return true;
         }
     }else{
-        if ((!getBit(brd->occupancies[both], sq-8) && blackPawnAttacks[sq-8] & brd->bitboards[P]) && !(backwardsPawnMasks[sq] & brd->bitboards[p])){
+        if (!(files[sq%8] & brd->occupancies[white]) && (blackPawnAttacks[sq-8] & brd->bitboards[P]) && !(backwardsPawnMasks[sq] & brd->bitboards[p])){
             return true;
         }
     }
