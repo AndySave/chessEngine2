@@ -13,6 +13,7 @@
 #include "../utils/helpers.h"
 #include "hashtable.h"
 #include "../ui/uci.h"
+#include "../evaluation/pawn_structure.h"
 
 
 int main() {
@@ -26,6 +27,8 @@ int main() {
 
     initWhitePassedPawnMask();
     initBlackPassedPawnMask();
+    initIsolatedPawnMasks();
+    initBackwardPawnMasks();
 
     initHashkeys();
 
@@ -35,7 +38,7 @@ int main() {
     fillRookAttacksArray();
 
     uci();
-
 }
+
 
 
