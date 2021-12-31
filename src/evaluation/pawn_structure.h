@@ -5,6 +5,7 @@
 #include "../utils/bitops.h"
 #include "../definitions/std_typedef.h"
 #include "../definitions/board.h"
+#include "../definitions/nonSlidersAttacks.h"
 
 /// --------------------PASSED PAWN-------------------- ///
 // TODO: Temporary. Make more advanced passed pawn handling
@@ -28,6 +29,16 @@ void initIsolatedPawnMasks();
 
 bool pawnIsIsolated(Board *brd, int sq, int color);
 int isolatedPawnEvaluation(Board *brd);
+
+/// --------------------BACKWARDS PAWN-------------------- ///
+inline int backwardsPawnPenalty = 25;
+
+inline ull backwardsPawnMasks[64];
+
+void initBackwardPawnMasks();
+
+bool pawnIsBackwards(Board *brd, int sq, int color);
+int backwardsPawnEvaluation(Board *brd);
 
 
 #endif
