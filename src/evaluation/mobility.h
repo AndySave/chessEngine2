@@ -7,6 +7,7 @@
 #include "../definitions/board.h"
 #include "../definitions/slidersAttacks.h"
 #include "../definitions/nonSlidersAttacks.h"
+#include "eval_functions.h"
 
 constexpr int mobilityBonus[5][28][2] = {
         {},

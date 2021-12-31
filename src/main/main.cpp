@@ -12,6 +12,7 @@
 #include "../search/main_search.h"
 #include "../utils/helpers.h"
 #include "hashtable.h"
+#include "../ui/uci.h"
 
 
 int main() {
@@ -23,6 +24,9 @@ int main() {
     initBishopAttackMasks();
     initRookAttackMasks();
 
+    initWhitePassedPawnMask();
+    initBlackPassedPawnMask();
+
     initHashkeys();
 
     initMvvLva();
@@ -30,25 +34,8 @@ int main() {
     fillBishopAttacksArray();
     fillRookAttacksArray();
 
+    uci();
 
-    Board board;
-
-    string fenString = "8/5r1k/1Rb5/1p1pB1R1/pP1P4/P2P2K1/2r5/8 w - - 37 77";
-    //fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    FEN(&board, fenString);
-    printBoard(&board);
-
-    HashTable tt{};
-    initHashTable(&tt);
-
-    // Late inits
-    initPhase(&board);
-    initMaterial(&board);
-    initPieceTable(&board);
-
-
-    search(&board, &tt, 17);
-    search(&board, &tt, 17);
 }
 
 

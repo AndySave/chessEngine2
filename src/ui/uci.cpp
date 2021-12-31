@@ -1,34 +1,9 @@
 #include "uci.h"
 
-void preInit() {
-    initBitMasks();
-    initWhitePawnAttacks();
-    initBlackPawnAttacks();
-    initKnightAttacks();
-    initKingAttacks();
-    initBishopAttackMasks();
-    initRookAttackMasks();
-
-    initWhitePassedPawnMask();
-    initBlackPassedPawnMask();
-
-    initHashkeys();
-
-    initMvvLva();
-
-    fillBishopAttacksArray();
-    fillRookAttacksArray();
-}
-
 void postInit(Board* board) {
     initPhase(board);
     initMaterial(board);
     initPieceTable(board);
-}
-
-void allInit(Board* board) {
-    preInit();
-    postInit(board);
 }
 
 bool isCommand(const char* line, const char *command) {
@@ -54,7 +29,7 @@ void commandIsReady() {
 void commandUCINewGame(Board* board, HashTable* tt) {
     cout << "info string command ucinewgame was called" << endl;
 
-    allInit(board);
+    postInit(board);
     initHashTable(tt);
 }
 
@@ -219,7 +194,7 @@ void uci() {
 
         } else if (isCommand(line, "position")) {
             commandPosition(line, &board);
-            allInit(&board);
+            postInit(&board);
             printBoard(&board);
 
         } else if (isCommand(line, "go")) {
