@@ -108,7 +108,11 @@ int eval(Board *brd){
     mobilityEvaluation(brd);
     score += (midMobility*mgFactor + endMobility*egFactor) / taperedFactor;
 
+    // Giving bonus for passed pawns
     score += passedPawnEvaluation(brd);
+
+    // Giving penalty for isolated pawns
+    score += isolatedPawnEvaluation(brd);
 
     if (brd->side == white){
         return score;
