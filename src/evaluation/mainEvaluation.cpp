@@ -109,7 +109,8 @@ int eval(Board *brd){
     //score += (midMobility*mgFactor + endMobility*egFactor) / taperedFactor;
 
     // Giving bonus for passed pawns
-    score += passedPawnEvaluation(brd);
+    passedPawnEvaluation(brd);
+    score += (passedPawnScoreMG*mgFactor + passedPawnScoreEG*egFactor) / taperedFactor;
 
     // Giving penalty for isolated pawns
     score += isolatedPawnEvaluation(brd);
