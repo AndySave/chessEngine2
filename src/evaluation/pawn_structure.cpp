@@ -81,8 +81,9 @@ bool pawnIsPassed(Board *brd, int sq, int color){
  * Returns an int score
  * Used in main eval
  */
-int passedPawnEvaluation(Board *brd){
-    int score = 0;
+void passedPawnEvaluation(Board *brd){
+    passedPawnScoreMG = 0;
+    passedPawnScoreEG = 0;
 
     ull whitePawns = brd->bitboards[P];
     while (whitePawns){
@@ -90,7 +91,8 @@ int passedPawnEvaluation(Board *brd){
         clearBit(whitePawns, index);
 
         if (pawnIsPassed(brd, index, white)){
-            score += passedPawnBonus;
+            passedPawnScoreMG += passedPawnBonus[index/8][0];
+            passedPawnScoreEG += passedPawnBonus[index/8][1];
         }
     }
 
@@ -100,11 +102,10 @@ int passedPawnEvaluation(Board *brd){
         clearBit(blackPawns, index);
 
         if (pawnIsPassed(brd, index, black)){
-            score -= passedPawnBonus;
+            passedPawnScoreMG -= passedPawnBonus[index/8][0];
+            passedPawnScoreEG -= passedPawnBonus[index/8][1];
         }
     }
-
-    return score;
 }
 
 
