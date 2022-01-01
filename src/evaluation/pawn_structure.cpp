@@ -259,3 +259,38 @@ int backwardsPawnEvaluation(Board *brd){
     return score;
 }
 
+
+bool protectedByPawn(Board *brd, int sq, int color){
+    if (color == white) {
+        return blackPawnAttacks[sq] & brd->bitboards[P];
+    }else{
+        return whitePawnAttacks[sq] & brd->bitboards[p];
+    }
+}
+
+int pawnChainEvaluation(Board *brd){
+    int score = 0;
+
+    ull whitePawns = brd->bitboards[P];
+    while (whitePawns){
+        int index = getLSB(whitePawns);
+        clearBit(whitePawns, index);
+
+        if (protectedByPawn(brd, index, white)){
+            score += pawnChainBonus;
+        }
+    }
+
+    ull blackPawns = brd->bitboards[p];
+    while (blackPawns){
+        int index = getLSB(blackPawns);
+        clearBit(blackPawns, index);
+
+        if (pawnIsBackwards(brd, index, black)){
+            score -= pawnChainBonus;
+        }
+    }
+
+    return score;
+}
+

@@ -47,5 +47,10 @@ void initBackwardPawnMasks();
 bool pawnIsBackwards(Board *brd, int sq, int color);
 int backwardsPawnEvaluation(Board *brd);
 
+/// --------------------PAWN CHAIN-------------------- ///
+inline int pawnChainBonus = 15;
+
+bool protectedByPawn(Board *brd, int sq, int color);
+int pawnChainEvaluation(Board *brd);
 
 #endif
