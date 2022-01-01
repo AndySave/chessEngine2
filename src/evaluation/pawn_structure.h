@@ -9,7 +9,14 @@
 
 /// --------------------PASSED PAWN-------------------- ///
 // TODO: Temporary. Make more advanced passed pawn handling
-inline int passedPawnBonus = 75;
+
+// passedPawnBonus[rank] contains a bonus according to the rank of a passed pawn
+constexpr int passedPawnBonus[8][2] = {
+        {0, 0}, {7, 27}, {16, 32}, {17, 40}, {64, 71}, {170, 174}, {278, 262}, {0, 0}
+};
+
+inline int passedPawnScoreMG = 0;
+inline int passedPawnScoreEG = 0;
 
 inline ull whitePassedPawnMasks[64];
 inline ull blackPassedPawnMasks[64];
@@ -18,7 +25,7 @@ void initWhitePassedPawnMask();
 void initBlackPassedPawnMask();
 
 bool pawnIsPassed(Board *brd, int sq, int color);
-int passedPawnEvaluation(Board *brd);
+void passedPawnEvaluation(Board *brd);
 
 /// --------------------ISOLATED PAWN-------------------- ///
 inline int isolatedPawnPenalty = 50;
