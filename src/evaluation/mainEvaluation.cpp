@@ -118,8 +118,16 @@ int eval(Board *brd){
     // Giving penalty for backwards pawns
     score += backwardsPawnEvaluation(brd);
 
+    // Giving bonus for pawns if they are protected by another pawn
+    score += pawnChainEvaluation(brd);
+
     if (brd->side == white){
+        score += tempoBonus;
         return score;
     }
+    score -= tempoBonus;
     return -score;
 }
+
+
+
