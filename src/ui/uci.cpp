@@ -118,19 +118,18 @@ void commandGo(char* line, SearchInfo* info, Board* board, HashTable* tt) {
     }
 
 
-    /*
     if(time != -1) {
+        info->stopped = false;
         info->timeSet = true;
         time /= movestogo;
         time -= 50;
-        info->stopTime = info->startTime + time + inc;
+        info->startTime = getTime();
+        info->stopTime = info->startTime + time + inc/2;
+    }else{
+        info->timeSet = false;
+        info->startTime = 0;
+        info->stopTime = 1000000000;
     }
-     */
-
-    info->stopped = false;
-    info->timeSet = true;
-    info->startTime = getTime();
-    info->stopTime = info->startTime + 5000;
 
     info->depth = INF; //depth;
 
