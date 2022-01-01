@@ -127,8 +127,8 @@ void commandGo(char* line, SearchInfo* info, Board* board, HashTable* tt) {
         info->stopTime = info->startTime + time + inc/2;
     }else{
         info->timeSet = false;
-        info->startTime = 0;
-        info->stopTime = 1000000000;
+        info->startTime = getTime();
+        info->stopTime = info->startTime + 10000000;
     }
 
     info->depth = INF; //depth;
