@@ -22,7 +22,7 @@ constexpr inline int tapered[12] = {0, 1, 1, 2, 4, 0, 0, 1, 1, 2, 4, 0};
 /// --------------------PIECE VALUES-------------------- ///
 inline int materialMG = 0;
 inline int materialEG = 0;
-constexpr inline int pieceValuesMg[12] = {126, 781, 825, 1276, 2538, 0, 126, 781, 825, 1276, 2538, 0};
+constexpr inline int pieceValuesMg[12] = {160, 781, 825, 1276, 2538, 0, 160, 781, 825, 1276, 2538, 0};
 constexpr inline int pieceValuesEg[12] = {208, 854, 915, 1380, 2681, 0, 208, 854, 915, 1380, 2681, 0};
 inline int tempoBonus = 20;
 
@@ -41,3 +41,4 @@ int eval(Board *brd);
 
 
 #endif
+
