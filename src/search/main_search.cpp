@@ -30,7 +30,7 @@ int quiescence(Board *brd, int alpha, int beta, SearchInfo *info){
     }
 
     // Fifty move rule and repetition check
-    if (brd->fiftyMove == 100 || isRepetition(brd)){ return 0; }
+    if (isRepetition(brd)){ return 0; }
 
     // Standing pat (doing nothing). Setting a lower bound on the score which we can do because we can always
     // assume that there is at least one move that can match or beat the lower bound.
@@ -91,7 +91,7 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
     }
 
     // Fifty move rule and repetition check
-    if (brd->fiftyMove == 100 || isRepetition(brd)){ return 0; }
+    if (isRepetition(brd)){ return 0; }
 
     int value = -INF;
     int bestmove = 0;
