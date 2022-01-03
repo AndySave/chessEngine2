@@ -8,8 +8,8 @@
 #include "../definitions/nonSlidersAttacks.h"
 #include "../definitions/slidersAttacks.h"
 #include "pieceTables.h"
-#include "mobility.h"
 #include "pawn_structure.h"
+#include "eval_functions.h"
 
 
 /// --------------------TAPERED VALUES-------------------- ///
