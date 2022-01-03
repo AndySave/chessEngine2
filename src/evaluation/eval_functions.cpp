@@ -1,7 +1,13 @@
 #include "eval_functions.h"
 
-void initMobility(Board* brd) {
-    numOfPieces = 0;
+void mobilityEval(Board* brd) {
+    kingSafetyEval = 0;
+    midMobilityEval = 0;
+    endMobilityEval = 0;
+
+    int whiteKingScore = 0;
+    int blackKingScore = 0;
+
     //WHITE
 
     //Knight
@@ -10,31 +16,34 @@ void initMobility(Board* brd) {
         int curKnight = getLSB(wKnightPositions);
         clearBit(wKnightPositions, curKnight);
 
-        //Counts how many non-white squares attacked
+        //Non-white squares attacked
         ull knightMobility = knightAttacks[curKnight] & (~brd->occupancies[white]);
+        int knightMobilityCount = countBits(knightMobility);
 
-        presentPieces[numOfPieces] = curKnight;
-        numOfPieces++;
-        pieceOfSquare[curKnight] = N;
+        //Mobility evaluation
+        midMobilityEval += mobilityBonus[1][knightMobilityCount][0];
+        endMobilityEval += mobilityBonus[1][knightMobilityCount][1];
 
-        mobilityMasks[curKnight] = knightMobility;
-        mobility[curKnight] = countBits(knightMobility);
-
+        //King safety evaluation
+        int bKingZoneAttacks = countBits(blackKingZones[brd->blackKingPos] & knightAttacks[curKnight]);
+        whiteKingScore += bKingZoneAttacks * attackUnits[N];
     }
 
-    //Bishop
+    // Bishop
     ull wBishopPositions = brd->bitboards[B];
     while (wBishopPositions) {
         int curBishop = getLSB(wBishopPositions);
         clearBit(wBishopPositions, curBishop);
         ull bishopMobility = bishopAttackRay(brd->occupancies[both], curBishop) & (~brd->occupancies[white]);
+        int bishopMobilityCount = countBits(bishopMobility);
 
-        presentPieces[numOfPieces] = curBishop;
-        numOfPieces++;
-        pieceOfSquare[curBishop] = B;
+        // Mobility evaluation
+        midMobilityEval += mobilityBonus[2][bishopMobilityCount][0];
+        endMobilityEval += mobilityBonus[2][bishopMobilityCount][1];
 
-        mobilityMasks[curBishop] = bishopMobility;
-        mobility[curBishop] = countBits(bishopMobility);
+        // King safety evaluation
+        int bKingZoneAttacks = countBits(blackKingZones[brd->blackKingPos] & bishopAttackRay(brd->occupancies[both], curBishop));
+        whiteKingScore += bKingZoneAttacks * attackUnits[B];
     }
 
     //Rook
@@ -43,13 +52,15 @@ void initMobility(Board* brd) {
         int curRook = getLSB(wRookPositions);
         clearBit(wRookPositions, curRook);
         ull rookMobility = rookAttackRay(brd->occupancies[both], curRook) & (~brd->occupancies[white]);
+        int rookMobilityCount = countBits(rookMobility);
 
-        presentPieces[numOfPieces] = curRook;
-        numOfPieces++;
-        pieceOfSquare[curRook] = R;
+        // Mobility evaluation
+        midMobilityEval += mobilityBonus[3][rookMobilityCount][0];
+        endMobilityEval += mobilityBonus[3][rookMobilityCount][1];
 
-        mobilityMasks[curRook] = rookMobility;
-        mobility[curRook] = countBits(rookMobility);
+        // King safety evaluation
+        int bKingZoneAttacks = countBits(blackKingZones[brd->blackKingPos] & rookAttackRay(brd->occupancies[both], curRook));
+        whiteKingScore += bKingZoneAttacks * attackUnits[R];
     }
 
     //Queen
@@ -58,13 +69,15 @@ void initMobility(Board* brd) {
         int curQueen = getLSB(wQueenPositions);
         clearBit(wQueenPositions, curQueen);
         ull queenMobility = queenAttackRay(brd->occupancies[both], curQueen) & (~brd->occupancies[white]);
+        int queenMobilityCount = countBits(queenMobility);
 
-        presentPieces[numOfPieces] = curQueen;
-        numOfPieces++;
-        pieceOfSquare[curQueen] = Q;
+        // Mobility evaluation
+        midMobilityEval += mobilityBonus[4][queenMobilityCount][0];
+        endMobilityEval += mobilityBonus[4][queenMobilityCount][1];
 
-        mobilityMasks[curQueen] = queenMobility;
-        mobility[curQueen] = countBits(queenMobility);
+        // King safety evaluation
+        int bKingZoneAttacks = countBits(blackKingZones[brd->blackKingPos] & queenAttackRay(brd->occupancies[both], curQueen));
+        whiteKingScore += bKingZoneAttacks * attackUnits[Q];
     }
 
     //BLACK
@@ -77,13 +90,16 @@ void initMobility(Board* brd) {
 
         //Counts how many non-white squares attacked
         ull knightMobility = knightAttacks[curKnight] & (~brd->occupancies[black]);
+        int knightMobilityCount = countBits(knightMobility);
 
-        presentPieces[numOfPieces] = curKnight;
-        numOfPieces++;
-        pieceOfSquare[curKnight] = n;
+        //Mobility evaluation
+        midMobilityEval -= mobilityBonus[1][knightMobilityCount][0];
+        endMobilityEval -= mobilityBonus[1][knightMobilityCount][1];
 
-        mobilityMasks[curKnight] = knightMobility;
-        mobility[curKnight] = countBits(knightMobility);
+        //King safety evaluation
+        int wKingZoneAttacks = countBits(whiteKingZones[brd->whiteKingPos] & knightAttacks[curKnight]);
+        blackKingScore += wKingZoneAttacks * attackUnits[n];
+
     }
 
     //Bishop
@@ -92,13 +108,15 @@ void initMobility(Board* brd) {
         int curBishop = getLSB(bBishopPositions);
         clearBit(bBishopPositions, curBishop);
         ull bishopMobility = bishopAttackRay(brd->occupancies[both],curBishop) & (~brd->occupancies[black]);
+        int bishopMobilityCount = countBits(bishopMobility);
 
-        presentPieces[numOfPieces] = curBishop;
-        numOfPieces++;
-        pieceOfSquare[curBishop] = b;
+        //Mobility evaluation
+        midMobilityEval -= mobilityBonus[2][bishopMobilityCount][0];
+        endMobilityEval -= mobilityBonus[2][bishopMobilityCount][1];
 
-        mobilityMasks[curBishop] = bishopMobility;
-        mobility[curBishop] = countBits(bishopMobility);
+        //King safety evaluation
+        int wKingZoneAttacks = countBits(whiteKingZones[brd->whiteKingPos] & bishopAttackRay(brd->occupancies[both],curBishop));
+        blackKingScore += wKingZoneAttacks * attackUnits[b];
 
     }
 
@@ -108,13 +126,15 @@ void initMobility(Board* brd) {
         int curRook = getLSB(bRookPositions);
         clearBit(bRookPositions, curRook);
         ull rookMobility = rookAttackRay(brd->occupancies[both], curRook) & (~brd->occupancies[black]);
+        int rookMobilityCount = countBits(rookMobility);
 
-        presentPieces[numOfPieces] = curRook;
-        numOfPieces++;
-        pieceOfSquare[curRook] = r;
+        //Mobility evaluation
+        midMobilityEval -= mobilityBonus[3][rookMobilityCount][0];
+        endMobilityEval -= mobilityBonus[3][rookMobilityCount][1];
 
-        mobilityMasks[curRook] = rookMobility;
-        mobility[curRook] = countBits(rookMobility);
+        //King safety evaluation
+        int wKingZoneAttacks = countBits(whiteKingZones[brd->whiteKingPos] & rookAttackRay(brd->occupancies[both], curRook));
+        blackKingScore += wKingZoneAttacks * attackUnits[r];
     }
 
     //Queen
@@ -123,12 +143,68 @@ void initMobility(Board* brd) {
         int curQueen = getLSB(bQueenPositions);
         clearBit(bQueenPositions, curQueen);
         ull queenMobility = queenAttackRay(brd->occupancies[both], curQueen) & (~brd->occupancies[black]);
+        int queenMobilityCount = countBits(queenMobility);
 
-        presentPieces[numOfPieces] = curQueen;
-        numOfPieces++;
-        pieceOfSquare[curQueen] = q;
+        //Mobility evaluation
+        midMobilityEval -= mobilityBonus[4][queenMobilityCount][0];
+        endMobilityEval -= mobilityBonus[4][queenMobilityCount][1];
 
-        mobilityMasks[curQueen] = queenMobility;
-        mobility[curQueen] = countBits(queenMobility);
+        //King safety evaluation
+        int wKingZoneAttacks = countBits(whiteKingZones[brd->whiteKingPos] & queenAttackRay(brd->occupancies[both], curQueen));
+        blackKingScore += wKingZoneAttacks * attackUnits[q];
+    }
+
+    kingSafetyEval = safetyTable[whiteKingScore] - safetyTable[blackKingScore]; //Actual score
+}
+
+ull makeWhiteKingZones(int sq){
+    ull bb = 0ll;
+    int rank = sq/8, file = sq % 8;
+
+    setBit(bb, sq);
+    if (rank + 1 < 8){ setBit(bb, sq + 8); }
+    if (rank - 1 >= 0){ setBit(bb, sq - 8); }
+    if (rank + 1 < 8 && file + 1 < 8){ setBit(bb, sq + 8 + 1); }
+    if (rank + 1 < 8 && file - 1 >= 0){ setBit(bb, sq + 8 - 1); }
+    if (rank - 1 >= 0 && file + 1 < 8){ setBit(bb, sq - 8 + 1); }
+    if (rank - 1 >= 0 && file - 1 >= 0){ setBit(bb, sq - 8 - 1); }
+    if (rank + 2 < 8) setBit(bb, sq + 2*8);
+    if (rank + 2 < 8 && file + 1 < 8) setBit(bb, sq+ 2*8 + 1);
+    if (rank + 2 < 8 && file - 1 >= 0) setBit(bb, sq + 2*8 - 1);
+
+    if (file + 1 < 8){ setBit(bb, sq + 1); }
+    if (file - 1 >= 0){ setBit(bb, sq - 1); }
+
+
+    return bb;
+}
+
+ull makeBlackKingZones(int sq){
+    ull bb = 0ll;
+    int rank = sq/8, file = sq % 8;
+
+    setBit(bb, sq);
+    if (rank + 1 < 8){ setBit(bb, sq + 8); }
+    if (rank - 1 >= 0){ setBit(bb, sq - 8); }
+    if (rank + 1 < 8 && file + 1 < 8){ setBit(bb, sq + 8 + 1); }
+    if (rank + 1 < 8 && file - 1 >= 0){ setBit(bb, sq + 8 - 1); }
+    if (rank - 1 >= 0 && file + 1 < 8){ setBit(bb, sq - 8 + 1); }
+    if (rank - 1 >= 0 && file - 1 >= 0){ setBit(bb, sq - 8 - 1); }
+    if (rank - 2 >= 0) setBit(bb, sq - 2*8);
+    if (rank - 2 >= 0 && file + 1 < 8) setBit(bb, sq - 2*8 + 1);
+    if (rank - 2 >= 0 && file - 1 >= 0) setBit(bb, sq - 2*8 - 1);
+
+    if (file + 1 < 8) setBit(bb, sq + 1);
+    if (file - 1 >= 0){ setBit(bb, sq - 1); }
+
+
+    return bb;
+}
+
+
+void initKingZones() {
+    for (int i = 0; i < 64; i++) {
+        whiteKingZones[i] = makeWhiteKingZones(i);
+        blackKingZones[i] = makeBlackKingZones(i);
     }
 }
