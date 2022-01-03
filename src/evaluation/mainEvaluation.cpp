@@ -6,13 +6,13 @@
  * needs board info.
  */
 void initPhase(Board *brd){
-    phase = totalPhase;
+    phase = 0;
 
     for (int pce = P; pce <= k; pce++){
         if (pce == K || pce == k){ continue; }
         int count = countBits(brd->bitboards[pce]);
 
-        phase -= tapered[pce] * count;
+        phase += tapered[pce] * count;
     }
 }
 
@@ -33,7 +33,7 @@ void removePhase(int piece){
  * 0 = Opening, 256 = Endgame
  */
 int getPhase(){
-    return (phase * 256 + (totalPhase / 2)) / totalPhase;
+    return (phase * taperedFactor + (totalPhase / 2)) / totalPhase;
 }
 
 
@@ -95,8 +95,9 @@ void removeMaterial(int piece){
  */
 int eval(Board *brd){
     int score = 0;
-    int egFactor = (phase * taperedFactor + (totalPhase / 2)) / totalPhase;
-    int mgFactor = 256 - egFactor;
+
+    int mgFactor = getPhase();
+    int egFactor = 256 - mgFactor;
 
     // Adding material to score
     score += (materialMG*mgFactor + materialEG*egFactor) / taperedFactor;
@@ -128,6 +129,7 @@ int eval(Board *brd){
     score -= tempoBonus;
     return -score;
 }
+
 
 
 
