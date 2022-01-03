@@ -1,7 +1,6 @@
 #include "main_search.h"
 
 #define maxdepth 32
-#define STOPPED 1000000000
 
 int ply = 0;
 int nodes = 0;
@@ -27,7 +26,7 @@ int quiescence(Board *brd, int alpha, int beta, SearchInfo *info){
         checkIfStopped(info);
     }
     if (info->stopped){
-        return STOPPED;
+        return 0;
     }
 
     // Fifty move rule and repetition check
@@ -88,13 +87,11 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
         checkIfStopped(info);
     }
     if (info->stopped){
-        return STOPPED;
+        return 0;
     }
 
     // Fifty move rule and repetition check
     if (brd->fiftyMove == 100 || isRepetition(brd)){ return 0; }
-
-    int hashFlag = hashAlpha;
 
     int value = -INF;
     int bestmove = 0;
@@ -107,6 +104,8 @@ int askMax(Board *brd, int depth, int alpha, int beta, SearchInfo *info, HashTab
         leafNodes++;
         return quiescence(brd, alpha, beta, info);
     }
+
+    int hashFlag = hashAlpha;
 
     int kingPos = brd->side == white ? brd->whiteKingPos : brd->blackKingPos;
     bool inCheck = isSquareAttacked(brd, kingPos, brd->side);
@@ -276,7 +275,7 @@ void search(Board *brd, HashTable *tt, SearchInfo *info, int maxDepth) {
         int t2 = getTime();
         searchTime += t2-t1;
 
-        if (score == STOPPED){
+        if (info->stopped){
             storeHash(brd, tt, previousBestMove, 0, hashExact, 10);
             return;
         }
