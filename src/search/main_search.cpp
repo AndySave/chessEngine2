@@ -275,6 +275,8 @@ void search(Board *brd, HashTable *tt, SearchInfo *info, int maxDepth) {
         int t2 = getTime();
         searchTime += t2-t1;
 
+        checkIfStopped(info);
+
         if (info->stopped){
             storeHash(brd, tt, previousBestMove, 0, hashExact, 10);
             return;
@@ -317,5 +319,6 @@ void search(Board *brd, HashTable *tt, SearchInfo *info, int maxDepth) {
         searchTime = 0;
     }
 }
+
 
 
