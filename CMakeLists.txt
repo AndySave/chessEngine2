@@ -27,8 +27,6 @@ add_executable(
         src/evaluation/mainEvaluation.h
         src/evaluation/pieceTables.cpp
         src/evaluation/pieceTables.h
-        src/evaluation/mobility.cpp
-        src/evaluation/mobility.h
         src/evaluation/eval_functions.cpp
         src/evaluation/eval_functions.h
         src/evaluation/pawn_structure.cpp
@@ -160,8 +158,6 @@ add_executable(
         src/evaluation/mainEvaluation.h
         src/evaluation/pieceTables.cpp
         src/evaluation/pieceTables.h
-        src/evaluation/mobility.cpp
-        src/evaluation/mobility.h
         src/evaluation/eval_functions.cpp
         src/evaluation/eval_functions.h
         src/evaluation/pawn_structure.cpp
