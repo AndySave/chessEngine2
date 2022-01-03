@@ -62,9 +62,6 @@ void commandPosition(char* line, Board *board) {
             int move = algebraicMoveToInt(charPtr, board);
             if(move == 0) break;
             makeMove(board, move);
-            cout << sqToAlgebraic(fromSquare(move)) << sqToAlgebraic(toSquare(move)) << endl;
-
-            printBoard(board);
 
             while(*charPtr && *charPtr!= ' ') charPtr++;
             charPtr++;
@@ -130,6 +127,8 @@ void commandGo(char* line, SearchInfo* info, Board* board, HashTable* tt) {
         info->startTime = getTime();
         info->stopTime = info->startTime + 10000000;
     }
+
+    cout << "Time assigned for search: " << info->stopTime - info->startTime << "ms" << endl;
 
     info->depth = INF; //depth;
 
