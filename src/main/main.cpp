@@ -29,6 +29,7 @@ int main() {
     initBlackPassedPawnMask();
     initIsolatedPawnMasks();
     initBackwardPawnMasks();
+    initKingZones();
 
     initHashkeys();
 
