@@ -1,5 +1,5 @@
 
-#include "mainEvaluation.h"
+#include "main_evaluation.h"
 
 /*
  * Initializes the phase value. Must be called after FEN function has been called because it
