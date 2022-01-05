@@ -160,7 +160,7 @@ void mobilityEval(Board* brd) {
     kingSafetyEval = safetyTable[whiteKingScore] - safetyTable[blackKingScore]; //Actual score
 }
 
-ull makeWhiteKingZones(int sq){
+ull makeWhiteKingZone(int sq){
     ull bb = 0ll;
     int rank = sq/8, file = sq % 8;
 
@@ -182,7 +182,7 @@ ull makeWhiteKingZones(int sq){
     return bb;
 }
 
-ull makeBlackKingZones(int sq){
+ull makeBlackKingZone(int sq){
     ull bb = 0ll;
     int rank = sq/8, file = sq % 8;
 
@@ -204,10 +204,9 @@ ull makeBlackKingZones(int sq){
     return bb;
 }
 
-
 void initKingZones() {
     for (int i = 0; i < 64; i++) {
-        whiteKingZones[i] = makeWhiteKingZones(i);
-        blackKingZones[i] = makeBlackKingZones(i);
+        whiteKingZones[i] = makeWhiteKingZone(i);
+        blackKingZones[i] = makeBlackKingZone(i);
     }
 }
