@@ -8,7 +8,7 @@
 #include "../utils/fen.h"
 #include "../definitions/board.h"
 #include "../definitions/moveGeneration.h"
-#include "../evaluation/mainEvaluation.h"
+#include "../evaluation/main_evaluation.h"
 #include "../definitions/moveStructs.h"
 #include "../utils/helpers.h"
 #include "hash_table.h"
