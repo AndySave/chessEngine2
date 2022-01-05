@@ -1,5 +1,5 @@
-#ifndef CHESSENGINE2_EVAL_FUNCTIONS_H
-#define CHESSENGINE2_EVAL_FUNCTIONS_H
+#ifndef CHESSENGINE2_ATTACK_H
+#define CHESSENGINE2_ATTACK_H
 
 #include "../definitions/std_typedef.h"
 #include "../definitions/board.h"
@@ -50,7 +50,12 @@ constexpr int mobilityBonus[5][28][2] = {
                 {118,174}, {119,177}, {123,191}, {128,199} }
 };
 
-void mobilityEval(Board* brd);
+//Initialization method, must be called before callubg mobilityEval.
 void initKingZones();
 
-#endif //CHESSENGINE2_EVAL_FUNCTIONS_H
+/*
+ * King safety and mobility evaluation
+ */
+void mobilityEval(Board* brd);
+
+#endif //CHESSENGINE2_ATTACK_H
