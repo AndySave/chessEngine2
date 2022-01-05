@@ -6,10 +6,13 @@
 #include "../definitions/slidersAttacks.h"
 #include "../definitions/nonSlidersAttacks.h"
 
+// Evaluation scores
 inline int kingSafetyEval;
 inline int midMobilityEval;
 inline int endMobilityEval;
 
+// A king zone is defined as: squares that enemy king can reach + three more forward squares facing enemy position.
+// Used in calculating king safety and value of attack against a king.
 inline ull whiteKingZones[64];
 inline ull blackKingZones[64];
 
@@ -17,6 +20,7 @@ inline ull blackKingZones[64];
 //                              {P, N, B, R, Q, K, p, n, b, r, q, k, noPiece}
 constexpr int attackUnits[13] = {0, 2, 2, 3, 5, 0, 0, 2, 2, 3, 5, 0, 0};
 
+// Safety-table stores the scores associated with number of attackers on the enemy. More attackers higher score.
 constexpr int safetyTable[100] = {
         0,  0,   1,   2,   3,   5,   7,   9,  12,  15,
         18,  22,  26,  30,  35,  39,  44,  50,  56,  62,
@@ -30,6 +34,8 @@ constexpr int safetyTable[100] = {
         500, 500, 500, 500, 500, 500, 500, 500, 500, 500
 };
 
+// Mobility-bonus stores the scores of pieces based on mobility, both in midgame and endgame.
+// The higher the mobility, the better.
 constexpr int mobilityBonus[5][28][2] = {
         {},
         { {-75,-76}, {-56,-54}, {-9,-26}, {-2,-10}, {6,  5}, {15, 11}, // Knights
@@ -50,12 +56,10 @@ constexpr int mobilityBonus[5][28][2] = {
                 {118,174}, {119,177}, {123,191}, {128,199} }
 };
 
-//Initialization method, must be called before callubg mobilityEval.
+// Initialization method, must be called before callubg mobilityEval.
 void initKingZones();
 
-/*
- * King safety and mobility evaluation
- */
+// King safety and mobility evaluation
 void mobilityEval(Board* brd);
 
 #endif //CHESSENGINE2_ATTACK_H
