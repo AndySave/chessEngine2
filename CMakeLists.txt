@@ -23,12 +23,12 @@ add_executable(
         src/definitions/move.cpp
         src/definitions/move.h
 
-        src/evaluation/mainEvaluation.cpp
-        src/evaluation/mainEvaluation.h
+        src/evaluation/main_evaluation.cpp
+        src/evaluation/main_evaluation.h
         src/evaluation/pieceTables.cpp
         src/evaluation/pieceTables.h
-        src/evaluation/eval_functions.cpp
-        src/evaluation/eval_functions.h
+        src/evaluation/attack.cpp
+        src/evaluation/attack.h
         src/evaluation/pawn_structure.cpp
         src/evaluation/pawn_structure.h
 
@@ -109,8 +109,8 @@ add_executable(
         src/definitions/move.cpp
         src/definitions/move.h
 
-        src/evaluation/mainEvaluation.cpp
-        src/evaluation/mainEvaluation.h
+        src/evaluation/main_evaluation.cpp
+        src/evaluation/main_evaluation.h
         src/evaluation/pieceTables.cpp
         src/evaluation/pieceTables.h
 
@@ -154,12 +154,12 @@ add_executable(
         src/definitions/move.cpp
         src/definitions/move.h
 
-        src/evaluation/mainEvaluation.cpp
-        src/evaluation/mainEvaluation.h
+        src/evaluation/main_evaluation.cpp
+        src/evaluation/main_evaluation.h
         src/evaluation/pieceTables.cpp
         src/evaluation/pieceTables.h
-        src/evaluation/eval_functions.cpp
-        src/evaluation/eval_functions.h
+        src/evaluation/attack.cpp
+        src/evaluation/attack.h
         src/evaluation/pawn_structure.cpp
         src/evaluation/pawn_structure.h
 

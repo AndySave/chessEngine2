@@ -1,6 +1,6 @@
 
-#ifndef CHESSENGINE2_MAINEVALUATION_H
-#define CHESSENGINE2_MAINEVALUATION_H
+#ifndef CHESSENGINE2_MAIN_EVALUATION_H
+#define CHESSENGINE2_MAIN_EVALUATION_H
 
 #include "../definitions/board.h"
 #include "../definitions/std_typedef.h"
@@ -9,7 +9,7 @@
 #include "../definitions/slidersAttacks.h"
 #include "pieceTables.h"
 #include "pawn_structure.h"
-#include "eval_functions.h"
+#include "attack.h"
 
 
 /// --------------------TAPERED VALUES-------------------- ///

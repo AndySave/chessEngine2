@@ -1,5 +1,8 @@
-#include "eval_functions.h"
+#include "attack.h"
 
+/*
+ * King safety and mobility evaluation.
+ */
 void mobilityEval(Board* brd) {
     kingSafetyEval = 0;
     midMobilityEval = 0;

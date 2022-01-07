@@ -11,7 +11,7 @@
 #include "../utils/fen.h"
 #include "../definitions/board.h"
 #include "../definitions/moveGeneration.h"
-#include "../evaluation/mainEvaluation.h"
+#include "../evaluation/main_evaluation.h"
 #include "../evaluation/pieceTables.h"
 #include "../search/move_ordering.h"
 #include "../search/main_search.h"

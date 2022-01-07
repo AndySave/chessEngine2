@@ -7,7 +7,7 @@
 #include "../../src/utils/fen.h"
 #include "../../src/definitions/board.h"
 #include "../../src/definitions/moveGeneration.h"
-#include "../../src/evaluation/mainEvaluation.h"
+#include "../../src/evaluation/main_evaluation.h"
 
 struct PerftTest : public ::testing::Test {
     // If the constructor and destructor are not enough for setting up
