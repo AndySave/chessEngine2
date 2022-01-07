@@ -34,6 +34,16 @@ inline int countBits(ull x){
     return (x * h01) >> 56;
 }
 
+//Returns number of set bits in the bitboard. Faster than pop_count(x) when the bitboard has few set bits
+inline int sparseCountBits(ull x) {
+    int count = 0;
+    while (x) {
+        count++;
+        x &= x - 1;
+    }
+    return count;
+}
+
 /*
 // Gets index of Least Significant Bit
 inline int getLSB(ull bb){
