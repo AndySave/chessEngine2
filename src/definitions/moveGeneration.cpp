@@ -876,6 +876,7 @@ void genLegalMoves(Board *brd, Movelist* moves) {
 
                 // Getting pinned pawns on second rank
                 bb2 = bb & ranks[1];
+                bb &= ~ranks[1];
 
                 // Handling pinned pawn moves (not en passant)
                 while (bb){
