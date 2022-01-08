@@ -32,7 +32,7 @@ struct Board{
     int pvTable[64];
 
     int searchHistory[12][64];
-    int searchKillers[2][64];
+    int searchKillers[2][512];
 };
 
 // Prints board in a nice format
