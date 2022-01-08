@@ -14,5 +14,6 @@ int algebraicToSq(string &coords);
 string sqToAlgebraic(int sq);
 int getTime();
 int ord(char c);
+string squaresToAlgebraic(int fromSq, int toSq);
 
 #endif
