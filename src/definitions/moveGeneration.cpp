@@ -1101,8 +1101,9 @@ void genLegalMoves(Board *brd, Movelist* moves) {
 
         // Rook
         ull rookPositions = brd->bitboards[R] & ~pinned;
-        while (bishopPositions){
-            int curPos = popLsb(&bishopPositions);
+
+        while (rookPositions){
+            int curPos = popLsb(&rookPositions);
 
             ull quietMoves = rookAttackRay(brd->occupancies[both], curPos) & ~brd->occupancies[both] & pushMask;
             ull captureMoves = rookAttackRay(brd->occupancies[both], curPos) & brd->occupancies[black] & captureMask;
