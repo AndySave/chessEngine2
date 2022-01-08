@@ -783,7 +783,19 @@ void genLegalMoves(Board *brd, Movelist* moves) {
     if (brd->side == white) {
         ull attackers = genAttackers(brd, false);
         ull checkers = genCheckers(brd, false, brd->whiteKingPos);
-        ull pinned = attackers & queenAttackRay(brd->occupancies[both], brd->whiteKingPos) & brd->occupancies[white];
+
+        ull pinned = 0;
+        ull pinner = bishopXray(brd->occupancies[both], brd->occupancies[white], brd->whiteKingPos);
+        while (pinner){
+            int index = popLsb(&pinner);
+            pinned |= squaresBetween[brd->whiteKingPos][index] & brd->occupancies[white];
+        }
+
+        pinner = rookXray(brd->occupancies[both], brd->occupancies[white], brd->whiteKingPos);
+        while (pinner){
+            int index = popLsb(&pinner);
+            pinned |= squaresBetween[brd->whiteKingPos][index] & brd->occupancies[white];
+        }
 
         int numOfCheckers = sparseCountBits(checkers);
 
