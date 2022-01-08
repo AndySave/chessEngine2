@@ -64,6 +64,9 @@ string sqToAlgebraic(int sq) {
     return algebraic;
 }
 
+string squaresToAlgebraic(int fromSq, int toSq) {
+    return sqToAlgebraic(fromSq) + sqToAlgebraic(toSq);
+}
 
 int getTime(){
     return GetTickCount();

@@ -799,10 +799,13 @@ void genLegalMoves(Board *brd, Movelist* moves) {
 
         int numOfCheckers = sparseCountBits(checkers);
 
-        cout << "Attackers: " << endl; // REPLACE WITH ADDING TO MOVELIST!
+        // REPLACE WITH ADDING TO MOVELIST!
+        cout << "Attackers: " << endl;
         printBitboard(attackers);
         cout << "Checkers: " << endl;
         printBitboard(checkers);
+        cout << "Pinned: " << endl;
+        printBitboard(pinned);
 
         // KING MOVES
         ull kingMoves = ~attackers & kingAttacks[brd->whiteKingPos] & ~brd->occupancies[white];
@@ -876,9 +879,8 @@ void genLegalMoves(Board *brd, Movelist* moves) {
                 while (bb){
                     fromSq = popLsb(&bb);
 
-                    quietMoves = (whitePawnAttacks[fromSq] | whitePawnPush[fromSq]) & squaresBetweenRay[brd->whiteKingPos][fromSq];
-                    captures = quietMoves & brd->occupancies[black];
-                    quietMoves &= ~brd->occupancies[black];
+                    quietMoves = whitePawnPush[fromSq] & squaresBetweenRay[brd->whiteKingPos][fromSq] & ~brd->occupancies[black];
+                    captures = whitePawnAttacks[fromSq] & brd->occupancies[black] & squaresBetweenRay[brd->whiteKingPos][fromSq];
 
                     cout << "Quiet pinned pawn moves: " << endl;
                     while (quietMoves){
@@ -995,6 +997,141 @@ void genLegalMoves(Board *brd, Movelist* moves) {
 
 
                 break;
+        }
+
+        // OTHER MOVES
+
+        // Pawn
+        ull pawnPositionsRank2 = brd->bitboards[P] & ranks[1] & ~pinned;
+        ull pawnPositionsRank7 = brd->bitboards[P] & ranks[6] & ~pinned;
+        ull pawnPositionRest = brd->bitboards[P] & ~(ranks[1] | ranks[6]) & ~pinned;
+
+        while (pawnPositionsRank2) {
+            int curPos = popLsb(&pawnPositionsRank2);
+            bool isPawnBlocked = getBit(brd->occupancies[both], curPos+8); //1 - blocked, 0 - not blocked
+
+            ull quietMoves = whitePawnPush[curPos] & ~brd->occupancies[both] & pushMask;
+            ull captureMoves = whitePawnAttacks[curPos] & brd->occupancies[black] & captureMask;
+
+            while (quietMoves){ // Handle quiet moves
+                int curPawn = popLsb(&quietMoves);
+                if (!isPawnBlocked) cout << squaresToAlgebraic(curPos, curPawn) <<endl; // REPLACE
+            }
+
+            while (captureMoves){ // Handle capture moves
+                int curPawn = popLsb(&captureMoves);
+                if (!isPawnBlocked) cout << squaresToAlgebraic(curPos, curPawn) << endl; // REPLACE
+            }
+        }
+
+        while (pawnPositionsRank7) {
+            int curPos = popLsb(&pawnPositionsRank7);
+
+            ull quietMoves = whitePawnPush[curPos] & ~brd->occupancies[both] & pushMask;
+            ull captureMoves = whitePawnAttacks[curPos] & brd->occupancies[black] & captureMask;
+
+            while (quietMoves){ // Handle quiet moves
+                int curPawn = popLsb(&quietMoves);
+                cout << squaresToAlgebraic(curPos, curPawn) << "PROMOTE" <<endl; // REPLACE
+            }
+
+            while (captureMoves){ // Handle capture moves
+                int curPawn = popLsb(&captureMoves);
+                cout << squaresToAlgebraic(curPos, curPawn) << "PROMOTE" << endl; // REPLACE
+            }
+        }
+
+        while (pawnPositionRest) {
+            int curPos = popLsb(&pawnPositionRest);
+
+            ull quietMoves = whitePawnPush[curPos] & ~brd->occupancies[both] & pushMask;
+            ull captureMoves = whitePawnAttacks[curPos] & brd->occupancies[black] & captureMask;
+
+            while (quietMoves){ // Handle quiet moves
+                int curPawn = popLsb(&quietMoves);
+                cout << squaresToAlgebraic(curPos, curPawn) <<endl; // REPLACE
+            }
+
+            while (captureMoves){ // Handle capture moves
+                int curPawn = popLsb(&captureMoves);
+                cout << squaresToAlgebraic(curPos, curPawn) << endl; // REPLACE
+            }
+        }
+
+        // Knight
+        ull knightPositions = brd->bitboards[N] & ~pinned;
+        while (knightPositions){
+            int curPos = popLsb(&knightPositions);
+
+            ull quietMoves = knightAttacks[curPos] & ~brd->occupancies[both] & pushMask;
+            ull captureMoves = knightAttacks[curPos] & brd->occupancies[black] & captureMask;
+
+            while (quietMoves){ // Handle quiet moves
+                int curKnight = popLsb(&quietMoves);
+                cout << squaresToAlgebraic(curPos, curKnight) << endl; // REPLACE
+            }
+
+            while (captureMoves){ // Handle capture moves
+                int curKnight = popLsb(&captureMoves);
+                cout << squaresToAlgebraic(curPos, curKnight) << endl; // REPLACE
+            }
+        }
+
+        // Bishop
+        ull bishopPositions = brd->bitboards[B] & ~pinned;
+        while (bishopPositions){
+            int curPos = popLsb(&bishopPositions);
+
+            ull quietMoves = bishopAttackRay(brd->occupancies[both], curPos) & ~brd->occupancies[both] & pushMask;
+            ull captureMoves = bishopAttackRay(brd->occupancies[both], curPos) & brd->occupancies[black] & captureMask;
+
+            while (quietMoves){ // Handle quiet moves
+                int curBishop = popLsb(&quietMoves);
+                cout << squaresToAlgebraic(curPos, curBishop) << endl; // REPLACE
+            }
+
+            while (captureMoves){ // Handle capture moves
+                int curBishop = popLsb(&captureMoves);
+                cout << squaresToAlgebraic(curPos, curBishop) << endl; // REPLACE
+            }
+        }
+
+        // Rook
+        ull rookPositions = brd->bitboards[R] & ~pinned;
+        while (bishopPositions){
+            int curPos = popLsb(&bishopPositions);
+
+            ull quietMoves = rookAttackRay(brd->occupancies[both], curPos) & ~brd->occupancies[both] & pushMask;
+            ull captureMoves = rookAttackRay(brd->occupancies[both], curPos) & brd->occupancies[black] & captureMask;
+
+            while (quietMoves){ // Handle quiet moves
+                int curRook = popLsb(&quietMoves);
+                cout << squaresToAlgebraic(curPos, curRook) << endl; // REPLACE
+            }
+
+            while (captureMoves){ // Handle capture moves
+                int curRook = popLsb(&captureMoves);
+                cout << squaresToAlgebraic(curPos, curRook) << endl; // REPLACE
+            }
+        }
+
+        // Queen
+        ull queenPositions = brd->bitboards[Q] & ~pinned;
+        while (queenPositions){
+            int curPos = popLsb(&queenPositions);
+
+            ull quietMoves = queenAttackRay(brd->occupancies[both], curPos) & ~brd->occupancies[both] & pushMask;
+            ull captureMoves = queenAttackRay(brd->occupancies[both], curPos) & brd->occupancies[black] & captureMask;
+
+            while (quietMoves){ // Handle quiet moves
+                int curQueen = popLsb(&quietMoves);
+                cout << squaresToAlgebraic(curPos, curQueen) << endl; // REPLACE
+            }
+
+            while (captureMoves){ // Handle capture moves
+                int curQueen = popLsb(&captureMoves);
+                cout << squaresToAlgebraic(curPos, curQueen) << endl; // REPLACE
+            }
         }
 
     } else {
