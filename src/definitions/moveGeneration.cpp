@@ -786,14 +786,14 @@ void genLegalMoves(Board *brd, Movelist* moves) {
 
         ull pinned = 0;
         ull pinners = bishopXray(brd->occupancies[both], brd->occupancies[white], brd->whiteKingPos) & brd->occupancies[black]
-                & brd->bitboards[P] & brd->bitboards[B] & brd->bitboards[Q];
+                & (brd->bitboards[p] | brd->bitboards[b] | brd->bitboards[q]);
         while (pinners){
             int pinner = popLsb(&pinners);
             pinned |= squaresBetween[brd->whiteKingPos][pinner] & brd->occupancies[white];
         }
 
         pinners = rookXray(brd->occupancies[both], brd->occupancies[white], brd->whiteKingPos) & brd->occupancies[black]
-                & brd->bitboards[P] & brd->bitboards[R] & brd->bitboards[Q];
+                & (brd->bitboards[p] | brd->bitboards[r] | brd->bitboards[q]);
         while (pinners){
             int pinner = popLsb(&pinners);
             pinned |= squaresBetween[brd->whiteKingPos][pinner] & brd->occupancies[white];
