@@ -12,8 +12,7 @@ void generateMoves(Board *brd, Movelist *lst){
         /// PAWN MOVES ///
         ull pawnPositions = brd->bitboards[P];
         while (pawnPositions){
-            int pawnPos = getLSB(pawnPositions);
-            clearBit(pawnPositions, pawnPos);
+            int pawnPos = popLsb(&pawnPositions);
 
             int rank = pawnPos/8;
             if (!getBit(occ, pawnPos+8)){
@@ -35,8 +34,7 @@ void generateMoves(Board *brd, Movelist *lst){
             ull attacks = whitePawnAttacks[pawnPos] & brd->occupancies[black];
             int index;
             while (attacks){
-                index = getLSB(attacks);
-                clearBit(attacks, index);
+                index = popLsb(&attacks);
 
                 int captured = findPiece(brd, index, black);
 
@@ -65,16 +63,14 @@ void generateMoves(Board *brd, Movelist *lst){
 
         // Handling quiet moves
         while (moves){
-            int index = getLSB(moves);
-            clearBit(moves, index);
+            int index = popLsb(&moves);
 
             addQuietMove(brd, lst, createMove(brd->whiteKingPos, index, 0, noFlag, K, noPiece));
         }
 
         // Handling capture moves
         while (attacks){
-            int index = getLSB(attacks);
-            clearBit(attacks, index);
+            int index = popLsb(&attacks);
 
             int captured = findPiece(brd, index, black);
 
@@ -105,8 +101,7 @@ void generateMoves(Board *brd, Movelist *lst){
         /// KNIGHT MOVES ///
         ull knightPositions = brd->bitboards[N];
         while (knightPositions){
-            int knightPos = getLSB(knightPositions);
-            clearBit(knightPositions, knightPos);
+            int knightPos = popLsb(&knightPositions);
 
             // Getting moves and removing self captures
             ull moves = knightAttacks[knightPos] & (~brd->occupancies[white]);
@@ -117,16 +112,14 @@ void generateMoves(Board *brd, Movelist *lst){
 
             // Handle quiet moves
             while (moves){
-                int index = getLSB(moves);
-                clearBit(moves, index);
+                int index = popLsb(&moves);
 
                 addQuietMove(brd, lst, createMove(knightPos, index, 0, noFlag, N, noPiece));
             }
 
             // Handle capture moves
             while (attacks){
-                int index = getLSB(attacks);
-                clearBit(attacks, index);
+                int index = popLsb(&attacks);
 
                 int captured = findPiece(brd, index, black);
 
@@ -137,8 +130,7 @@ void generateMoves(Board *brd, Movelist *lst){
         /// BISHOP MOVES ///
         ull bishopPositions = brd->bitboards[B];
         while (bishopPositions){
-            int bishopPos = getLSB(bishopPositions);
-            clearBit(bishopPositions, bishopPos);
+            int bishopPos = popLsb(&bishopPositions);
 
             // Getting moves and removing self captures
             ull moves = bishopAttackRay(occ, bishopPos) & (~brd->occupancies[white]);
@@ -149,16 +141,14 @@ void generateMoves(Board *brd, Movelist *lst){
 
             // Handle quiet moves
             while (moves){
-                int index = getLSB(moves);
-                clearBit(moves, index);
+                int index = popLsb(&moves);
 
                 addQuietMove(brd, lst, createMove(bishopPos, index, 0, noFlag, B, noPiece));
             }
 
             // Handle capture moves
             while (attacks){
-                int index = getLSB(attacks);
-                clearBit(attacks, index);
+                int index = popLsb(&attacks);
 
                 int captured = findPiece(brd, index, black);
 
@@ -169,8 +159,7 @@ void generateMoves(Board *brd, Movelist *lst){
         /// ROOK MOVES ///
         ull rookPositions = brd->bitboards[R];
         while (rookPositions){
-            int rookPos = getLSB(rookPositions);
-            clearBit(rookPositions, rookPos);
+            int rookPos = popLsb(&rookPositions);
 
             // Getting moves and removing self captures
             ull moves = rookAttackRay(occ, rookPos) & (~brd->occupancies[white]);;
@@ -181,15 +170,13 @@ void generateMoves(Board *brd, Movelist *lst){
 
             // Handle quiet moves
             while (moves){
-                int index = getLSB(moves);
-                clearBit(moves, index);
+                int index = popLsb(&moves);
 
                 addQuietMove(brd, lst, createMove(rookPos, index, 0, noFlag, R, noPiece));
             }
 
             while (attacks){
-                int index = getLSB(attacks);
-                clearBit(attacks, index);
+                int index = popLsb(&attacks);
 
                 int captured = findPiece(brd, index, black);
 
@@ -200,8 +187,7 @@ void generateMoves(Board *brd, Movelist *lst){
         /// QUEEN MOVES ///
         ull queenPositions = brd->bitboards[Q];
         while (queenPositions){
-            int queenPos = getLSB(queenPositions);
-            clearBit(queenPositions, queenPos);
+            int queenPos = popLsb(&queenPositions);
 
             // Getting moves and removing self captures
             ull moves = queenAttackRay(occ, queenPos) & (~brd->occupancies[white]);;
@@ -212,15 +198,13 @@ void generateMoves(Board *brd, Movelist *lst){
 
             // Handle quiet moves
             while (moves){
-                int index = getLSB(moves);
-                clearBit(moves, index);
+                int index = popLsb(&moves);
 
                 addQuietMove(brd, lst, createMove(queenPos, index, 0, noFlag, Q, noPiece));
             }
 
             while (attacks){
-                int index = getLSB(attacks);
-                clearBit(attacks, index);
+                int index = popLsb(&attacks);
 
                 int captured = findPiece(brd, index, black);
 
@@ -235,8 +219,7 @@ void generateMoves(Board *brd, Movelist *lst){
         /// PAWN MOVES ///
         ull pawnPositions = brd->bitboards[p];
         while (pawnPositions){
-            int pawnPos = getLSB(pawnPositions);
-            clearBit(pawnPositions, pawnPos);
+            int pawnPos = popLsb(&pawnPositions);
 
             int rank = pawnPos/8;
             if (!getBit(occ, pawnPos-8)){
@@ -258,8 +241,7 @@ void generateMoves(Board *brd, Movelist *lst){
             ull attacks = blackPawnAttacks[pawnPos] & brd->occupancies[white];
             int index;
             while (attacks){
-                index = getLSB(attacks);
-                clearBit(attacks, index);
+                index = popLsb(&attacks);
 
                 int captured = findPiece(brd, index, white);
 
@@ -288,16 +270,14 @@ void generateMoves(Board *brd, Movelist *lst){
 
         // Handling quiet moves
         while (moves){
-            int index = getLSB(moves);
-            clearBit(moves, index);
+            int index = popLsb(&moves);
 
             addQuietMove(brd, lst, createMove(brd->blackKingPos, index, 0, noFlag, k, noPiece));
         }
 
         // Handling capture moves
         while (attacks){
-            int index = getLSB(attacks);
-            clearBit(attacks, index);
+            int index = popLsb(&attacks);
 
             int captured = findPiece(brd, index, white);
 
@@ -328,8 +308,7 @@ void generateMoves(Board *brd, Movelist *lst){
         /// KNIGHT MOVES ///
         ull knightPositions = brd->bitboards[n];
         while (knightPositions){
-            int knightPos = getLSB(knightPositions);
-            clearBit(knightPositions, knightPos);
+            int knightPos = popLsb(&knightPositions);
 
             // Getting moves and removing self captures
             ull moves = knightAttacks[knightPos] & (~brd->occupancies[black]);
@@ -340,16 +319,14 @@ void generateMoves(Board *brd, Movelist *lst){
 
             // Handle quiet moves
             while (moves){
-                int index = getLSB(moves);
-                clearBit(moves, index);
+                int index = popLsb(&moves);
 
                 addQuietMove(brd, lst, createMove(knightPos, index, 0, noFlag, n, noPiece));
             }
 
             // Handle capture moves
             while (attacks){
-                int index = getLSB(attacks);
-                clearBit(attacks, index);
+                int index = popLsb(&attacks);
 
                 int captured = findPiece(brd, index, white);
 
@@ -360,8 +337,7 @@ void generateMoves(Board *brd, Movelist *lst){
         /// BISHOP MOVES ///
         ull bishopPositions = brd->bitboards[b];
         while (bishopPositions){
-            int bishopPos = getLSB(bishopPositions);
-            clearBit(bishopPositions, bishopPos);
+            int bishopPos = popLsb(&bishopPositions);
 
             // Getting moves and removing self captures
             ull moves = bishopAttackRay(occ, bishopPos) & (~brd->occupancies[black]);;
@@ -372,15 +348,13 @@ void generateMoves(Board *brd, Movelist *lst){
 
             // Handle quiet moves
             while (moves){
-                int index = getLSB(moves);
-                clearBit(moves, index);
+                int index = popLsb(&moves);
 
                 addQuietMove(brd, lst, createMove(bishopPos, index, 0, noFlag, b, noPiece));
             }
 
             while (attacks){
-                int index = getLSB(attacks);
-                clearBit(attacks, index);
+                int index = popLsb(&attacks);
 
                 int captured = findPiece(brd, index, white);
 
@@ -391,8 +365,7 @@ void generateMoves(Board *brd, Movelist *lst){
         /// ROOK MOVES ///
         ull rookPositions = brd->bitboards[r];
         while (rookPositions){
-            int rookPos = getLSB(rookPositions);
-            clearBit(rookPositions, rookPos);
+            int rookPos = popLsb(&rookPositions);
 
             // Getting moves and removing self captures
             ull moves = rookAttackRay(occ, rookPos) & (~brd->occupancies[black]);
@@ -403,15 +376,13 @@ void generateMoves(Board *brd, Movelist *lst){
 
             // Handle quiet moves
             while (moves){
-                int index = getLSB(moves);
-                clearBit(moves, index);
+                int index = popLsb(&moves);
 
                 addQuietMove(brd, lst, createMove(rookPos, index, 0, noFlag, r, noPiece));
             }
 
             while (attacks){
-                int index = getLSB(attacks);
-                clearBit(attacks, index);
+                int index = popLsb(&attacks);
 
                 int captured = findPiece(brd, index, white);
 
@@ -422,8 +393,7 @@ void generateMoves(Board *brd, Movelist *lst){
         /// QUEEN MOVES ///
         ull queenPositions = brd->bitboards[q];
         while (queenPositions){
-            int queenPos = getLSB(queenPositions);
-            clearBit(queenPositions, queenPos);
+            int queenPos = popLsb(&queenPositions);
 
             // Getting moves and removing self captures
             ull moves = queenAttackRay(occ, queenPos) & (~brd->occupancies[black]);
@@ -434,15 +404,13 @@ void generateMoves(Board *brd, Movelist *lst){
 
             // Handle quiet moves
             while (moves){
-                int index = getLSB(moves);
-                clearBit(moves, index);
+                int index = popLsb(&moves);
 
                 addQuietMove(brd, lst, createMove(queenPos, index, 0, noFlag, q, noPiece));
             }
 
             while (attacks){
-                int index = getLSB(attacks);
-                clearBit(attacks, index);
+                int index = popLsb(&attacks);
 
                 int captured = findPiece(brd, index, white);
 
@@ -465,16 +433,14 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
         ull pawnPositions = brd->bitboards[P];
 
         while (pawnPositions) { //Loops through each pawn of current side
-            int curPos = getLSB(pawnPositions); //The position of current pawn being evaluated
-            clearBit(pawnPositions, curPos);
+            int curPos = popLsb(&pawnPositions); //The position of current pawn being evaluated
 
             ull attacks =  whitePawnAttacks[curPos] & brd->occupancies[black]; //The square current pawn attacks
 
             int rank = curPos/8; //rank of current pawn
 
             while(attacks) { //Loops thorugh each square current pawn attacks
-                int curAttack = getLSB(attacks);
-                clearBit(attacks, curAttack);
+                int curAttack = popLsb(&attacks);
 
                 int captured = findPiece(brd, curAttack, black);
 
@@ -497,16 +463,14 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
         ull pawnPositions = brd->bitboards[p];
 
         while (pawnPositions) { //Loops through each pawn of current side
-            int curPos = getLSB(pawnPositions); //The position of current pawn being evaluated
-            clearBit(pawnPositions, curPos);
+            int curPos = popLsb(&pawnPositions); //The position of current pawn being evaluated
 
             ull attacks =  blackPawnAttacks[curPos] & brd->occupancies[white]; //The square current pawn attacks
 
             int rank = curPos/8; //rank of current pawn
 
             while(attacks) { //Loops through each square current pawn attacks
-                int curAttack = getLSB(attacks);
-                clearBit(attacks, curAttack);
+                int curAttack = popLsb(&attacks);
 
                 int captured = findPiece(brd, curAttack, white);
 
@@ -533,14 +497,12 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
     ull kingPositions = brd->bitboards[piece];
 
     while (kingPositions) { //Loops through each king of current side
-        int curPos = getLSB(kingPositions); //The position of current king being evaluated
-        clearBit(kingPositions, curPos);
+        int curPos = popLsb(&kingPositions); //The position of current king being evaluated
 
         ull attacks = kingAttacks[curPos] & brd->occupancies[!side];
 
         while(attacks) { //Loops through each square current king attacks
-            int curAttack = getLSB(attacks);
-            clearBit(attacks, curAttack);
+            int curAttack = popLsb(&attacks);
 
             int captured = findPiece(brd, curAttack, !side);
 
@@ -553,14 +515,12 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
     ull bishopPositions = brd->bitboards[piece];
 
     while (bishopPositions) { //Loops through each bishop of current side
-        int curPos = getLSB(bishopPositions); //The position of current bishop being evaluated
-        clearBit(bishopPositions, curPos);
+        int curPos = popLsb(&bishopPositions); //The position of current bishop being evaluated
 
         ull attacks = bishopAttackRay(occ, curPos) & brd->occupancies[!side];
 
         while(attacks) { //Loops through each square current bishop attacks
-            int curAttack = getLSB(attacks);
-            clearBit(attacks, curAttack);
+            int curAttack = popLsb(&attacks);
 
             int captured = findPiece(brd, curAttack, !side);
 
@@ -573,14 +533,12 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
     ull rookPositions = brd->bitboards[piece];
 
     while (rookPositions) { //Loops through each rook of current side
-        int curPos = getLSB(rookPositions); //The position of current rook being evaluated
-        clearBit(rookPositions, curPos);
+        int curPos = popLsb(&rookPositions); //The position of current rook being evaluated
 
         ull attacks = rookAttackRay(occ, curPos) & brd->occupancies[!side];
 
         while(attacks) { //Loops through each square current rook attacks
-            int curAttack = getLSB(attacks);
-            clearBit(attacks, curAttack);
+            int curAttack = popLsb(&attacks);
 
             int captured = findPiece(brd, curAttack, !side);
 
@@ -593,14 +551,12 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
     ull knightPositions = brd->bitboards[piece];
 
     while (knightPositions){ //Loops through each knight of current side
-        int curPos = getLSB(knightPositions); //The position of current knight being evaluated
-        clearBit(knightPositions, curPos);
+        int curPos = popLsb(&knightPositions); //The position of current knight being evaluated
 
         ull attacks = knightAttacks[curPos] & brd->occupancies[!side];
 
         while (attacks){ //Loops through each square current knight attacks
-            int curAttack = getLSB(attacks);
-            clearBit(attacks, curAttack);
+            int curAttack = popLsb(&attacks);
 
             int captured = findPiece(brd, curAttack, !side);
 
@@ -613,14 +569,12 @@ void generateCaptureMoves(Board *brd, Movelist *lst) {
     ull queenPositions = brd->bitboards[piece];
 
     while (queenPositions){ //Loops through each queen of current side
-        int curPos = getLSB(queenPositions); //The position of current queen being evaluated
-        clearBit(queenPositions, curPos);
+        int curPos = popLsb(&queenPositions); //The position of current queen being evaluated
 
         ull attacks = queenAttackRay(occ, curPos) & brd->occupancies[!side];
 
         while (attacks){ //Loops through each square current queen attacks
-            int curAttack = getLSB(attacks);
-            clearBit(attacks, curAttack);
+            int curAttack = popLsb(&attacks);
 
             int captured = findPiece(brd, curAttack, !side);
 
@@ -781,6 +735,27 @@ void initSquaresBetween() {
     }
 }
 
+ull genSquaresBetweenRay(int fromSq, int toSq){
+    int file1 = fromSq % 8, rank1 = fromSq / 8;
+    int file2 = toSq % 8, rank2 = toSq / 8;
+
+    if (file1 == file2 || rank1 == rank2){
+        return incrementalRookAttack(0, fromSq) & incrementalRookAttack(0, toSq);
+    }else if (diagonal1[fromSq] == diagonal1[toSq] || diagonal2[fromSq] == diagonal2[toSq]){
+        return incrementalBishopAttack(0, fromSq) & incrementalBishopAttack(0, toSq);
+    }
+
+    return 0;
+}
+
+void initSquaresBetweenRay() {
+    for (int i = 0; i<64; i++) {
+        for (int j = 0; j<64; j++) {
+            squaresBetweenRay[i][j] = genSquaresBetweenRay(i, j);
+        }
+    }
+}
+
 ull genCheckers(Board* brd, bool isWhiteAttacking, int attackedKing) {
     ull checkers = 0;
     ull occ = brd->occupancies[both];
@@ -802,11 +777,14 @@ ull genCheckers(Board* brd, bool isWhiteAttacking, int attackedKing) {
     return checkers;
 }
 
+
 void genLegalMoves(Board *brd, Movelist* moves) {
 
     if (brd->side == white) {
         ull attackers = genAttackers(brd, false);
         ull checkers = genCheckers(brd, false, brd->whiteKingPos);
+        ull pinned = attackers & queenAttackRay(brd->occupancies[both], brd->whiteKingPos) & brd->occupancies[white];
+
         int numOfCheckers = sparseCountBits(checkers);
 
         cout << "Attackers: " << endl; // REPLACE WITH ADDING TO MOVELIST!
@@ -821,10 +799,10 @@ void genLegalMoves(Board *brd, Movelist* moves) {
             int curPos = popLsb(&kingMoves);
             cout << sqToAlgebraic(brd->whiteKingPos) << sqToAlgebraic(curPos) << endl; // REPLACE WITH ADDING TO MOVELIST!
         }
+
         ull captureMask = 0xFFFFFFFFFFFFFFFFull; // Squares a piece can capture on (would be restricted while in check
         ull pushMask = 0xFFFFFFFFFFFFFFFFull; // Squares a piece can move to (would be restricted in case of blocking a check)
         int checkingPiece;
-
         switch (numOfCheckers) { // Counts the amo
             case 2:
                 cout << "Double check." << endl; // REPLACE WITH ADDING TO MOVELIST!
@@ -853,6 +831,157 @@ void genLegalMoves(Board *brd, Movelist* moves) {
                 break;
             default:
                 cout << "no check." << endl; // REPLACE WITH ADDING TO MOVELIST!
+
+                // King side castle
+                if (brd->castle & WKC && !getBit(brd->occupancies[both], f1) && !getBit(brd->occupancies[both], g1)
+                && !getBit(attackers, f1) && !getBit(attackers, g1)){
+                    cout << "king can castle king side" << endl;
+                }
+
+                // Queen side castle
+                if (brd->castle & WQC && !getBit(brd->occupancies[both], d1) &&
+                !getBit(brd->occupancies[both], c1) && !getBit(brd->occupancies[both], b1)
+                    && !getBit(attackers, d1) && !getBit(attackers, c1)){
+                    cout << "king can castle queen side" << endl;
+                }
+
+                // Initializing variables
+                ull quietMoves;
+                ull captures;
+                int fromSq;
+                int toSq;
+
+                // General use bitboards
+                ull bb, bb2;
+
+                // Getting pinned pawns
+                bb = pinned & brd->bitboards[P];
+
+                // Getting pinned pawns on second rank
+                bb2 = bb & ranks[1];
+
+                // Handling pinned pawn moves (not en passant)
+                while (bb){
+                    fromSq = popLsb(&bb);
+
+                    quietMoves = (whitePawnAttacks[fromSq] | whitePawnPush[fromSq]) & squaresBetweenRay[brd->whiteKingPos][fromSq];
+                    captures = quietMoves & brd->occupancies[black];
+                    quietMoves &= ~brd->occupancies[black];
+
+                    cout << "Quiet pinned pawn moves: " << endl;
+                    while (quietMoves){
+                        toSq = popLsb(&quietMoves);
+
+                        cout << sqToAlgebraic(fromSq) << sqToAlgebraic(toSq) << endl;
+                    }
+
+                    cout << "Capture pinned pawn moves: " << endl;
+                    while (captures){
+                        toSq = popLsb(&captures);
+
+                        cout << sqToAlgebraic(fromSq) << sqToAlgebraic(toSq) << endl;
+                    }
+                }
+
+                // Handling pinned pawn moves on second rank
+                while (bb2){
+                    fromSq = popLsb(&bb2);
+
+                    quietMoves = (whitePawnAttacks[fromSq] | whitePawnPush[fromSq]) & squaresBetweenRay[brd->whiteKingPos][fromSq];
+                    captures = quietMoves & brd->occupancies[black];
+                    quietMoves &= ~brd->occupancies[black];
+
+                    cout << "Quiet pinned pawn moves: " << endl;
+                    while (quietMoves){
+                        toSq = popLsb(&quietMoves);
+
+                        cout << sqToAlgebraic(fromSq) << sqToAlgebraic(toSq) << endl;
+                    }
+
+                    cout << "Capture pinned pawn moves: " << endl;
+                    while (captures){
+                        toSq = popLsb(&captures);
+
+                        cout << sqToAlgebraic(fromSq) << sqToAlgebraic(toSq) << endl;
+                    }
+                }
+
+                // Getting pinned bishops
+                bb = pinned & brd->bitboards[B];
+
+                while (bb){
+                    fromSq = popLsb(&bb);
+
+                    quietMoves = bishopAttackRay(brd->occupancies[both], fromSq) & squaresBetweenRay[brd->whiteKingPos][fromSq];
+                    captures = quietMoves & brd->occupancies[black];
+                    quietMoves &= ~brd->occupancies[black];
+
+                    cout << "Quiet pinned bishop moves: " << endl;
+                    while (quietMoves){
+                        toSq = popLsb(&quietMoves);
+
+                        cout << sqToAlgebraic(fromSq) << sqToAlgebraic(toSq) << endl;
+                    }
+
+                    cout << "Capture pinned bishop moves: " << endl;
+                    while (captures){
+                        toSq = popLsb(&captures);
+
+                        cout << sqToAlgebraic(fromSq) << sqToAlgebraic(toSq) << endl;
+                    }
+                }
+
+                // Getting pinned rooks
+                bb = pinned & brd->bitboards[R];
+
+                while (bb){
+                    fromSq = popLsb(&bb);
+
+                    quietMoves = rookAttackRay(brd->occupancies[both], fromSq) & squaresBetweenRay[brd->whiteKingPos][fromSq];
+                    captures = quietMoves & brd->occupancies[black];
+                    quietMoves &= ~brd->occupancies[black];
+
+                    cout << "Quiet pinned rook moves: " << endl;
+                    while (quietMoves){
+                        toSq = popLsb(&quietMoves);
+
+                        cout << sqToAlgebraic(fromSq) << sqToAlgebraic(toSq) << endl;
+                    }
+
+                    cout << "Capture pinned rook moves: " << endl;
+                    while (captures){
+                        toSq = popLsb(&captures);
+
+                        cout << sqToAlgebraic(fromSq) << sqToAlgebraic(toSq) << endl;
+                    }
+                }
+
+                // Getting pinned queens
+                bb = pinned & brd->bitboards[Q];
+
+                while (bb){
+                    fromSq = popLsb(&bb);
+
+                    quietMoves = queenAttackRay(brd->occupancies[both], fromSq) & squaresBetweenRay[brd->whiteKingPos][fromSq];
+                    captures = quietMoves & brd->occupancies[black];
+                    quietMoves &= ~brd->occupancies[black];
+
+                    cout << "Quiet pinned queen moves: " << endl;
+                    while (quietMoves){
+                        toSq = popLsb(&quietMoves);
+
+                        cout << sqToAlgebraic(fromSq) << sqToAlgebraic(toSq) << endl;
+                    }
+
+                    cout << "Capture pinned queen moves: " << endl;
+                    while (captures){
+                        toSq = popLsb(&captures);
+
+                        cout << sqToAlgebraic(fromSq) << sqToAlgebraic(toSq) << endl;
+                    }
+                }
+
+
                 break;
         }
 
@@ -861,3 +990,4 @@ void genLegalMoves(Board *brd, Movelist* moves) {
 
     }
 }
+
