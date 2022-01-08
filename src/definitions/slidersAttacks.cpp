@@ -1,5 +1,7 @@
 #include "slidersAttacks.h"
 
+ull whiteBishopForwardAttackMask[64];
+ull blackBishopForwardAttackMask[64];
 ull bishopAttackMasks[64];
 ull rookAttackMasks[64];
 
@@ -19,6 +21,47 @@ ull generateOccupancy(ull attackMask, int index){
     return occupancy;
 }
 
+ull generateWhiteBishopForwardAttackMask(int sq){
+    ull bb = 0ull;
+    int rank = sq/8, file = sq % 8;
+
+    int xDir = 1, yDir = 1;
+    while (file + xDir < 8 && rank + yDir < 8){
+        setBit(bb, sq + yDir*8 + xDir);
+        xDir++;
+        yDir++;
+    }
+
+    xDir = -1, yDir = 1;
+    while (file + xDir >= 0 && rank + yDir < 8){
+        setBit(bb, sq + yDir*8 + xDir);
+        xDir--;
+        yDir++;
+    }
+
+    return bb;
+}
+
+ull generateBlackBishopForwardAttackMask(int sq){
+    ull bb = 0ull;
+    int rank = sq/8, file = sq % 8;
+
+    int xDir = -1, yDir = -1;
+    while (file + xDir >= 0 && rank + yDir >= 0){
+        setBit(bb, sq + yDir*8 + xDir);
+        xDir--;
+        yDir--;
+    }
+
+    xDir = 1, yDir = -1;
+    while (file + xDir < 8 && rank + yDir >= 0){
+        setBit(bb, sq + yDir*8 + xDir);
+        xDir++;
+        yDir--;
+    }
+
+    return bb;
+}
 
 ull generateBishopAttackMask(int sq){
     ull bb = 0ull;
@@ -204,11 +247,32 @@ ull queenAttackRay(ull occ, int sq){
     return bishopAttackRay(occ, sq) | rookAttackRay(occ, sq);
 }
 
+// Xrays own pieces (blockers should be own pieces)
+ull bishopXray(ull occ, ull blockers, int sq){
+    ull attacks = bishopAttackRay(occ, sq);
+    blockers &= attacks;
+    return attacks ^ bishopAttackRay(occ ^ blockers, sq);
+}
+
+ull rookXray(ull occ, ull blockers, int sq){
+    ull attacks = rookAttackRay(occ, sq);
+    blockers &= attacks;
+    return attacks ^ rookAttackRay(occ ^ blockers, sq);
+}
+
 
 
 /// ----------- INITS ------------ ///
 /// Must be initialized at startup ///
 /// Fills arrays with attack bb's  ///
+
+// Array: bishopForwardAttackMasks
+void initBishopForwardAttackMasks(){
+    for (int sq = 0; sq < 64; sq++){
+        whiteBishopForwardAttackMask[sq] = generateWhiteBishopForwardAttackMask(sq);
+        blackBishopForwardAttackMask[sq] = generateBlackBishopForwardAttackMask(sq);
+    }
+}
 
 // Array: bishopAttackMasks
 void initBishopAttackMasks(){

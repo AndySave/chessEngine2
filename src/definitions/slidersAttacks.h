@@ -14,12 +14,18 @@ ull bishopAttackRay(ull occ, int sq);
 ull rookAttackRay(ull occ, int sq);
 ull queenAttackRay(ull occ, int sq);
 
+ull bishopXray(ull occ, ull blockers, int sq);
+ull rookXray(ull occ, ull blockers, int sq);
+
+void initBishopForwardAttackMasks();
 void initBishopAttackMasks();
 void initRookAttackMasks();
 
 void fillBishopAttacksArray();
 void fillRookAttacksArray();
 
+extern ull whiteBishopForwardAttackMask[64];
+extern ull blackBishopForwardAttackMask[64];
 extern ull bishopAttackMasks[64];
 extern ull rookAttackMasks[64];
 extern ull bishopAttacks[64][512];
@@ -107,6 +113,5 @@ constexpr inline ull rookMagics[64] = {
         4977040710267061250ULL, 10097633331715778562ULL, 325666550235288577ULL,
         1100057149646ULL
 };
-
 
 #endif
