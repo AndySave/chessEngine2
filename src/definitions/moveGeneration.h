@@ -13,6 +13,9 @@
 // Squares between [from][to]
 inline ull squaresBetween[64][64];
 
+// Squares between [from][to] and extending past to
+inline ull squaresBetweenRay[64][64];
+
 void generateMoves(Board *brd, Movelist *lst);
 void generateCaptureMoves(Board *brd, Movelist *lst);
 bool moveExists(Board *brd, int move);
@@ -24,6 +27,7 @@ ull genCheckers(Board* brd, bool isWhiteAttacking, int attackedKing);
 void genLegalMoves(Board *brd, Movelist* moves);
 
 void initSquaresBetween();
+void initSquaresBetweenRay();
 
 
 
