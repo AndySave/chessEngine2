@@ -4,6 +4,8 @@
 
 ull whitePawnAttacks[64];
 ull blackPawnAttacks[64];
+ull whitePawnPush[64];
+ull blackPawnPush[64];
 ull knightAttacks[64];
 ull kingAttacks[64];
 
@@ -29,6 +31,40 @@ ull blackPawnAttackMask(int sq){
     if (file > 0 && rank > 0){ setBit(bb, sq - 9); }
     // Up Left
     if (file < 7 && rank > 0){ setBit(bb, sq - 7); }
+
+    return bb;
+}
+
+ull whitePawnPushMask(int sq){
+    ull bb = 0ull;
+    int rank = sq/8, file = sq % 8;
+
+    if (rankSquares[sq] == 7){
+        return bb;
+    }
+
+    setBit(bb, sq+8);
+
+    if (rankSquares[sq] == 1){
+        setBit(bb, sq+16);
+    }
+
+    return bb;
+}
+
+ull blackPawnPushMask(int sq){
+    ull bb = 0ull;
+    int rank = sq/8, file = sq % 8;
+
+    if (rankSquares[sq] == 0){
+        return bb;
+    }
+
+    setBit(bb, sq-8);
+
+    if (rankSquares[sq] == 6){
+        setBit(bb, sq-16);
+    }
 
     return bb;
 }
@@ -81,6 +117,20 @@ void initWhitePawnAttacks(){
 void initBlackPawnAttacks(){
     for (int sq = 0; sq < 64; sq++){
         blackPawnAttacks[sq] = blackPawnAttackMask(sq);
+    }
+}
+
+// Array: whitePawnPush
+void initWhitePushAttacks(){
+    for (int sq = 0; sq < 64; sq++){
+        whitePawnPush[sq] = whitePawnPushMask(sq);
+    }
+}
+
+// Array: blackPawnPush
+void initBlackPushAttacks(){
+    for (int sq = 0; sq < 64; sq++){
+        blackPawnPush[sq] = blackPawnPushMask(sq);
     }
 }
 
