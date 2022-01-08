@@ -642,3 +642,222 @@ bool moveExists(Board *brd, int move){
     return false;
 }
 
+// Generates a bitboard of all king danger squares.
+// Source: https://peterellisjones.com/posts/generating-legal-chess-moves-efficiently/
+ull genAttackers(Board* brd, bool isWhiteAttacking) {
+    ull attackers = 0;
+
+    if (isWhiteAttacking) {
+        ull occ = brd->occupancies[both];
+        occ ^= brd->bitboards[k];
+
+        // Loop through each piece
+        ull pawnPositions = brd->bitboards[P];
+        while (pawnPositions) {
+            int curPos = popLsb(&pawnPositions);
+            attackers |= whitePawnAttacks[curPos];
+        }
+
+        ull knightPositions = brd->bitboards[N];
+        while (knightPositions) {
+            int curPos = popLsb(&knightPositions);
+            attackers |= knightAttacks[curPos];
+        }
+
+        ull bishopPositions = brd->bitboards[B];
+        while (bishopPositions) {
+            int curPos = popLsb(&bishopPositions);
+            attackers |= bishopAttackRay(occ, curPos);
+        }
+
+        ull rookPositions = brd->bitboards[R];
+        while (rookPositions) {
+            int curPos = popLsb(&rookPositions);
+            attackers |= rookAttackRay(occ, curPos);
+        }
+
+        ull queenPositions = brd->bitboards[Q];
+        while (queenPositions) {
+            int curPos = popLsb(&queenPositions);
+            attackers |= queenAttackRay(occ, curPos);
+        }
+
+        attackers |= kingAttacks[brd->whiteKingPos];
+
+    } else {
+        ull occ = brd->occupancies[both];
+        occ ^= brd->bitboards[K];
+
+        // Loop through each piece
+        ull pawnPositions = brd->bitboards[p];
+        while (pawnPositions) {
+            int curPos = popLsb(&pawnPositions);
+            attackers |= blackPawnAttacks[curPos];
+        }
+
+        ull knightPositions = brd->bitboards[n];
+        while (knightPositions) {
+            int curPos = popLsb(&knightPositions);
+            attackers |= knightAttacks[curPos];
+        }
+
+        ull bishopPositions = brd->bitboards[b];
+        while (bishopPositions) {
+            int curPos = popLsb(&bishopPositions);
+            attackers |= bishopAttackRay(occ, curPos);
+        }
+
+        ull rookPositions = brd->bitboards[r];
+        while (rookPositions) {
+            int curPos = popLsb(&rookPositions);
+            attackers |= rookAttackRay(occ, curPos);
+        }
+
+        ull queenPositions = brd->bitboards[q];
+        while (queenPositions) {
+            int curPos = popLsb(&queenPositions);
+            attackers |= queenAttackRay(occ, curPos);
+        }
+
+        attackers |= kingAttacks[brd->blackKingPos];
+    }
+
+    return attackers;
+}
+
+ull genSquaresBetween(int fromSq, int toSq){
+    int downUp[2] = {-1, 1};
+    int leftRight[2] = {-1, 1};
+
+    for (int hor : leftRight){
+        ull bb = 0ull;
+        int file = fromSq % 8, rank = fromSq / 8;
+        while (file >= 0 && file < 7){
+            file += hor;
+
+            if (file + rank*8 == toSq){
+                return bb;
+            }
+            setBit(bb, file + rank*8);
+        }
+    }
+
+    for (int vert : downUp){
+        ull bb = 0ull;
+        int file = fromSq % 8, rank = fromSq / 8;
+        while (rank >= 0 && rank < 7){
+            rank += vert;
+
+            if (file + rank*8 == toSq){
+                return bb;
+            }
+            setBit(bb, file + rank*8);
+        }
+    }
+
+    for (int hor : downUp){
+        for (int vert : leftRight){
+            ull bb = 0ull;
+            int file = fromSq % 8, rank = fromSq / 8;
+            while (file >= 0 && file < 8 && rank >= 0 && rank < 8){
+                file += hor, rank += vert;
+
+                if (file + rank*8 == toSq){
+                    return bb;
+                }
+                setBit(bb, file + rank*8);
+            }
+        }
+    }
+
+    return 0;
+}
+
+void initSquaresBetween() {
+    for (int i = 0; i<64; i++) {
+        for (int j = 0; j<64; j++) {
+            squaresBetween[i][j] = genSquaresBetween(i, j);
+        }
+    }
+}
+
+ull genCheckers(Board* brd, bool isWhiteAttacking, int attackedKing) {
+    ull checkers = 0;
+    ull occ = brd->occupancies[both];
+
+    if (isWhiteAttacking) {
+        checkers |= (brd->bitboards[P] & blackPawnAttacks[attackedKing]);
+        checkers |= (brd->bitboards[N] & knightAttacks[attackedKing]);
+        checkers |= (brd->bitboards[B] & bishopAttackRay(occ, attackedKing));
+        checkers |= (brd->bitboards[R] & rookAttackRay(occ, attackedKing));
+        checkers |= (brd->bitboards[Q] & queenAttackRay(occ, attackedKing));
+    } else {
+        checkers |= (brd->bitboards[p] & whitePawnAttacks[attackedKing]);
+        checkers |= (brd->bitboards[n] & knightAttacks[attackedKing]);
+        checkers |= (brd->bitboards[b] & bishopAttackRay(occ, attackedKing));
+        checkers |= (brd->bitboards[r] & rookAttackRay(occ, attackedKing));
+        checkers |= (brd->bitboards[q] & queenAttackRay(occ, attackedKing));
+    }
+
+    return checkers;
+}
+
+void genLegalMoves(Board *brd, Movelist* moves) {
+
+    if (brd->side == white) {
+        ull attackers = genAttackers(brd, false);
+        ull checkers = genCheckers(brd, false, brd->whiteKingPos);
+        int numOfCheckers = sparseCountBits(checkers);
+
+        cout << "Attackers: " << endl; // REPLACE WITH ADDING TO MOVELIST!
+        printBitboard(attackers);
+        cout << "Checkers: " << endl;
+        printBitboard(checkers);
+
+        // KING MOVES
+        ull kingMoves = ~attackers & kingAttacks[brd->whiteKingPos] & ~brd->occupancies[white];
+        cout << "Available king moves" << endl; // REPLACE WITH ADDING TO MOVELIST!
+        while (kingMoves) {
+            int curPos = popLsb(&kingMoves);
+            cout << sqToAlgebraic(brd->whiteKingPos) << sqToAlgebraic(curPos) << endl; // REPLACE WITH ADDING TO MOVELIST!
+        }
+        ull captureMask = 0xFFFFFFFFFFFFFFFFull; // Squares a piece can capture on (would be restricted while in check
+        ull pushMask = 0xFFFFFFFFFFFFFFFFull; // Squares a piece can move to (would be restricted in case of blocking a check)
+        int checkingPiece;
+
+        switch (numOfCheckers) { // Counts the amo
+            case 2:
+                cout << "Double check." << endl; // REPLACE WITH ADDING TO MOVELIST!
+                return; // Only king moves possible
+                break;
+            case 1:
+                cout << "Single check." << endl; // REPLACE WITH ADDING TO MOVELIST!
+
+                // Set captureMask
+                captureMask = checkers; // Squares a piece can capture on
+
+                //Set pushMask
+                checkingPiece = findPiece(brd, bsf(checkers), black);
+
+                switch (checkingPiece) {
+                    case p:
+                        pushMask = 0;
+                        break;
+                    case n:
+                        pushMask = 0;
+                        break;
+                    default:
+                        pushMask = squaresBetween[bsf(checkers)][brd->whiteKingPos];
+                        break;
+                }
+                break;
+            default:
+                cout << "no check." << endl; // REPLACE WITH ADDING TO MOVELIST!
+                break;
+        }
+
+    } else {
+
+
+    }
+}
