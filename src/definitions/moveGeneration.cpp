@@ -785,16 +785,18 @@ void genLegalMoves(Board *brd, Movelist* moves) {
         ull checkers = genCheckers(brd, false, brd->whiteKingPos);
 
         ull pinned = 0;
-        ull pinner = bishopXray(brd->occupancies[both], brd->occupancies[white], brd->whiteKingPos);
-        while (pinner){
-            int index = popLsb(&pinner);
-            pinned |= squaresBetween[brd->whiteKingPos][index] & brd->occupancies[white];
+        ull pinners = bishopXray(brd->occupancies[both], brd->occupancies[white], brd->whiteKingPos) & brd->occupancies[black]
+                & brd->bitboards[P] & brd->bitboards[B] & brd->bitboards[Q];
+        while (pinners){
+            int pinner = popLsb(&pinners);
+            pinned |= squaresBetween[brd->whiteKingPos][pinner] & brd->occupancies[white];
         }
 
-        pinner = rookXray(brd->occupancies[both], brd->occupancies[white], brd->whiteKingPos);
-        while (pinner){
-            int index = popLsb(&pinner);
-            pinned |= squaresBetween[brd->whiteKingPos][index] & brd->occupancies[white];
+        pinners = rookXray(brd->occupancies[both], brd->occupancies[white], brd->whiteKingPos) & brd->occupancies[black]
+                & brd->bitboards[P] & brd->bitboards[R] & brd->bitboards[Q];
+        while (pinners){
+            int pinner = popLsb(&pinners);
+            pinned |= squaresBetween[brd->whiteKingPos][pinner] & brd->occupancies[white];
         }
 
         int numOfCheckers = sparseCountBits(checkers);
